@@ -12,7 +12,7 @@ import {
 const Aside = () => {
   return (
     <div>
-      <aside className="w-64 min-h-screen bg-white border-r shadow-md">
+      <aside className="w-64 h-full bg-white border-r shadow-md">
         {/* Logo / Title */}
         <div className="px-6 py-5 bg-gradient-to-r from-sky-500 via-blue-500 to-indigo-500">
           <h2 className="text-xl font-bold text-white">Admin Dashboard</h2>
@@ -21,8 +21,8 @@ const Aside = () => {
 
         {/* Navigation */}
         <nav className="mt-6 px-4 space-y-2">
-          <NavItem to="/admin/dashboard" icon={<FiHome />} label="Dashboard" />
-          <NavItem to="/admin/dashboard" icon={<FiHome />} label="Dashboard" />
+          <NavItem to="/dashboard/main" icon={<FiHome />} label="Dashboard" />
+          <NavItem to="/dashboard/add-product" icon={<FiHome />} label="Add Product" />
           <NavItem to="/admin/users" icon={<FiUsers />} label="All Users" />
           <NavItem to="/admin/donors" icon={<FiUserCheck />} label="Donors" />
           <NavItem
@@ -38,7 +38,7 @@ const Aside = () => {
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 w-full px-4 py-4 border-t">
+        <div className="absolute bottom-0 w-full px-4 py-4 ">
           <button className="flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition">
             <FiLogOut />
             Logout
