@@ -15,19 +15,21 @@ import {
   Camera,
   CheckCircle,
   AlertCircle,
-  Heart
+  Heart,
+  Activity,
+  BarChart3,
+  TrendingUp,
+  Bell,
+  Clock,
+  Award
 } from "lucide-react";
-
-
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
-
 const MainDashboard = () => {
-
-     const { user, updateUserProfile } = useContext(AuthContext);
+  const { user, updateUserProfile } = useContext(AuthContext);
   const axiosSecure = useAxiosSecure();
   const [loading, setLoading] = useState(true);
   const [editing, setEditing] = useState(false);
@@ -35,6 +37,14 @@ const MainDashboard = () => {
   const [districts, setDistricts] = useState([]);
   const [upazilas, setUpazilas] = useState([]);
   const [filteredUpazilas, setFilteredUpazilas] = useState([]);
+  const [stats, setStats] = useState({
+    donations: 0,
+    requests: 0,
+    savedLives: 0,
+    pendingRequests: 0,
+    completedRequests: 0,
+    recentActivity: []
+  });
 
   const [profileData, setProfileData] = useState({
     name: "",
@@ -53,17 +63,19 @@ const MainDashboard = () => {
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const genders = ["Male", "Female", "Other"];
 
-  // Load user profile data
+  // Load user profile data and stats
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
+      
+      // Load profile data
       axiosSecure.get(`/user/${user.email}`)
         .then((res) => {
           const userData = res.data;
           setProfileData({
             name: userData.name || user.displayName || "",
             email: userData.email || user.email || "",
-            photoURL: userData.photoURL || user.photoURL || "https://ui-avatars.com/api/?name=" + (userData.name || user.displayName || "User") + "&background=random",
+            photoURL: userData.photoURL || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || "User"}&background=random`,
             district: userData.district || "",
             upazila: userData.upazila || "",
             bloodGroup: userData.bloodGroup || "",
@@ -73,7 +85,6 @@ const MainDashboard = () => {
             lastDonation: userData.lastDonation || "",
             gender: userData.gender || "",
           });
-          setLoading(false);
         })
         .catch(() => {
           // If no profile exists, use auth data
@@ -90,6 +101,25 @@ const MainDashboard = () => {
             lastDonation: "",
             gender: "",
           });
+        });
+
+      // Load user stats
+      axiosSecure.get(`/user-stats/${user.email}`)
+        .then((res) => {
+          setStats(res.data);
+        })
+        .catch(() => {
+          // Fallback stats
+          setStats({
+            donations: 0,
+            requests: 0,
+            savedLives: 0,
+            pendingRequests: 0,
+            completedRequests: 0,
+            recentActivity: []
+          });
+        })
+        .finally(() => {
           setLoading(false);
         });
     }
@@ -315,19 +345,19 @@ const MainDashboard = () => {
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
             <Heart className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
-          <h3 className="text-xl font-bold text-gray-800">Loading Profile</h3>
+          <h3 className="text-xl font-bold text-gray-800">Loading Dashboard</h3>
           <p className="text-gray-600 mt-2">Getting your information ready...</p>
         </motion.div>
       </div>
     );
   }
 
-    return (
-        <motion.div
+  return (
+    <motion.div
       initial="initial"
       animate="animate"
       variants={pageVariants}
-      className="min-h-screen  relative overflow-hidden"
+      className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
     >
       {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
@@ -345,64 +375,172 @@ const MainDashboard = () => {
         />
       </div>
 
-      <div className="container mx-auto px-4 py-8 relative z-10">
-        <div className="max-w-6xl mx-auto">
-          {/* Header */}
+      <div className="lg:ml-72"> {/* Adjust margin for sidebar */}
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          {/* Welcome Header */}
           <motion.div
             variants={cardVariants}
-            className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8"
+            className="mb-8"
           >
-            <div>
-              <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                My Profile
-              </h1>
-              <p className="text-gray-600">
-                Manage your personal information and preferences
-              </p>
-            </div>
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
+              <div>
+                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
+                  Welcome back, {profileData.name}!
+                </h1>
+                <p className="text-gray-600">
+                  Here's your dashboard with all your important information
+                </p>
+              </div>
 
-            <div className="flex gap-4">
-              {!editing ? (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={() => setEditing(true)}
-                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-                >
-                  <Edit2 className="w-5 h-5" />
-                  Edit Profile
-                </motion.button>
-              ) : (
-                <>
+              <div className="flex gap-4">
+                {!editing ? (
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
-                    onClick={handleCancelEdit}
-                    className="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
+                    onClick={() => setEditing(true)}
+                    className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                   >
-                    <X className="w-5 h-5" />
-                    Cancel
+                    <Edit2 className="w-5 h-5" />
+                    Edit Profile
                   </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    onClick={handleSaveProfile}
-                    className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-                  >
-                    <Save className="w-5 h-5" />
-                    Save Changes
-                  </motion.button>
-                </>
-              )}
+                ) : (
+                  <>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleCancelEdit}
+                      className="px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
+                    >
+                      <X className="w-5 h-5" />
+                      Cancel
+                    </motion.button>
+                    <motion.button
+                      whileHover={{ scale: 1.05 }}
+                      whileTap={{ scale: 0.95 }}
+                      onClick={handleSaveProfile}
+                      className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
+                    >
+                      <Save className="w-5 h-5" />
+                      Save Changes
+                    </motion.button>
+                  </>
+                )}
+              </div>
             </div>
           </motion.div>
 
-          {/* Profile Content */}
+          {/* Stats Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {/* Total Donations */}
+            <motion.div
+              variants={cardVariants}
+              transition={{ delay: 0.1 }}
+              whileHover={{ y: -5 }}
+              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-500 text-sm">Total Donations</p>
+                  <p className="text-3xl font-bold text-gray-800">{stats.donations}</p>
+                  <p className="text-green-600 text-sm mt-1 flex items-center gap-1">
+                    <TrendingUp className="w-4 h-4" />
+                    +2 this month
+                  </p>
+                </div>
+                <motion.div
+                  animate={pulseAnimation}
+                  className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center"
+                >
+                  <Droplets className="w-7 h-7 text-red-600" />
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Active Requests */}
+            <motion.div
+              variants={cardVariants}
+              transition={{ delay: 0.2 }}
+              whileHover={{ y: -5 }}
+              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-500 text-sm">Active Requests</p>
+                  <p className="text-3xl font-bold text-gray-800">{stats.requests}</p>
+                  <p className="text-blue-600 text-sm mt-1 flex items-center gap-1">
+                    <Activity className="w-4 h-4" />
+                    {stats.pendingRequests} pending
+                  </p>
+                </div>
+                <motion.div
+                  animate={floatAnimation}
+                  className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center"
+                >
+                  <Bell className="w-7 h-7 text-blue-600" />
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Saved Lives */}
+            <motion.div
+              variants={cardVariants}
+              transition={{ delay: 0.3 }}
+              whileHover={{ y: -5 }}
+              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-500 text-sm">Lives Saved</p>
+                  <p className="text-3xl font-bold text-gray-800">{stats.savedLives}</p>
+                  <p className="text-purple-600 text-sm mt-1 flex items-center gap-1">
+                    <Award className="w-4 h-4" />
+                    Hero Level
+                  </p>
+                </div>
+                <motion.div
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                  className="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center"
+                >
+                  <Heart className="w-7 h-7 text-purple-600" />
+                </motion.div>
+              </div>
+            </motion.div>
+
+            {/* Last Donation */}
+            <motion.div
+              variants={cardVariants}
+              transition={{ delay: 0.4 }}
+              whileHover={{ y: -5 }}
+              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
+            >
+              <div className="flex items-center justify-between">
+                <div>
+                  <p className="text-gray-500 text-sm">Last Donation</p>
+                  <p className="text-2xl font-bold text-gray-800">
+                    {profileData.lastDonation || "Never"}
+                  </p>
+                  <p className="text-yellow-600 text-sm mt-1 flex items-center gap-1">
+                    <Clock className="w-4 h-4" />
+                    {profileData.lastDonation ? "120 days ago" : "Ready to donate!"}
+                  </p>
+                </div>
+                <motion.div
+                  animate={pulseAnimation}
+                  className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center"
+                >
+                  <Calendar className="w-7 h-7 text-green-600" />
+                </motion.div>
+              </div>
+            </motion.div>
+          </div>
+
+          {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Left Column - Profile Card */}
             <motion.div
               variants={cardVariants}
-              transition={{ delay: 0.1 }}
+              transition={{ delay: 0.5 }}
               className="lg:col-span-1"
             >
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-8">
@@ -470,16 +608,24 @@ const MainDashboard = () => {
                   )}
                 </div>
 
-                {/* Stats */}
-                <div className="grid grid-cols-2 gap-4 mb-6">
-                  <div className="text-center p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl">
-                    <div className="text-2xl font-bold text-blue-600">0</div>
-                    <div className="text-sm text-gray-600">Donations</div>
-                  </div>
-                  <div className="text-center p-4 bg-gradient-to-br from-green-50 to-emerald-50 rounded-xl">
-                    <div className="text-2xl font-bold text-green-600">0</div>
-                    <div className="text-sm text-gray-600">Requests</div>
-                  </div>
+                {/* Quick Actions */}
+                <div className="space-y-3 mb-6">
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <Plus className="w-5 h-5" />
+                    Create New Request
+                  </motion.button>
+                  <motion.button
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-2"
+                  >
+                    <Activity className="w-5 h-5" />
+                    View History
+                  </motion.button>
                 </div>
 
                 {/* Role Badge */}
@@ -493,7 +639,7 @@ const MainDashboard = () => {
             {/* Right Column - Profile Form */}
             <motion.div
               variants={cardVariants}
-              transition={{ delay: 0.2 }}
+              transition={{ delay: 0.6 }}
               className="lg:col-span-2"
             >
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
@@ -780,7 +926,14 @@ const MainDashboard = () => {
         </div>
       </div>
     </motion.div>
-    );
+  );
 };
+
+// Plus Icon component
+const Plus = ({ className }) => (
+  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+  </svg>
+);
 
 export default MainDashboard;
