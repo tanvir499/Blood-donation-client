@@ -5,6 +5,7 @@ import { AuthContext } from "../Provider/AuthProvider";
 import { updateProfile } from "firebase/auth";
 import axios from "axios";
 import auth from "../Firebase/firebase.config";
+import { motion } from "framer-motion";
 
 const Register = () => {
   const [upazilas, setUpazilas] = useState([]);
@@ -97,148 +98,290 @@ const Register = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-6 bg-gray-100 dark:bg-gray-900 transition-all">
-      <div className="rounded-2xl shadow-2xl p-8 w-[420px] border bg-white dark:bg-gray-800 dark:border-gray-700 transition-all">
-        <h2 className="text-3xl font-bold text-center bg-gradient-to-r from-indigo-600 via-blue-500 to-cyan-400 bg-clip-text text-transparent mb-6">
-          Create Your Account
-        </h2>
+    <div className="min-h-screen flex items-center justify-center p-4">
+      
+      {/* Floating Blood Drop Icons - Only on larger screens */}
+      <motion.div
+        animate={{ y: [0, -20, 0] }}
+        transition={{ repeat: Infinity, duration: 3 }}
+        className="hidden lg:block absolute top-10 right-10 text-4xl opacity-10"
+      >
+        🩸
+      </motion.div>
+      <motion.div
+        animate={{ y: [0, 20, 0] }}
+        transition={{ repeat: Infinity, duration: 4, delay: 0.5 }}
+        className="hidden lg:block absolute bottom-10 left-10 text-4xl opacity-10"
+      >
+        ❤️
+      </motion.div>
 
-        <form onSubmit={handleSubmit} className="space-y-4">
-          {/* Name */}
-          <div>
-            <label className="font-medium text-gray-800 dark:text-gray-200">
-              Full Name
-            </label>
-            <input
-              name="fullName"
-              type="text"
-              placeholder="Enter your full name"
-              className="w-full p-3 mt-1 rounded-lg border dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring focus:ring-blue-300 outline-none"
-              required
-            />
-          </div>
-
-          {/* Email */}
-          <div>
-            <label className="font-medium text-gray-800 dark:text-gray-200">
-              Email
-            </label>
-            <input
-              name="email"
-              type="email"
-              placeholder="Enter your email"
-              className="w-full p-3 mt-1 rounded-lg border dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring focus:ring-blue-300 outline-none"
-              required
-            />
-          </div>
-
-          {/* Photo URL */}
-          <div>
-            <label className="font-medium text-gray-800 dark:text-gray-200">
-              Photo URL
-            </label>
-            <input
-              name="photoURL"
-              type="file"
-              placeholder="Enter your photo URL"
-              className="w-full p-3 mt-1 rounded-lg border dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring focus:ring-blue-300 outline-none"
-            />
-          </div>
-          <label className="font-medium text-gray-800 dark:text-gray-200">
-            Choose Blood Group
-          </label>
-          <select
-            name="blood"
-            defaultValue="Choose Blood Group"
-            className="select"
+      {/* Main Registration Card - No background */}
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.4 }}
+        className="relative z-10 w-full max-w-md"
+      >
+        <div className="rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
+          
+          {/* Header Section - No background */}
+          <motion.div
+            initial={{ y: -10, opacity: 0 }}
+            animate={{ y: 0, opacity: 1 }}
+            transition={{ duration: 0.4 }}
+            className="text-center mb-6 md:mb-8"
           >
-            <option disabled={true}>Choose Blood Group</option>
-            <option value="A+">A+</option>
-            <option value="A-">A-</option>
-            <option value="B+">B+</option>
-            <option value="B-">B-</option>
-            <option value="AB+">AB+</option>
-            <option value="AB-">AB-</option>
-            <option value="O+">O+</option>
-            <option value="O-">O-</option>
-          </select>
-          {/* for district */}
-           <label className="font-medium text-gray-800 dark:text-gray-200">
-            Choose Your District
-          </label>
-          <select
-            name="district"
-            defaultValue="Select your district"
-            className="select"
-          >
-            <option disabled={true}>Select your district</option>
-            {districts.map((d) => (
-              <option value={d?.name} key={d.id}>
-                {d?.name}
-              </option>
-            ))}
-          </select>
-          {/* for upazila */}
-           <label className="font-medium text-gray-800 dark:text-gray-200">
-            Choose Your Upazila
-          </label>
-          <select
-            name="upazila"
-            defaultValue="Select your Upazila"
-            className="select"
-          >
-            <option disabled={true}>Select your Upazila</option>
-            {upazilas.map((u) => (
-              <option value={u.name} key={u.id}>
-                {u.name}
-              </option>
-            ))}
-          </select>
+            <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl md:rounded-2xl mb-3 md:mb-4 shadow-md">
+              <span className="text-3xl md:text-4xl text-white">🩸</span>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 via-pink-500 to-rose-500 bg-clip-text text-transparent mb-2">
+              Create Your Account
+            </h2>
+            <p className="text-gray-600  text-sm md:text-base">
+              Join LifeStream to save lives through blood donation
+            </p>
+          </motion.div>
 
-          {/* Password */}
-          <div>
-            <label className="font-medium text-gray-800 dark:text-gray-200">
-              Password
-            </label>
-            <input
-              name="password"
-              type="password"
-              placeholder="Enter your password"
-              className="w-full p-3 mt-1 rounded-lg border dark:bg-gray-700 dark:text-white dark:border-gray-600 focus:ring focus:ring-blue-300 outline-none"
-              required
-            />
-          </div>
+          <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
+            {/* Name Input - No background */}
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.1 }}
+            >
+              <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                Full Name
+              </label>
+              <div className="relative">
+                <input
+                  name="fullName"
+                  type="text"
+                  placeholder="Enter your full name"
+                  className="w-full p-3 md:p-4 pl-10 md:pl-12 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+                  required
+                />
+                <div className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2  text-sm md:text-base">
+                  👤
+                </div>
+              </div>
+            </motion.div>
 
-          {/* Register Button (NEW COLOR) */}
-          <button
-            type="submit"
-            className="w-full text-center px-6 py-3 font-semibold text-white rounded-lg bg-gradient-to-r from-blue-600 via-indigo-500 to-purple-500 hover:from-purple-500 hover:via-indigo-500 hover:to-blue-600 transition-all duration-300 shadow-md hover:shadow-lg"
-          >
-            Register
-          </button>
+            {/* Email Input - No background */}
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                Email
+              </label>
+              <div className="relative">
+                <input
+                  name="email"
+                  type="email"
+                  placeholder="Enter your email"
+                  className="w-full p-3 md:p-4 pl-10 md:pl-12 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+                  required
+                />
+                <div className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm md:text-base">
+                  ✉️
+                </div>
+              </div>
+            </motion.div>
 
-          {/* Google Login (NEW STYLE) */}
-          <button
-            type="button"
-            onClick={googleSignIn}
-            className="w-full flex items-center justify-center gap-3 px-6 py-3 mt-2 font-semibold text-gray-800 dark:text-gray-200 rounded-lg border dark:border-gray-600 shadow-sm bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-300"
-          >
-            <FcGoogle size={22} />
-            Continue with Google
-          </button>
-        </form>
+            {/* Photo URL - No background */}
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.3 }}
+            >
+              <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                Profile Photo
+              </label>
+              <div className="relative">
+                <input
+                  name="photoURL"
+                  type="file"
+                  accept="image/*"
+                  className="w-full p-3 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-xs md:text-sm"
+                />
+              </div>
+            </motion.div>
 
-        {/* Redirect to Login */}
-        <p className="text-center text-gray-600 dark:text-gray-300 mt-4">
-          Already have an account?{" "}
-          <Link
-            to={"/login"}
-            className="text-blue-600 dark:text-blue-300 font-semibold hover:underline"
+            {/* Blood Group - No background */}
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.4 }}
+            >
+              <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                Choose Blood Group
+              </label>
+              <select
+                name="blood"
+                defaultValue=""
+                className="w-full p-3 md:p-4 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base appearance-none"
+                required
+              >
+                <option value="" disabled>Choose Blood Group</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+            </motion.div>
+
+            {/* District and Upazila - No background */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.5 }}
+              >
+                <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                  Choose Your District
+                </label>
+                <select
+                  name="district"
+                  defaultValue=""
+                  className="w-full p-3 md:p-4 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base appearance-none"
+                  required
+                >
+                  <option value="" disabled>Select your district</option>
+                  {districts.map((d) => (
+                    <option value={d?.name} key={d.id}>
+                      {d?.name}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
+
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                transition={{ delay: 0.6 }}
+              >
+                <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                  Choose Your Upazila
+                </label>
+                <select
+                  name="upazila"
+                  defaultValue=""
+                  className="w-full p-3 md:p-4 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base appearance-none"
+                  required
+                >
+                  <option value="" disabled>Select your Upazila</option>
+                  {upazilas.map((u) => (
+                    <option value={u.name} key={u.id}>
+                      {u.name}
+                    </option>
+                  ))}
+                </select>
+              </motion.div>
+            </div>
+
+            {/* Password - No background */}
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ delay: 0.7 }}
+            >
+              <label className="block font-semibold text-gray-700  mb-1 md:mb-2 text-sm md:text-base">
+                Password
+              </label>
+              <div className="relative">
+                <input
+                  name="password"
+                  type="password"
+                  placeholder="Enter your password"
+                  className="w-full p-3 md:p-4 pl-10 md:pl-12 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base"
+                  required
+                />
+                <div className="absolute left-3 md:left-4 top-1/2 transform -translate-y-1/2 text-gray-400 text-sm md:text-base">
+                  🔒
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Register Button - Only button has gradient background */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.8 }}
+            >
+              <button
+                type="submit"
+                className="w-full px-6 py-3 md:px-8 md:py-4 font-semibold text-white rounded-lg md:rounded-xl bg-gradient-to-r from-red-500 via-pink-500 to-rose-500 hover:from-rose-600 hover:via-pink-600 hover:to-red-500 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5 text-sm md:text-base"
+              >
+                Register
+              </button>
+            </motion.div>
+
+            {/* Divider - No background */}
+            <motion.div
+              initial={{ scaleX: 0 }}
+              animate={{ scaleX: 1 }}
+              transition={{ delay: 0.9 }}
+              className="relative my-4 md:my-6"
+            >
+              <div className="absolute inset-0 flex items-center">
+                <div className="w-full border-t border-gray-200 dark:border-gray-600"></div>
+              </div>
+              <div className="relative flex justify-center text-sm">
+                <span className="px-3 md:px-4 text-gray-500 dark:text-gray-400 text-xs md:text-sm">
+                  Or continue with
+                </span>
+              </div>
+            </motion.div>
+
+            {/* Google Login - No background */}
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 1 }}
+            >
+              <button
+                type="button"
+                onClick={googleSignIn}
+                className="w-full flex items-center justify-center gap-2 md:gap-3 px-6 py-3 md:px-8 md:py-4 font-semibold text-gray-800 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 shadow-sm hover:shadow-md md:hover:shadow-lg transform hover:-translate-y-0.5 transition-all duration-200 text-sm md:text-base"
+              >
+                <FcGoogle size={18} md:size={22} />
+                <span>Continue with Google</span>
+              </button>
+            </motion.div>
+          </form>
+
+          {/* Redirect to Login - No background */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 1.1 }}
+            className="text-center mt-6 md:mt-8 pt-4 md:pt-6 border-t border-gray-200 dark:border-gray-700"
           >
-            Login
-          </Link>
-        </p>
-      </div>
+            <p className="text-gray-600  text-sm md:text-base">
+              Already have an account?{" "}
+              <Link
+                to={"/login"}
+                className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 font-semibold hover:underline inline-flex items-center gap-1 transition-all"
+              >
+                Login
+                <motion.span
+                  animate={{ x: [0, 4, 0] }}
+                  transition={{ repeat: Infinity, duration: 1.5, delay: 1 }}
+                  className="inline-block"
+                >
+                  →
+                </motion.span>
+              </Link>
+            </p>
+          </motion.div>
+        </div>
+      </motion.div>
     </div>
   );
 };
