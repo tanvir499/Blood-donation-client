@@ -31,7 +31,7 @@ const Aside = () => {
 
         {/* Navigation */}
         <nav className="mt-6 px-4 space-y-2">
-          <NavItem to="/dashboard" icon={<FiHome />} label="Dashboard" />
+          <NavItem to="/dashboard" icon={<FiHome />} label="Profile" />
            {
             role == 'donor' && <NavItem to="/dashboard/add-request" icon={<FiHome />} label="Add Request" />
            }

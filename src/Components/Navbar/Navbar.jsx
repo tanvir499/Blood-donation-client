@@ -59,7 +59,7 @@ const Navbar = () => {
           <div className="hidden lg:flex items-center gap-8">
             {/* Donation Requests Link */}
             <Link 
-              to="/blood-donation-requests" 
+              to="/donation-Request" 
               className="flex items-center gap-2 text-gray-700 hover:text-blue-500 transition-colors"
             >
               <Droplets className="w-4 h-4" />
