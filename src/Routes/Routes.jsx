@@ -5,7 +5,11 @@ import Login from "../Pages/Login";
 import Register from "../Pages/Register";
 import DashboardLayout from "../DashboardLayout/DashboardLayout";
 import MainDashboard from "../Pages/Dashboard/MainDashboard/MainDashboard";
-import AddProduct from "../Pages/Dashboard/AddProduct/AddProduct";
+import AddRequest from "../Pages/Dashboard/AddRequest/AddRequest";
+import AllUsers from "../Pages/Dashboard/AllUsers/AllUsers";
+import PrivateRoute from "../Routes/PrivateRoute";
+import MyRequest from "../Pages/Dashboard/MyRequest/MyRequest";
+
 
 const router = createBrowserRouter([
   {
@@ -28,17 +32,25 @@ const router = createBrowserRouter([
   },
   // Routes for Dashboard
   {
-    path: '/dashboard',
-    element: <DashboardLayout></DashboardLayout>,
+    path: 'dashboard',
+    element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
     children:[
       {
-        path:'main',
+        path:'/dashboard',
         element: <MainDashboard></MainDashboard>
       },
       {
-        path:'add-product',
-        element: <AddProduct></AddProduct>
-      }
+        path:'add-request',
+        element: <AddRequest></AddRequest>
+      },
+      {
+        path:'all-users',
+        element: <AllUsers></AllUsers>
+      },
+      {
+        path:'my-request',
+        element: <MyRequest></MyRequest>
+      },
     ]
   }
 ]);

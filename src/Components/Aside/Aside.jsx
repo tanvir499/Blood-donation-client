@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useContext } from "react";
 import { NavLink } from "react-router";
 import {
   FiHome,
@@ -8,8 +8,18 @@ import {
   FiSettings,
   FiLogOut,
 } from "react-icons/fi";
+import { AuthContext } from "../../Provider/AuthProvider";
+import { signOut } from "firebase/auth";
+import auth from "../../firebase/firebase.config";
 
 const Aside = () => {
+
+  const {role} = useContext(AuthContext)
+
+  const handleLogout = () =>{
+    signOut(auth)
+  }
+
   return (
     <div>
       <aside className="w-64 h-full bg-white border-r shadow-md">
@@ -21,9 +31,15 @@ const Aside = () => {
 
         {/* Navigation */}
         <nav className="mt-6 px-4 space-y-2">
-          <NavItem to="/dashboard/main" icon={<FiHome />} label="Dashboard" />
-          <NavItem to="/dashboard/add-product" icon={<FiHome />} label="Add Product" />
-          <NavItem to="/admin/users" icon={<FiUsers />} label="All Users" />
+          <NavItem to="/dashboard" icon={<FiHome />} label="Dashboard" />
+           {
+            role == 'donor' && <NavItem to="/dashboard/add-request" icon={<FiHome />} label="Add Request" />
+           }
+         
+          {
+            role == 'admin' && <NavItem to="/dashboard/all-users" icon={<FiUsers />} label="All Users" />
+          }
+           <NavItem to="/dashboard/my-request" icon={<FiHome />} label="My Request" />
           <NavItem to="/admin/donors" icon={<FiUserCheck />} label="Donors" />
           <NavItem
             to="/admin/requests"
@@ -38,7 +54,7 @@ const Aside = () => {
         </nav>
 
         {/* Footer */}
-        <div className="absolute bottom-0 w-full px-4 py-4 ">
+        <div onClick={handleLogout} className="absolute bottom-0 w-full px-4 py-4 ">
           <button className="flex items-center gap-3 px-4 py-2 rounded-lg text-red-600 hover:bg-red-50 transition">
             <FiLogOut />
             Logout
