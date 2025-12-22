@@ -76,6 +76,13 @@ const Navbar = () => {
                   <Activity className="w-4 h-4" />
                   <span>Funding</span>
                 </Link>
+                <Link 
+                  to="search"
+                  className="flex items-center gap-2 text-gray-700 hover:text-blue-500 transition-colors"
+                >
+                  <Activity className="w-4 h-4" />
+                  <span>Search</span>
+                </Link>
 
                 {/* User Avatar Dropdown */}
                 <div className="relative">
