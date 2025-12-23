@@ -419,12 +419,7 @@ const Donate = () => {
                       Processing Payment...
                     </>
                   ) : (
-                    <>
-                      <motion.span
-                        animate={{ scale: [1, 1.2, 1] }}
-                        transition={{ repeat: Infinity, duration: 1.5 }}
-                      >🩸
-                      </motion.span>
+                    <>       
                       Proceed to Donate
                     </>
                   )}
@@ -432,35 +427,7 @@ const Donate = () => {
               </motion.button>
             </motion.div>
 
-            {/* Security Badges with Wave Animation */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ delay: 1.3 }}
-              className="text-center pt-4 border-t border-gray-100 dark:border-gray-600"
-            >
-              <p className="text-xs md:text-sm text-gray-500 mb-3">
-                Your donation is secured with Stripe payment processing
-              </p>
-              <div className="flex justify-center items-center gap-4">
-                {["🔒", "🛡️", "📈", "✅"].map((icon, index) => (
-                  <motion.span
-                    key={icon}
-                    initial={{ y: 0 }}
-                    animate={{ y: [0, -5, 0] }}
-                    transition={{
-                      repeat: Infinity,
-                      duration: 1.5,
-                      delay: index * 0.1,
-                      ease: "easeInOut"
-                    }}
-                    className="text-lg opacity-70"
-                  >
-                    {icon}
-                  </motion.span>
-                ))}
-              </div>
-            </motion.div>
+          
           </form>
 
           {/* Success Confetti (Hidden until success) */}

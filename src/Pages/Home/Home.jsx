@@ -17,7 +17,7 @@ import {
   Activity
 } from "lucide-react";
 
-import { FiMenu, FiX } from "react-icons/fi";
+
 import { AuthContext } from "../../Provider/AuthProvider";
 
 const Home = () => {
@@ -249,7 +249,7 @@ const Home = () => {
                 step: "03",
                 title: "Save Lives",
                 description: "Donate blood and receive updates on lives saved",
-                icon: "❤️",
+                icon: "🩸",
                 color: "from-red-500 to-orange-400"
               }
             ].map((feature, index) => (
@@ -294,7 +294,7 @@ const Home = () => {
           >
             <div className="bg-gradient-to-br from-white to-red-50 rounded-3xl border border-gray-100 shadow-xl p-8 md:p-12">
               <div className="grid md:grid-cols-2 gap-8">
-                {/* Contact Form */}
+              
                 <div>
                   <h3 className="text-2xl font-bold text-gray-800 mb-6">Contact Us</h3>
                   <form className="space-y-4">
@@ -390,7 +390,7 @@ const Home = () => {
       <footer className="bg-gradient-to-b from-gray-900 to-gray-800 text-white pt-12 pb-8">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
-            {/* Logo and Description */}
+          
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-pink-500 flex items-center justify-center">
@@ -403,7 +403,7 @@ const Home = () => {
               </p>
             </div>
 
-            {/* Quick Links */}
+          
             <div>
               <h4 className="font-bold text-lg mb-4">Quick Links</h4>
               <ul className="space-y-2">
@@ -414,7 +414,7 @@ const Home = () => {
               </ul>
             </div>
 
-            {/* Resources */}
+         
             <div>
               <h4 className="font-bold text-lg mb-4">Resources</h4>
               <ul className="space-y-2">
@@ -425,7 +425,6 @@ const Home = () => {
               </ul>
             </div>
 
-            {/* Newsletter */}
             <div>
               <h4 className="font-bold text-lg mb-4">Stay Updated</h4>
               <p className="text-gray-400 mb-4">Subscribe to our newsletter</p>
@@ -448,7 +447,7 @@ const Home = () => {
 
           <div className="border-t border-gray-700 pt-8 text-center text-gray-400">
             <p>&copy; {new Date().getFullYear()} LifeStream. All rights reserved.</p>
-            <p className="mt-2 text-sm">Made with ❤️ for saving lives</p>
+            <p className="mt-2 text-sm">Made by Tanvir Hossain for saving lives</p>
           </div>
         </div>
       </footer>

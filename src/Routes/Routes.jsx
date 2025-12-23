@@ -1,4 +1,4 @@
-import { createBrowserRouter} from "react-router";
+import { createBrowserRouter } from "react-router";
 import RootLayout from "../RootLayout/RootLayout";
 import Home from "../Pages/Home/Home";
 import Login from "../Pages/Login";
@@ -16,85 +16,86 @@ import DonationRequest from "../Pages/DonationRequest/DonationRequest";
 import DonationRequestDetails from "../Pages/DonationRequestDetails/DonationRequestDetails";
 import DonorDashboard from "../Pages/Dashboard/DonorDashboard/DonorDashboard";
 import VolunteerDashboard from "../Pages/Dashboard/VolunteerDashboard/VolunteerDashboard";
-
-
-
+import Volunteers from "../Pages/Volunteers";
 
 const router = createBrowserRouter([
   {
     path: "/",
     element: <RootLayout></RootLayout>,
     children: [
-        {
-            path:'/',
-            Component: Home
-        },
-         {
-            path:'/donate',
-            Component: Donate
-        },
-         {
-            path:'/payment-success',
-            Component: PaymentSuccess
-        },
-         {
-            path:'/donation-Request',
-            Component: DonationRequest
-        },
-         {
-            path:'/donation-request/:id',
-            Component: DonationRequestDetails
-        },
-        {
-            path:'search',
-            Component: Search
-        },
-        {
-            path:'/login',
-            Component: Login
-        },
-        {
-            path:'/register',
-            Component: Register
-        }
-       
-    ]
+      {
+        path: "/",
+        Component: Home,
+      },
+      {
+        path: "/donate",
+        Component: Donate,
+      },
+      {
+        path: "/payment-success",
+        Component: PaymentSuccess,
+      },
+      {
+        path: "/donation-Request",
+        Component: DonationRequest,
+      },
+      {
+        path: "/donation-request/:id",
+        Component: DonationRequestDetails,
+      },
+      {
+        path: "search",
+        Component: Search,
+      },
+      {
+        path: "/login",
+        Component: Login,
+      },
+      {
+        path: "/register",
+        Component: Register,
+      },
+      {
+        path: "/volunteers",
+        element: <Volunteers></Volunteers>,
+      }
+    ],
   },
   // Routes for Dashboard
   {
-    path: 'dashboard',
-    element: <PrivateRoute><DashboardLayout></DashboardLayout></PrivateRoute>,
-    children:[
+    path: "dashboard",
+    element: (
+      <PrivateRoute>
+        <DashboardLayout></DashboardLayout>
+      </PrivateRoute>
+    ),
+    children: [
       {
-        path:'/dashboard',
-        element: <MainDashboard></MainDashboard>
+        path: "/dashboard",
+        element: <MainDashboard></MainDashboard>,
       },
       {
-        path:'add-request',
-        element: <AddRequest></AddRequest>
+        path: "add-request",
+        element: <AddRequest></AddRequest>,
       },
       {
-        path:'all-users',
-        element: <AllUsers></AllUsers>
+        path: "all-users",
+        element: <AllUsers></AllUsers>,
       },
       {
-        path:'my-request',
-        element: <MyRequest></MyRequest>
+        path: "my-request",
+        element: <MyRequest></MyRequest>,
       },
       {
-        path:'donation-requests',
-        element: <DonorDashboard></DonorDashboard>
+        path: "donation-requests",
+        element: <DonorDashboard></DonorDashboard>,
       },
       {
-        path:'volunteer-dashboard',
-        element: <VolunteerDashboard></VolunteerDashboard>
-      },
-      {
-        path:'volunteer-dashboard',
-        element: 
+        path: "volunteer-dashboard",
+        element: <VolunteerDashboard></VolunteerDashboard>,
       }
-    ]
-  }
+    ],
+  },
 ]);
 
 export default router;
