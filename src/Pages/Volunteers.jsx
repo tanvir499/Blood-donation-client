@@ -119,7 +119,7 @@ const Volunteers = () => {
 
       <div className="container mx-auto px-4 py-8 md:py-12">
     
-        {/* Section Header */}
+
         <motion.div
           variants={cardVariants}
           transition={{ delay: 0.4 }}
@@ -136,7 +136,7 @@ const Volunteers = () => {
           </div>
         </motion.div>
 
-        {/* Volunteers Grid - Full width */}
+      
         <motion.div
           variants={cardVariants}
           transition={{ delay: 0.5 }}
@@ -154,9 +154,9 @@ const Volunteers = () => {
                     whileHover={{ y: -5 }}
                     className="bg-white rounded-2xl shadow-lg border border-red-100 overflow-hidden group"
                   >
-                    {/* Volunteer Card */}
+                 
                     <div className="p-6">
-                      {/* Profile Image */}
+                  
                       <div className="relative mb-6">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
@@ -175,7 +175,6 @@ const Volunteers = () => {
                         />
                       </div>
 
-                      {/* Volunteer Info */}
                       <div className="text-center mb-6">
                         <h3 className="text-xl font-bold text-gray-800 mb-2">
                           {volunteer.fullName}
@@ -185,7 +184,7 @@ const Volunteers = () => {
                           <span className="text-sm truncate">{volunteer.email}</span>
                         </div>
 
-                        {/* Blood Group Badge */}
+                    
                         {volunteer.blood && (
                           <motion.div
                             animate={pulseAnimation}
@@ -196,7 +195,6 @@ const Volunteers = () => {
                           </motion.div>
                         )}
 
-                        {/* Location */}
                         <div className="space-y-2">
                           <div className="flex items-center justify-center gap-2 text-gray-600">
                             <MapPin className="w-4 h-4" />
@@ -209,13 +207,12 @@ const Volunteers = () => {
                         </div>
                       </div>
 
-                      {/* Volunteer Status */}
+                  
                       <div className="flex items-center justify-center gap-2 mb-6">
                         <Shield className="w-4 h-4 text-blue-500" />
                         <span className="text-sm font-semibold text-blue-600">Verified Volunteer</span>
                       </div>
 
-                      {/* View Details Button */}
                       <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
@@ -231,7 +228,7 @@ const Volunteers = () => {
               </AnimatePresence>
             </div>
           ) : (
-            /* No Volunteers Found */
+          
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -263,7 +260,7 @@ const Volunteers = () => {
           )}
         </motion.div>
 
-        {/* Volunteer Details Modal */}
+       
         <AnimatePresence>
           {selectedVolunteer && (
             <motion.div
@@ -280,7 +277,7 @@ const Volunteers = () => {
                 className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Modal Header */}
+              
                 <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white">
                   <div className="flex items-center gap-3">
                     <div className="w-16 h-16 rounded-full bg-white/20 overflow-hidden border-2 border-white/30">
@@ -297,10 +294,10 @@ const Volunteers = () => {
                   </div>
                 </div>
 
-                {/* Modal Content */}
+             
                 <div className="p-6">
                   <div className="space-y-6">
-                    {/* Blood Group */}
+                
                     {selectedVolunteer.blood && (
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
@@ -316,7 +313,7 @@ const Volunteers = () => {
                       </div>
                     )}
 
-                    {/* Location */}
+            
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-blue-500" />
@@ -334,7 +331,7 @@ const Volunteers = () => {
                       </div>
                     </div>
 
-                    {/* Additional Information */}
+                  
                     <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                       <div className="flex items-start gap-3">
                         <Award className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -347,7 +344,7 @@ const Volunteers = () => {
                       </div>
                     </div>
 
-                    {/* Action Buttons */}
+                  
                     <div className="flex gap-3 pt-6 border-t border-gray-200">
                       <motion.button
                         whileHover={{ scale: 1.02 }}

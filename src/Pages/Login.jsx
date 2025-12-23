@@ -84,7 +84,7 @@ const Login = () => {
             className="text-center mb-6 md:mb-8"
           >
             <div className="inline-flex items-center justify-center w-16 h-16 md:w-20 md:h-20 bg-gradient-to-r from-red-500 to-pink-500 rounded-xl md:rounded-2xl mb-3 md:mb-4 shadow-md">
-              <span className="text-3xl md:text-4xl text-white">❤️</span>
+              <span className="text-3xl md:text-4xl text-white">🩸</span>
             </div>
             <h2 className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-red-600 via-pink-500 to-rose-500 bg-clip-text text-transparent mb-2">
               Welcome Back

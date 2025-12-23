@@ -1,27 +1,7 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  Home, 
-  Users, 
-  UserCheck, 
-  Droplets, 
-  Settings, 
-  LogOut, 
-  Menu, 
-  X, 
-  PlusCircle, 
-  FileText, 
-  Bell, 
-  Heart, 
-  Shield, 
-  User as UserIcon,
-  Activity,
-  Calendar,
-  BarChart3,
-  MapPin,
-  Phone
-} from "lucide-react";
+import { Home, Users, Droplets, Settings, LogOut, Menu, X, PlusCircle, FileText, Bell, Heart, Shield, User as UserIcon,Activity,BarChart3,} from "lucide-react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { signOut } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
@@ -67,14 +47,12 @@ const Aside = () => {
     
     // Donor specific
     { to: "/dashboard/add-request", icon: <PlusCircle className="w-5 h-5" />, label: "Add Request", roles: ['donor', 'volunteer'] },
-    { to: "/dashboard/donation-history", icon: <Activity className="w-5 h-5" />, label: "Donation History", roles: ['donor'] },
     
     // Admin specific
     { to: "/dashboard/all-users", icon: <Users className="w-5 h-5" />, label: "All Users", roles: ['admin'] },
-    { to: "/dashboard/manage-requests", icon: <Droplets className="w-5 h-5" />, label: "Manage Requests", roles: ['admin'] },
     { to: "/dashboard/volunteer-dashboard", icon: <Droplets className="w-5 h-5" />, label: "Volunteer Dashboard", roles: ['admin'] },
     { to: "/dashboard/analytics", icon: <BarChart3 className="w-5 h-5" />, label: "Analytics", roles: ['admin'] },
-    // { to: "/dashboard/volunteer-dashboard", icon: <Settings className="w-5 h-5" />, label: "Volunteer Dashboard", allRoles: true },
+   
   ];
 
   const filteredNavItems = navItems.filter(item => {
@@ -122,7 +100,7 @@ const Aside = () => {
 
   return (
     <>
-      {/* Mobile Menu Button */}
+    
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -132,7 +110,7 @@ const Aside = () => {
         <Menu className="w-6 h-6" />
       </motion.button>
 
-      {/* Backdrop for Mobile */}
+ 
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -145,7 +123,7 @@ const Aside = () => {
         )}
       </AnimatePresence>
 
-      {/* Sidebar */}
+
       <motion.aside
         initial={false}
         animate={isCollapsed ? "collapsed" : "expanded"}
@@ -154,7 +132,7 @@ const Aside = () => {
           isCollapsed ? "w-20" : "w-72"
         }`}
       >
-        {/* Collapse Toggle Button */}
+       
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -173,9 +151,9 @@ const Aside = () => {
           )}
         </motion.button>
 
-        {/* Header */}
+       
         <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
-          {/* Animated Background */}
+       
           <motion.div
             animate={{
               backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
@@ -221,7 +199,6 @@ const Aside = () => {
           </div>
         </div>
 
-        {/* User Profile Card */}
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
@@ -266,7 +243,6 @@ const Aside = () => {
           )}
         </AnimatePresence>
 
-        {/* Navigation */}
         <nav className="mt-8 px-4 space-y-1">
           <AnimatePresence>
             {filteredNavItems.map((item, index) => (
@@ -290,7 +266,7 @@ const Aside = () => {
           </AnimatePresence>
         </nav>
 
-        {/* Quick Stats (Only visible when expanded) */}
+
         <AnimatePresence>
           {!isCollapsed && (
             <motion.div
@@ -323,7 +299,7 @@ const Aside = () => {
           )}
         </AnimatePresence>
 
-        {/* Logout Button */}
+ 
         <div className="absolute bottom-0 w-full p-4 border-t border-red-100 bg-white">
           <motion.button
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 5 }}
@@ -350,7 +326,7 @@ const Aside = () => {
         </div>
       </motion.aside>
 
-      {/* Mobile Sidebar */}
+   
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.aside
@@ -360,7 +336,7 @@ const Aside = () => {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="lg:hidden fixed left-0 top-0 h-full w-72 bg-gradient-to-b from-white to-red-50 border-r border-red-100 shadow-xl z-50 overflow-y-auto"
           >
-            {/* Mobile Header */}
+            
             <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
               <motion.div
                 animate={{
@@ -402,7 +378,7 @@ const Aside = () => {
               </div>
             </div>
 
-            {/* Mobile User Profile */}
+        
             <div className="mx-4 -mt-8 relative z-10">
               <div className="bg-white rounded-xl shadow-lg border border-red-100 p-4">
                 <div className="flex items-center gap-3">
@@ -438,7 +414,7 @@ const Aside = () => {
               </div>
             </div>
 
-            {/* Mobile Navigation */}
+      
             <nav className="mt-8 px-4 space-y-1">
               {filteredNavItems.map((item, index) => (
                 <motion.div
@@ -458,7 +434,7 @@ const Aside = () => {
               ))}
             </nav>
 
-            {/* Quick Stats Mobile */}
+ 
             <div className="mt-8 mx-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
               <div className="flex items-center gap-2 mb-3">
                 <Activity className="w-4 h-4 text-blue-600" />
@@ -482,7 +458,6 @@ const Aside = () => {
               </div>
             </div>
 
-            {/* Mobile Logout Button */}
             <div className="mt-8 mx-4 mb-4">
               <motion.button
                 whileHover={{ scale: 1.02 }}
@@ -532,7 +507,6 @@ const NavItem = ({ to, icon, label, collapsed, onClick }) => {
         </motion.span>
       )}
       
-      {/* Tooltip for collapsed state */}
       {collapsed && (
         <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
           {label}
@@ -542,7 +516,7 @@ const NavItem = ({ to, icon, label, collapsed, onClick }) => {
   );
 };
 
-// Import icons for collapse/expand
+
 const ChevronLeft = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />

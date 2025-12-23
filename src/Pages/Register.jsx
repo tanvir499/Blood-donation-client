@@ -100,7 +100,7 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       
-      {/* Floating Blood Drop Icons - Only on larger screens */}
+ 
       <motion.div
         animate={{ y: [0, -20, 0] }}
         transition={{ repeat: Infinity, duration: 3 }}
@@ -116,7 +116,6 @@ const Register = () => {
         ❤️
       </motion.div>
 
-      {/* Main Registration Card - No background */}
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
@@ -124,8 +123,7 @@ const Register = () => {
         className="relative z-10 w-full max-w-md"
       >
         <div className="rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
-          
-          {/* Header Section - No background */}
+        
           <motion.div
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -144,7 +142,7 @@ const Register = () => {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-            {/* Name Input - No background */}
+     
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -167,7 +165,7 @@ const Register = () => {
               </div>
             </motion.div>
 
-            {/* Email Input - No background */}
+        
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -190,7 +188,7 @@ const Register = () => {
               </div>
             </motion.div>
 
-            {/* Photo URL - No background */}
+      
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -209,7 +207,7 @@ const Register = () => {
               </div>
             </motion.div>
 
-            {/* Blood Group - No background */}
+         
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -236,7 +234,7 @@ const Register = () => {
               </select>
             </motion.div>
 
-            {/* District and Upazila - No background */}
+       
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
@@ -285,7 +283,6 @@ const Register = () => {
               </motion.div>
             </div>
 
-            {/* Password - No background */}
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -308,7 +305,6 @@ const Register = () => {
               </div>
             </motion.div>
 
-            {/* Register Button - Only button has gradient background */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -322,7 +318,7 @@ const Register = () => {
               </button>
             </motion.div>
 
-            {/* Divider - No background */}
+           
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -339,7 +335,7 @@ const Register = () => {
               </div>
             </motion.div>
 
-            {/* Google Login - No background */}
+           
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -356,7 +352,6 @@ const Register = () => {
             </motion.div>
           </form>
 
-          {/* Redirect to Login - No background */}
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}

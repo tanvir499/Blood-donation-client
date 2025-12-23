@@ -1,23 +1,8 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate } from "react-router";
 import { motion, useAnimation } from "framer-motion";
-import { 
-  Heart, 
-  Users, 
-  Shield, 
-  Clock, 
-  Phone, 
-  Mail, 
-  MapPin, 
-  Search, 
-  UserPlus,
-  ChevronRight,
-  ArrowRight,
-  Droplets,
-  Activity
+import { Heart, Users, Shield, Clock, Phone, Mail, MapPin, Search, UserPlus, ChevronRight, ArrowRight, Droplets, Activity
 } from "lucide-react";
-
-
 import { AuthContext } from "../../Provider/AuthProvider";
 
 const Home = () => {
@@ -63,6 +48,7 @@ const Home = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50">
+
       {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
@@ -115,10 +101,9 @@ const Home = () => {
         </motion.div>
       ))}
 
-      {/* Navbar */}
      
 
-      {/* Hero Banner */}
+
       <section className="container mx-auto px-4 py-12 md:py-24">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -156,7 +141,7 @@ const Home = () => {
               Join thousands of donors in our mission to provide life-saving blood to those in need across Bangladesh
             </motion.p>
 
-            {/* CTA Buttons */}
+           
             <motion.div 
               variants={staggerContainer}
               initial="hidden"
@@ -185,7 +170,7 @@ const Home = () => {
             </motion.div>
           </motion.div>
 
-          {/* Stats Animation */}
+   
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -212,7 +197,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Featured Section */}
+
       <section className="py-16 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">
           <motion.div
@@ -283,7 +268,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Contact Section */}
+
       <section className="py-16">
         <div className="container mx-auto px-4">
           <motion.div
@@ -330,7 +315,7 @@ const Home = () => {
                   </form>
                 </div>
 
-                {/* Contact Info */}
+ 
                 <div className="space-y-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-6">Get in Touch</h3>
                   
@@ -366,7 +351,7 @@ const Home = () => {
                     </div>
                   </div>
 
-                  {/* Emergency Notice */}
+              
                   <motion.div
                     animate={{ 
                       backgroundColor: ["#fef2f2", "#fee2e2", "#fef2f2"]
@@ -386,7 +371,7 @@ const Home = () => {
         </div>
       </section>
 
-      {/* Footer */}
+     
       <footer className="bg-gradient-to-b from-gray-900 to-gray-800 text-white pt-12 pb-8">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
