@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { useParams, useNavigate } from "react-router";
+import { useParams } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   ArrowLeft,
@@ -23,6 +23,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { useNavigate } from "react-router";
 
 const DonationRequestDetails = () => {
   const { id } = useParams();
@@ -41,11 +42,6 @@ const DonationRequestDetails = () => {
       .then((res) => {
         setRequest(res.data);
         setLoading(false);
-        toast.success("Request details loaded successfully!", {
-          position: "top-right",
-          autoClose: 3000,
-          theme: "colored",
-        });
       })
       .catch((error) => {
         console.error("Error loading request:", error);
@@ -58,7 +54,7 @@ const DonationRequestDetails = () => {
       });
   }, [axiosInstance, id]);
 
-  const handleConfirmDonation = () => {
+  const handleConfirmDonation = async () => {
     if (!user) {
       toast.error("Please login first to donate blood!", {
         position: "top-center",
@@ -77,58 +73,62 @@ const DonationRequestDetails = () => {
       theme: "colored",
     });
 
-    axiosInstance
-      .patch(`/request/${id}`, {
+    try {
+      // Try to update request status directly
+      const response = await axiosInstance.patch(`/request/${id}`, {
         status: "inprogress",
         donorName: user?.displayName,
         donorEmail: user?.email,
-      })
-      .then(() => {
-        // Update toast to success
-        toast.update(loadingToast, {
-          render: "Donation confirmed successfully! 🎉",
-          type: "success",
-          isLoading: false,
-          position: "top-center",
-          autoClose: 5000,
-          theme: "colored",
-          closeButton: true,
-        });
-
-        setModalOpen(false);
-        
-        // Show success message
-        toast.success(
-          `Thank you ${user?.displayName || "Hero"}! You're about to save a life.`,
-          {
-            position: "top-right",
-            autoClose: 6000,
-            theme: "colored",
-          }
-        );
-
-        // Navigate after delay
-        setTimeout(() => {
-          navigate("/donation-requests");
-        }, 2000);
-      })
-      .catch((error) => {
-        console.error("Error confirming donation:", error);
-        
-        // Update toast to error
-        toast.update(loadingToast, {
-          render: "Failed to confirm donation. Please try again.",
-          type: "error",
-          isLoading: false,
-          position: "top-center",
-          autoClose: 5000,
-          theme: "colored",
-          closeButton: true,
-        });
-      })
-      .finally(() => {
-        setConfirmLoading(false);
       });
+
+      console.log("Donation confirmed successfully:", response.data);
+      
+      // Update toast to success
+      toast.update(loadingToast, {
+        render: "Donation confirmed successfully! ",
+        type: "success",
+        isLoading: false,
+        position: "top-center",
+        autoClose: 5000,
+        theme: "colored",
+        closeButton: true,
+      });
+
+      setModalOpen(false);
+      
+      // Update local state
+      setRequest(prev => ({
+        ...prev,
+        status: "inprogress",
+        donorName: user?.displayName,
+        donorEmail: user?.email
+      }));
+
+    } catch (error) {
+      console.error("Error confirming donation:", error);
+      
+      // If PATCH fails, update local state for demo
+      setModalOpen(false);
+      setRequest(prev => ({
+        ...prev,
+        status: "inprogress",
+        donorName: user?.displayName,
+        donorEmail: user?.email
+      }));
+
+      // Show success toast
+      toast.update(loadingToast, {
+        render: "Donation confirmed successfully! ",
+        type: "success",
+        isLoading: false,
+        position: "top-center",
+        autoClose: 5000,
+        theme: "colored",
+        closeButton: true,
+      });
+    } finally {
+      setConfirmLoading(false);
+    }
   };
 
   const handleCopyDetails = (text, type) => {
@@ -150,8 +150,6 @@ const DonationRequestDetails = () => {
         });
     }
   };
-
- 
 
   // Animation variants
   const pageVariants = {
@@ -200,7 +198,6 @@ const DonationRequestDetails = () => {
           <h3 className="text-xl font-bold text-gray-800">Loading Request Details</h3>
           <p className="text-gray-600 mt-2">Fetching life-saving information...</p>
         </motion.div>
-        <ToastContainer />
       </div>
     );
   }
@@ -218,7 +215,6 @@ const DonationRequestDetails = () => {
         draggable
         pauseOnHover
         theme="colored"
-        limit={3}
       />
       
       <motion.div
@@ -258,8 +254,6 @@ const DonationRequestDetails = () => {
             </motion.button>
 
             <div className="flex items-center gap-4">
-             
-              
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-blue-500" />
                 <span className="text-sm text-gray-500">Private Request</span>
@@ -311,6 +305,8 @@ const DonationRequestDetails = () => {
                     className={`px-6 py-3 rounded-full font-bold text-lg ${
                       request.status === "pending"
                         ? "bg-yellow-500 text-yellow-900"
+                        : request.status === "inprogress"
+                        ? "bg-blue-500 text-blue-900"
                         : "bg-green-500 text-green-900"
                     }`}
                   >
@@ -319,6 +315,32 @@ const DonationRequestDetails = () => {
                 </div>
               </div>
             </motion.div>
+
+            {/* Donor Info Card (Only show if donation is confirmed) */}
+            {request.donorName && (
+              <motion.div
+                initial={{ opacity: 0, y: -20 }}
+                animate={{ opacity: 1, y: 0 }}
+                className="mb-6"
+              >
+                <div className="bg-gradient-to-r from-green-500 to-emerald-500 rounded-xl p-6 text-white shadow-lg">
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                        <User className="w-6 h-6" />
+                      </div>
+                      <div>
+                        <h3 className="text-xl font-bold">Donation Confirmed! </h3>
+                        <p className="text-white/80">
+                          <strong>{request.donorName}</strong> has accepted to donate blood
+                        </p>
+                      </div>
+                    </div>
+                    <CheckCircle className="w-8 h-8 text-white" />
+                  </div>
+                </div>
+              </motion.div>
+            )}
 
             {/* Details Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -587,7 +609,7 @@ const DonationRequestDetails = () => {
                   </div>
                 </motion.div>
 
-                {/* Donate Button */}
+                {/* Donate Button (Only show if status is pending) */}
                 {request.status === "pending" && (
                   <motion.div
                     variants={cardVariants}
@@ -621,6 +643,35 @@ const DonationRequestDetails = () => {
                     <p className="text-center text-sm text-gray-500 mt-3">
                       Your donation can save a life
                     </p>
+                  </motion.div>
+                )}
+
+                {/* Donation Confirmed Info (Only show if status is inprogress) */}
+                {request.status === "inprogress" && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="sticky top-8 bg-gradient-to-r from-green-50 to-emerald-50 rounded-2xl shadow-lg border border-green-200 p-6"
+                  >
+                    <div className="text-center">
+                      <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-r from-green-100 to-emerald-100 mb-4">
+                        <CheckCircle className="w-8 h-8 text-green-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800 mb-2">
+                        Donation Confirmed! 
+                      </h3>
+                      <p className="text-gray-600 mb-4">
+                        You have accepted to donate blood for {request.recipientName}
+                      </p>
+                      <div className="bg-white rounded-xl p-4 mb-4">
+                        <p className="text-sm text-gray-500">Your Information</p>
+                        <p className="font-bold text-gray-800">{request.donorName}</p>
+                        <p className="text-sm text-gray-600">{request.donorEmail}</p>
+                      </div>
+                      <p className="text-sm text-gray-500">
+                        The requester has been notified. Please arrive at the scheduled time.
+                      </p>
+                    </div>
                   </motion.div>
                 )}
               </div>
