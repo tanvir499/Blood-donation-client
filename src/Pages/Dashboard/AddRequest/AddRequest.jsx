@@ -1,218 +1,661 @@
-import React, { useContext, useEffect, useState } from 'react';
-import axios from 'axios';
-import useAxiosSecure from '../../../hooks/useAxiosSecure';
-import { AuthContext } from '../../../Provider/AuthProvider';
-
+import React, { useContext, useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import axios from "axios";
+import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { AuthContext } from "../../../Provider/AuthProvider";
+import {
+  User,
+  Mail,
+  Droplets,
+  MapPin,
+  Hospital,
+  Calendar,
+  Clock,
+  FileText,
+  Send,
+  PlusCircle,
+  AlertCircle,
+  CheckCircle,
+  Shield,
+  Heart,
+  ArrowRight,
+} from "lucide-react";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const AddRequest = () => {
+  const [upazilas, setUpazilas] = useState([]);
+  const [districts, setDistricts] = useState([]);
+  const [filteredUpazilas, setFilteredUpazilas] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [selectedDistrict, setSelectedDistrict] = useState("");
+  const { user } = useContext(AuthContext);
 
-    const [upazilas, setUpazilas] = useState([])
-    const [districts, setDistricts] = useState([])
-    const { user } = useContext(AuthContext)
-    
-    const axiosSecure = useAxiosSecure();
-    useEffect(() => {
-        axios.get('/upazila.json')
-            .then(res => setUpazilas(res.data.upazilas))
+  const axiosSecure = useAxiosSecure();
 
-        axios.get('/district.json')
-            .then(res => (setDistricts(res.data.districts)))
-    }, [])
+  useEffect(() => {
+    setLoading(true);
+    Promise.all([axios.get("/upazila.json"), axios.get("/district.json")])
+      .then(([upazilaRes, districtRes]) => {
+        setUpazilas(upazilaRes.data.upazilas || []);
+        setDistricts(districtRes.data.districts || []);
+        setFilteredUpazilas(upazilaRes.data.upazilas || []);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.error("Error loading data:", err);
+        setLoading(false);
+      });
+  }, []);
 
-    const handleSubmit =(e)=>{
-        e.preventDefault()
-        const form = e.target;
+  // Filter upazilas when district changes
+  useEffect(() => {
+    if (selectedDistrict) {
+      const filtered = upazilas.filter(
+        (u) =>
+          u.district &&
+          u.district.toLowerCase() === selectedDistrict.toLowerCase()
+      );
+      setFilteredUpazilas(filtered);
+    } else {
+      setFilteredUpazilas(upazilas);
+    }
+  }, [selectedDistrict, upazilas]);
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const form = e.target;
 
     const requestData = {
-        requesterName: user?.displayName,
-        requesterEmail: user?.email,
+      requesterName: user?.displayName,
+      requesterEmail: user?.email,
 
-        recipientName: form.recipientName.value,
-        bloodGroup: form.bloodGroup.value,
+      recipientName: form.recipientName.value,
+      bloodGroup: form.bloodGroup.value,
 
-        district: form.district.value,
-        upazila: form.upazila.value,
+      district: form.district.value,
+      upazila: form.upazila.value,
 
-        hospital: form.hospital.value,
-        address: form.address.value,
+      hospital: form.hospital.value,
+      address: form.address.value,
 
-        donationDate: form.donationDate.value,
-        donationTime: form.donationTime.value,
+      donationDate: form.donationDate.value,
+      donationTime: form.donationTime.value,
 
-        message: form.message.value,
+      message: form.message.value,
 
-        status: "pending"
-        
+      status: "pending",
+      createdAt: new Date().toISOString(),
     };
-    // console.log(requestData)
-    
-     axiosSecure.post('/requests',requestData)
-       .then(res=>alert(res.data.insertedId))
-       .catch(err=>console.log(err))
-    }
+
+    setLoading(true);
+
+    // Show loading toast
+    const loadingToast = toast.loading("Submitting your request...", {
+      position: "top-center",
+      theme: "colored",
+    });
+
+    axiosSecure
+      .post("/requests", requestData)
+      .then((res) => {
+        // Update toast to success
+        toast.update(loadingToast, {
+          render: "Request submitted successfully! 🎉",
+          type: "success",
+          isLoading: false,
+          position: "top-center",
+          autoClose: 5000,
+          theme: "colored",
+          closeButton: true,
+        });
+
+        toast.success(
+          `Your blood donation request for ${requestData.recipientName} has been posted.`,
+          {
+            position: "top-right",
+            autoClose: 6000,
+            theme: "colored",
+          }
+        );
+
+        // Reset form
+        form.reset();
+        setSelectedDistrict("");
+
+        // Show success message
+        setTimeout(() => {
+          toast.info("Your request is now visible to potential donors.", {
+            position: "bottom-right",
+            autoClose: 4000,
+            theme: "colored",
+          });
+        }, 1000);
+      })
+      .catch((err) => {
+        console.error("Error submitting request:", err);
+
+        // Update toast to error
+        toast.update(loadingToast, {
+          render: "Failed to submit request. Please try again.",
+          type: "error",
+          isLoading: false,
+          position: "top-center",
+          autoClose: 5000,
+          theme: "colored",
+          closeButton: true,
+        });
+
+        toast.error(
+          "Something went wrong. Please check your connection and try again.",
+          {
+            position: "top-right",
+            autoClose: 5000,
+            theme: "colored",
+          }
+        );
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  };
+
+  // Animation variants
+  const pageVariants = {
+    initial: { opacity: 0, y: 20 },
+    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+    exit: { opacity: 0, y: -20 },
+  };
+
+  const cardVariants = {
+    hidden: { opacity: 0, scale: 0.95 },
+    visible: {
+      opacity: 1,
+      scale: 1,
+      transition: { type: "spring", stiffness: 100, damping: 15 },
+    },
+  };
+
+  const pulseAnimation = {
+    scale: [1, 1.05, 1],
+    transition: {
+      duration: 2,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  };
+
+  const floatAnimation = {
+    y: [0, -10, 0],
+    transition: {
+      duration: 3,
+      repeat: Infinity,
+      ease: "easeInOut",
+    },
+  };
+
+  const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   return (
-    <div className="max-w-4xl mx-auto p-6 bg-white rounded-xl shadow-md">
-      <h2 className="text-2xl font-semibold mb-6 text-center">
-        Blood Donation Request
-      </h2>
+    <motion.div
+      initial="initial"
+      animate="animate"
+      variants={pageVariants}
+      className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
+    >
+      {/* Animated Background */}
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
+        <motion.div
+          animate={{
+            x: ["0%", "100%", "0%"],
+            rotate: [0, 180, 360],
+          }}
+          transition={{
+            duration: 40,
+            repeat: Infinity,
+            ease: "linear",
+          }}
+          className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-red-100 to-pink-100 opacity-10 blur-3xl"
+        />
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-5">
-        {/* Requester Info */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="label">Requester Name</label>
-            <input
-              type="text"
-              value={user?.displayName || ""}
-              readOnly
-              className="input input-bordered w-full bg-gray-100"
-            />
-          </div>
+      {/* Main Content with Sidebar Margin */}
+      <div className="lg:ml-72">
+        <div className="container mx-auto px-4 py-8 relative z-10">
+          <div className="max-w-4xl mx-auto">
+            {/* Header */}
+            <motion.div variants={cardVariants} className="text-center mb-10">
+              <motion.div
+                animate={floatAnimation}
+                className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 mb-6"
+              >
+                <Heart className="w-10 h-10 text-red-500" />
+              </motion.div>
+              <motion.h1
+                animate={{
+                  backgroundPosition: ["0%", "100%", "0%"],
+                }}
+                transition={{
+                  duration: 6,
+                  repeat: Infinity,
+                  ease: "linear",
+                }}
+                style={{
+                  background:
+                    "linear-gradient(90deg, #dc2626, #ef4444, #dc2626)",
+                  backgroundSize: "200% auto",
+                  backgroundClip: "text",
+                  WebkitBackgroundClip: "text",
+                  color: "transparent",
+                }}
+                className="text-3xl md:text-4xl font-bold mb-3"
+              >
+                Create Blood Donation Request
+              </motion.h1>
+              <p className="text-gray-600 max-w-2xl mx-auto">
+                Fill out the form below to request blood donation. Your request
+                could save a life.
+              </p>
+            </motion.div>
 
-          <div>
-            <label className="label">Requester Email</label>
-            <input
-              type="email"
-              value={user?.email || ""}
-              readOnly
-              className="input input-bordered w-full bg-gray-100"
-            />
-          </div>
-        </div>
-
-        {/* Recipient Info */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="label">Recipient Name</label>
-            <input
-              name="recipientName"
-              type="text"
-              placeholder="Recipient full name"
-              className="input input-bordered w-full"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="label">Blood Group</label>
-            <select
-              name="bloodGroup"
-              className="select select-bordered w-full"
-              required
+            {/* Form Card */}
+            <motion.div
+              variants={cardVariants}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
             >
-              <option value="">Select blood group</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
+              {/* Form Header */}
+              <div className="bg-gradient-to-r from-red-500 to-pink-500 p-8">
+                <div className="flex items-center gap-4">
+                  <motion.div
+                    animate={{ rotate: 360 }}
+                    transition={{
+                      duration: 2,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
+                    className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
+                  >
+                    <PlusCircle className="w-8 h-8 text-white" />
+                  </motion.div>
+                  <div>
+                    <h2 className="text-2xl font-bold text-white">
+                      New Donation Request
+                    </h2>
+                    <p className="text-white/80">
+                      Please provide all necessary details accurately
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Form Content */}
+              <form onSubmit={handleSubmit} className="p-8">
+                <div className="space-y-8">
+                  {/* Section 1: Requester Info */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
+                        <Shield className="w-5 h-5 text-red-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Requester Information
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <User className="w-4 h-4 text-red-500" />
+                          Requester Name
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="text"
+                            value={user?.displayName || ""}
+                            readOnly
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <CheckCircle className="w-5 h-5 text-green-500" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-red-500" />
+                          Requester Email
+                        </label>
+                        <div className="relative">
+                          <input
+                            type="email"
+                            value={user?.email || ""}
+                            readOnly
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg bg-gray-50 cursor-not-allowed"
+                          />
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2">
+                            <CheckCircle className="w-5 h-5 text-green-500" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 2: Recipient Info */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
+                        <User className="w-5 h-5 text-blue-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Recipient Information
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Recipient Full Name *
+                        </label>
+                        <input
+                          name="recipientName"
+                          type="text"
+                          placeholder="Enter recipient's full name"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <Droplets className="w-4 h-4 text-red-500" />
+                          Required Blood Group *
+                        </label>
+                        <div className="relative">
+                          <select
+                            name="bloodGroup"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none appearance-none bg-white"
+                            required
+                          >
+                            <option value="">Select blood group</option>
+                            {bloodGroups.map((group) => (
+                              <option key={group} value={group}>
+                                {group}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <Droplets className="w-5 h-5 text-gray-400" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 3: Location */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
+                        <MapPin className="w-5 h-5 text-green-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Location Details
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          District *
+                        </label>
+                        <div className="relative">
+                          <select
+                            name="district"
+                            value={selectedDistrict}
+                            onChange={(e) =>
+                              setSelectedDistrict(e.target.value)
+                            }
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none appearance-none bg-white"
+                            required
+                          >
+                            <option value="">Select district</option>
+                            {districts.map((d) => (
+                              <option key={d.id} value={d.name}>
+                                {d.name}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <MapPin className="w-5 h-5 text-gray-400" />
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Upazila *
+                        </label>
+                        <div className="relative">
+                          <select
+                            name="upazila"
+                            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none appearance-none bg-white"
+                            required
+                            disabled={!selectedDistrict}
+                          >
+                            <option value="" disabled>
+                              Select your Upazila
+                            </option>
+                            {upazilas.map((u) => (
+                              <option value={u.name} key={u.id}>
+                                {u.name}
+                              </option>
+                            ))}
+                          </select>
+                          <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                            <MapPin className="w-5 h-5 text-gray-400" />
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <Hospital className="w-4 h-4 text-red-500" />
+                          Hospital Name *
+                        </label>
+                        <input
+                          name="hospital"
+                          type="text"
+                          placeholder="Enter hospital name"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700">
+                          Full Address *
+                        </label>
+                        <input
+                          name="address"
+                          type="text"
+                          placeholder="Enter complete address"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 4: Date & Time */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
+                        <Calendar className="w-5 h-5 text-purple-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Donation Schedule
+                      </h3>
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <Calendar className="w-4 h-4 text-red-500" />
+                          Donation Date *
+                        </label>
+                        <input
+                          name="donationDate"
+                          type="date"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                          required
+                        />
+                      </div>
+
+                      <div className="space-y-2">
+                        <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
+                          <Clock className="w-4 h-4 text-red-500" />
+                          Donation Time *
+                        </label>
+                        <input
+                          name="donationTime"
+                          type="time"
+                          className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all"
+                          required
+                        />
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Section 5: Message */}
+                  <div className="space-y-6">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
+                        <FileText className="w-5 h-5 text-yellow-600" />
+                      </div>
+                      <h3 className="text-xl font-bold text-gray-800">
+                        Additional Information
+                      </h3>
+                    </div>
+
+                    <div className="space-y-2">
+                      <label className="block text-sm font-medium text-gray-700">
+                        Request Message *
+                      </label>
+                      <textarea
+                        name="message"
+                        rows="4"
+                        placeholder="Please provide details about why blood is needed, patient condition, any special requirements..."
+                        className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all resize-none"
+                        required
+                      />
+                      <p className="text-sm text-gray-500 mt-1">
+                        Clear information helps donors understand the urgency
+                        and respond quickly.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Important Note */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-100"
+                  >
+                    <div className="flex items-start gap-3">
+                      <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
+                      <div>
+                        <h4 className="font-semibold text-yellow-800 mb-1">
+                          Important Information
+                        </h4>
+                        <ul className="text-sm text-yellow-700 space-y-1">
+                          <li>
+                            • Please ensure all information is accurate before
+                            submitting
+                          </li>
+                          <li>
+                            • Your request will be visible to registered donors
+                            in your area
+                          </li>
+                          <li>
+                            • You will be notified when a donor responds to your
+                            request
+                          </li>
+                          <li>
+                            • For emergencies, please contact hospital
+                            authorities directly
+                          </li>
+                        </ul>
+                      </div>
+                    </div>
+                  </motion.div>
+
+                  {/* Submit Button */}
+                  <motion.button
+                    whileHover={{
+                      scale: 1.02,
+                      boxShadow: "0 10px 30px rgba(239, 68, 68, 0.3)",
+                    }}
+                    whileTap={{ scale: 0.98 }}
+                    type="submit"
+                    disabled={loading}
+                    className="w-full py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group"
+                  >
+                    {loading ? (
+                      <>
+                        <motion.div
+                          animate={{ rotate: 360 }}
+                          transition={{
+                            duration: 1,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
+                          className="w-6 h-6 border-2 border-white border-t-transparent rounded-full"
+                        />
+                        <span>Submitting Request...</span>
+                      </>
+                    ) : (
+                      <>
+                        <Send className="w-6 h-6 group-hover:scale-110 transition-transform" />
+                        <span>Submit Donation Request</span>
+                        <ArrowRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
+                      </>
+                    )}
+                  </motion.button>
+                </div>
+              </form>
+            </motion.div>
+
+            {/* Loading State Overlay */}
+            {loading && (
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                className="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center z-50"
+              >
+                <motion.div
+                  animate={pulseAnimation}
+                  className="bg-white rounded-2xl p-8 shadow-2xl text-center"
+                >
+                  <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4 mx-auto">
+                    <Heart className="w-10 h-10 text-red-500 animate-pulse" />
+                  </div>
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">
+                    Processing Your Request
+                  </h3>
+                  <p className="text-gray-600">
+                    Please wait while we save your donation request...
+                  </p>
+                </motion.div>
+              </motion.div>
+            )}
           </div>
         </div>
-
-        {/* Location */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="label">Recipient District</label>
-            <select
-              name="district"
-              className="select select-bordered w-full"
-              required
-            >
-              <option value="">Select your district</option>
-              {districts.map((d) => (
-                <option key={d.id} value={d.name}>
-                  {d.name}
-                </option>
-              ))}
-            </select>
-          </div>
-
-          <div>
-            <label className="label">Recipient Upazila</label>
-            <select
-              name="upazila"
-              className="select select-bordered w-full"
-              required
-            >
-              <option value="">Select your upazila</option>
-              {upazilas.map((u) => (
-                <option key={u.id} value={u.name}>
-                  {u.name}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-
-        {/* Hospital & Address */}
-        <div>
-          <label className="label">Hospital Name</label>
-          <input
-            name="hospital"
-            type="text"
-            placeholder="Dhaka Medical College Hospital"
-            className="input input-bordered w-full"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="label">Full Address</label>
-          <input
-            name="address"
-            type="text"
-            placeholder="Zahir Raihan Rd, Dhaka"
-            className="input input-bordered w-full"
-            required
-          />
-        </div>
-
-        {/* Date & Time */}
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <label className="label">Donation Date</label>
-            <input
-              name="donationDate"
-              type="date"
-              className="input input-bordered w-full"
-              required
-            />
-          </div>
-
-          <div>
-            <label className="label">Donation Time</label>
-            <input
-              name="donationTime"
-              type="time"
-              className="input input-bordered w-full"
-              required
-            />
-          </div>
-        </div>
-
-        {/* Message */}
-        <div>
-          <label className="label">Request Message</label>
-          <textarea
-            name="message"
-            rows="4"
-            placeholder="Explain why blood is needed..."
-            className="textarea textarea-bordered w-full"
-            required
-          ></textarea>
-        </div>
-
-        {/* Submit */}
-        <button type="submit" className="btn btn-error w-full text-white">
-          Request Blood
-        </button>
-      </form>
-    </div>
+      </div>
+    </motion.div>
   );
 };
 

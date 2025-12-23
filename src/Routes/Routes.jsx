@@ -14,6 +14,8 @@ import PaymentSuccess from "../Pages/Home/PaymentSuccess/PaymentSuccess";
 import Search from "../Pages/Search/Search";
 import DonationRequest from "../Pages/DonationRequest/DonationRequest";
 import DonationRequestDetails from "../Pages/DonationRequestDetails/DonationRequestDetails";
+import DonorDashboard from "../Pages/Dashboard/DonorDashboard/DonorDashboard";
+import VolunteerDashboard from "../Pages/Dashboard/VolunteerDashboard/VolunteerDashboard";
 
 
 
@@ -79,6 +81,14 @@ const router = createBrowserRouter([
         path:'my-request',
         element: <MyRequest></MyRequest>
       },
+      {
+        path:'donation-requests',
+        element: <DonorDashboard></DonorDashboard>
+      },
+      {
+        path:'volunteer-dashboard',
+        element: <VolunteerDashboard></VolunteerDashboard>
+      }
     ]
   }
 ]);

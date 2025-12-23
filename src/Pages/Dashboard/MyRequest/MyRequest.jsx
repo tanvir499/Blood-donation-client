@@ -232,15 +232,7 @@ const MyRequest = () => {
                   Refresh
                 </motion.button>
 
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleExportData}
-                  className="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center gap-2"
-                >
-                  <Download className="w-5 h-5" />
-                  Export
-                </motion.button>
+               
               </div>
             </div>
 
@@ -304,24 +296,7 @@ const MyRequest = () => {
                 </div>
               </motion.div>
 
-              <motion.div
-                variants={cardVariants}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 text-sm">Total Pages</p>
-                    <p className="text-3xl font-bold text-gray-800">{pages.length}</p>
-                  </div>
-                  <motion.div
-                    animate={pulseAnimation}
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center"
-                  >
-                    <Activity className="w-6 h-6 text-red-600" />
-                  </motion.div>
-                </div>
-              </motion.div>
+             
             </div>
           </motion.div>
 
@@ -364,19 +339,6 @@ const MyRequest = () => {
                   </select>
                 </div>
 
-                <select
-                  value={itemsPerPage}
-                  onChange={(e) => {
-                    setItemsPerPage(Number(e.target.value));
-                    setCurrentPage(1);
-                  }}
-                  className="px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none bg-white"
-                >
-                  <option value="5">5 per page</option>
-                  <option value="10">10 per page</option>
-                  <option value="20">20 per page</option>
-                  <option value="50">50 per page</option>
-                </select>
               </div>
             </div>
           </motion.div>

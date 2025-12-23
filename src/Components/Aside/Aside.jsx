@@ -1,23 +1,6 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import {
-  FiHome,
-  FiUsers,
-  FiUserCheck,
-  FiDroplet,
-  FiSettings,
-  FiLogOut,
-  FiMenu,
-  FiX,
-  FiPlusCircle,
-  FiFileText,
-  FiBell,
-  FiHeart,
-  FiShield,
-  FiUser,
-  FiActivity
-} from "react-icons/fi";
 import { 
   Home, 
   Users, 
@@ -80,7 +63,7 @@ const Aside = () => {
   const navItems = [
     { to: "/dashboard", icon: <Home className="w-5 h-5" />, label: "Profile", allRoles: true },
     { to: "/dashboard/my-request", icon: <FileText className="w-5 h-5" />, label: "My Requests", allRoles: true },
-    { to: "/dashboard/donation-requests", icon: <Heart className="w-5 h-5" />, label: "Find Donors", allRoles: true },
+    { to: "/dashboard/donation-requests", icon: <Heart className="w-5 h-5" />, label: "Donor-Dashboard", allRoles: true },
     
     // Donor specific
     { to: "/dashboard/add-request", icon: <PlusCircle className="w-5 h-5" />, label: "Add Request", roles: ['donor', 'volunteer'] },
@@ -90,7 +73,7 @@ const Aside = () => {
     { to: "/dashboard/all-users", icon: <Users className="w-5 h-5" />, label: "All Users", roles: ['admin'] },
     { to: "/dashboard/manage-requests", icon: <Droplets className="w-5 h-5" />, label: "Manage Requests", roles: ['admin'] },
     { to: "/dashboard/analytics", icon: <BarChart3 className="w-5 h-5" />, label: "Analytics", roles: ['admin'] },
-    { to: "/dashboard/settings", icon: <Settings className="w-5 h-5" />, label: "Settings", allRoles: true },
+    { to: "/dashboard/volunteer-dashboard", icon: <Settings className="w-5 h-5" />, label: "Volunteer Dashboard", allRoles: true },
   ];
 
   const filteredNavItems = navItems.filter(item => {
