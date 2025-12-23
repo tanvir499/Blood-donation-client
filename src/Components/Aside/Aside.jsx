@@ -51,7 +51,6 @@ const Aside = () => {
     // Admin specific
     { to: "/dashboard/all-users", icon: <Users className="w-5 h-5" />, label: "All Users", roles: ['admin'] },
     { to: "/dashboard/volunteer-dashboard", icon: <Droplets className="w-5 h-5" />, label: "Volunteer Dashboard", roles: ['admin'] },
-    { to: "/dashboard/analytics", icon: <BarChart3 className="w-5 h-5" />, label: "Analytics", roles: ['admin'] },
    
   ];
 
@@ -265,39 +264,6 @@ const Aside = () => {
             ))}
           </AnimatePresence>
         </nav>
-
-
-        <AnimatePresence>
-          {!isCollapsed && (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              exit={{ opacity: 0, y: 20 }}
-              className="mt-8 mx-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100"
-            >
-              <div className="flex items-center gap-2 mb-3">
-                <Activity className="w-4 h-4 text-blue-600" />
-                <span className="text-sm font-semibold text-blue-800">
-                  Quick Stats
-                </span>
-              </div>
-              <div className="space-y-2">
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-600">Donations</span>
-                  <span className="text-sm font-bold text-red-600">0</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-600">Requests</span>
-                  <span className="text-sm font-bold text-green-600">0</span>
-                </div>
-                <div className="flex items-center justify-between">
-                  <span className="text-xs text-gray-600">Saved Lives</span>
-                  <span className="text-sm font-bold text-purple-600">0</span>
-                </div>
-              </div>
-            </motion.div>
-          )}
-        </AnimatePresence>
 
  
         <div className="absolute bottom-0 w-full p-4 border-t border-red-100 bg-white">

@@ -429,111 +429,7 @@ const MainDashboard = () => {
             </div>
           </motion.div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-            {/* Total Donations */}
-            <motion.div
-              variants={cardVariants}
-              transition={{ delay: 0.1 }}
-              whileHover={{ y: -5 }}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm">Total Donations</p>
-                  <p className="text-3xl font-bold text-gray-800">{stats.donations}</p>
-                  <p className="text-green-600 text-sm mt-1 flex items-center gap-1">
-                    <TrendingUp className="w-4 h-4" />
-                    +2 this month
-                  </p>
-                </div>
-                <motion.div
-                  animate={pulseAnimation}
-                  className="w-14 h-14 rounded-full bg-red-100 flex items-center justify-center"
-                >
-                  <Droplets className="w-7 h-7 text-red-600" />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            {/* Active Requests */}
-            <motion.div
-              variants={cardVariants}
-              transition={{ delay: 0.2 }}
-              whileHover={{ y: -5 }}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm">Active Requests</p>
-                  <p className="text-3xl font-bold text-gray-800">{stats.requests}</p>
-                  <p className="text-blue-600 text-sm mt-1 flex items-center gap-1">
-                    <Activity className="w-4 h-4" />
-                    {stats.pendingRequests} pending
-                  </p>
-                </div>
-                <motion.div
-                  animate={floatAnimation}
-                  className="w-14 h-14 rounded-full bg-blue-100 flex items-center justify-center"
-                >
-                  <Bell className="w-7 h-7 text-blue-600" />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            {/* Saved Lives */}
-            <motion.div
-              variants={cardVariants}
-              transition={{ delay: 0.3 }}
-              whileHover={{ y: -5 }}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm">Lives Saved</p>
-                  <p className="text-3xl font-bold text-gray-800">{stats.savedLives}</p>
-                  <p className="text-purple-600 text-sm mt-1 flex items-center gap-1">
-                    <Award className="w-4 h-4" />
-                    Hero Level
-                  </p>
-                </div>
-                <motion.div
-                  animate={{ rotate: 360 }}
-                  transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                  className="w-14 h-14 rounded-full bg-purple-100 flex items-center justify-center"
-                >
-                  <Heart className="w-7 h-7 text-purple-600" />
-                </motion.div>
-              </div>
-            </motion.div>
-
-            {/* Last Donation */}
-            <motion.div
-              variants={cardVariants}
-              transition={{ delay: 0.4 }}
-              whileHover={{ y: -5 }}
-              className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6"
-            >
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-gray-500 text-sm">Last Donation</p>
-                  <p className="text-2xl font-bold text-gray-800">
-                    {profileData.lastDonation || "Never"}
-                  </p>
-                  <p className="text-yellow-600 text-sm mt-1 flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    {profileData.lastDonation ? "120 days ago" : "Ready to donate!"}
-                  </p>
-                </div>
-                <motion.div
-                  animate={pulseAnimation}
-                  className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center"
-                >
-                  <Calendar className="w-7 h-7 text-green-600" />
-                </motion.div>
-              </div>
-            </motion.div>
-          </div>
+         
 
           {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -608,25 +504,7 @@ const MainDashboard = () => {
                   )}
                 </div>
 
-                {/* Quick Actions */}
-                <div className="space-y-3 mb-6">
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <Plus className="w-5 h-5" />
-                    Create New Request
-                  </motion.button>
-                  <motion.button
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    className="w-full py-3 border border-gray-300 text-gray-700 font-semibold rounded-lg hover:bg-gray-50 transition-all duration-300 flex items-center justify-center gap-2"
-                  >
-                    <Activity className="w-5 h-5" />
-                    View History
-                  </motion.button>
-                </div>
+             
 
                 {/* Role Badge */}
                 <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
