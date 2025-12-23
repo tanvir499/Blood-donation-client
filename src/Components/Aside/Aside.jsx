@@ -72,8 +72,9 @@ const Aside = () => {
     // Admin specific
     { to: "/dashboard/all-users", icon: <Users className="w-5 h-5" />, label: "All Users", roles: ['admin'] },
     { to: "/dashboard/manage-requests", icon: <Droplets className="w-5 h-5" />, label: "Manage Requests", roles: ['admin'] },
+    { to: "/dashboard/volunteer-dashboard", icon: <Droplets className="w-5 h-5" />, label: "Volunteer Dashboard", roles: ['admin'] },
     { to: "/dashboard/analytics", icon: <BarChart3 className="w-5 h-5" />, label: "Analytics", roles: ['admin'] },
-    { to: "/dashboard/volunteer-dashboard", icon: <Settings className="w-5 h-5" />, label: "Volunteer Dashboard", allRoles: true },
+    // { to: "/dashboard/volunteer-dashboard", icon: <Settings className="w-5 h-5" />, label: "Volunteer Dashboard", allRoles: true },
   ];
 
   const filteredNavItems = navItems.filter(item => {
