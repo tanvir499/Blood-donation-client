@@ -1,100 +1,27 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Droplets, MapPin, Mail, Phone, Shield, Heart, Calendar, User, Search, Filter, RefreshCw, ChevronDown, ChevronUp, Star, Award, Activity, Eye
-} from "lucide-react";
+import { Users, Droplets, MapPin, Mail, Shield, Heart, RefreshCw, Activity, Eye, Award } from "lucide-react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-
+import { 
+  cardVariants, 
+  pulseAnimation,
+  buttonHoverAnimation 
+} from "../utils/AnimationUtils";
 
 const Volunteers = () => {
   const axiosInstance = useAxiosSecure();
   const [volunteers, setVolunteers] = useState([]);
-  const [filteredVolunteers, setFilteredVolunteers] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({
-    district: "all",
-    upazila: "all",
-    bloodGroup: "all"
-  });
   const [selectedVolunteer, setSelectedVolunteer] = useState(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     axiosInstance
       .get("/volunteers")
       .then((res) => {
         setVolunteers(res.data);
-        setFilteredVolunteers(res.data);
       })
       .finally(() => setLoading(false));
   }, [axiosInstance]);
-
-  useEffect(() => {
-    let filtered = [...volunteers];
-
-    // Apply search filter
-    if (searchTerm) {
-      filtered = filtered.filter(volunteer =>
-        volunteer.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        volunteer.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        volunteer.district?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        volunteer.upazila?.toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    }
-
-    // Apply district filter
-    if (filters.district !== "all") {
-      filtered = filtered.filter(volunteer => volunteer.district === filters.district);
-    }
-
-    // Apply upazila filter
-    if (filters.upazila !== "all") {
-      filtered = filtered.filter(volunteer => volunteer.upazila === filters.upazila);
-    }
-
-    // Apply blood group filter
-    if (filters.bloodGroup !== "all") {
-      filtered = filtered.filter(volunteer => volunteer.blood === filters.bloodGroup);
-    }
-
-    setFilteredVolunteers(filtered);
-  }, [volunteers, searchTerm, filters]);
-
-  const handleResetFilters = () => {
-    setSearchTerm("");
-    setFilters({
-      district: "all",
-      upazila: "all",
-      bloodGroup: "all"
-    });
-    setFilteredVolunteers(volunteers);
-  };
-
- 
-
-  // Animation variants
-  const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    exit: { opacity: 0, y: -20 }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    }
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
 
   if (loading) {
     return (
@@ -115,11 +42,7 @@ const Volunteers = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50">
-
-
       <div className="container mx-auto px-4 py-8 md:py-12">
-    
-
         <motion.div
           variants={cardVariants}
           transition={{ delay: 0.4 }}
@@ -135,16 +58,14 @@ const Volunteers = () => {
             </div>
           </div>
         </motion.div>
-
-      
         <motion.div
           variants={cardVariants}
           transition={{ delay: 0.5 }}
         >
-          {filteredVolunteers.length > 0 ? (
+          {volunteers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AnimatePresence>
-                {filteredVolunteers.map((volunteer, index) => (
+                {volunteers.map((volunteer, index) => (
                   <motion.div
                     key={volunteer._id}
                     variants={cardVariants}
@@ -154,9 +75,7 @@ const Volunteers = () => {
                     whileHover={{ y: -5 }}
                     className="bg-white rounded-2xl shadow-lg border border-red-100 overflow-hidden group"
                   >
-                 
                     <div className="p-6">
-                  
                       <div className="relative mb-6">
                         <motion.div
                           whileHover={{ scale: 1.1 }}
@@ -184,7 +103,6 @@ const Volunteers = () => {
                           <span className="text-sm truncate">{volunteer.email}</span>
                         </div>
 
-                    
                         {volunteer.blood && (
                           <motion.div
                             animate={pulseAnimation}
@@ -207,15 +125,13 @@ const Volunteers = () => {
                         </div>
                       </div>
 
-                  
                       <div className="flex items-center justify-center gap-2 mb-6">
                         <Shield className="w-4 h-4 text-blue-500" />
                         <span className="text-sm font-semibold text-blue-600">Verified Volunteer</span>
                       </div>
 
                       <motion.button
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}
+                        {...buttonHoverAnimation}
                         onClick={() => setSelectedVolunteer(volunteer)}
                         className="w-full py-2 bg-gradient-to-r from-red-50 to-pink-50 text-red-600 font-semibold rounded-lg hover:bg-red-100 transition-all duration-300 flex items-center justify-center gap-2"
                       >
@@ -228,7 +144,6 @@ const Volunteers = () => {
               </AnimatePresence>
             </div>
           ) : (
-          
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -241,26 +156,21 @@ const Volunteers = () => {
                 No Volunteers Found
               </h3>
               <p className="text-gray-600 max-w-md mx-auto mb-8">
-                {searchTerm || Object.values(filters).some(f => f !== 'all')
-                  ? "No volunteers match your search criteria. Try adjusting your filters."
-                  : "No volunteers are currently registered."}
+                No volunteers are currently registered.
               </p>
-              {(searchTerm || Object.values(filters).some(f => f !== 'all')) && (
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={handleResetFilters}
-                  className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 mx-auto"
-                >
-                  <RefreshCw className="w-5 h-5" />
-                  Reset Filters
-                </motion.button>
-              )}
+              <motion.button
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
+                onClick={() => window.location.reload()}
+                className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2 mx-auto"
+              >
+                <RefreshCw className="w-5 h-5" />
+                Refresh
+              </motion.button>
             </motion.div>
           )}
         </motion.div>
 
-       
         <AnimatePresence>
           {selectedVolunteer && (
             <motion.div
@@ -277,7 +187,6 @@ const Volunteers = () => {
                 className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
                 onClick={(e) => e.stopPropagation()}
               >
-              
                 <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white">
                   <div className="flex items-center gap-3">
                     <div className="w-16 h-16 rounded-full bg-white/20 overflow-hidden border-2 border-white/30">
@@ -294,10 +203,8 @@ const Volunteers = () => {
                   </div>
                 </div>
 
-             
                 <div className="p-6">
                   <div className="space-y-6">
-                
                     {selectedVolunteer.blood && (
                       <div className="space-y-2">
                         <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
@@ -313,7 +220,6 @@ const Volunteers = () => {
                       </div>
                     )}
 
-            
                     <div className="space-y-2">
                       <label className="text-sm font-medium text-gray-500 flex items-center gap-2">
                         <MapPin className="w-4 h-4 text-blue-500" />
@@ -331,7 +237,6 @@ const Volunteers = () => {
                       </div>
                     </div>
 
-                  
                     <div className="p-4 bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
                       <div className="flex items-start gap-3">
                         <Award className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
@@ -344,7 +249,6 @@ const Volunteers = () => {
                       </div>
                     </div>
 
-                  
                     <div className="flex gap-3 pt-6 border-t border-gray-200">
                       <motion.button
                         whileHover={{ scale: 1.02 }}

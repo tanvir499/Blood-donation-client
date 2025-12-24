@@ -1,26 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { 
-  User, 
-  MapPin, 
-  Calendar, 
-  Clock, 
-  Droplets, 
-  CheckCircle, 
-  XCircle, 
-  Edit2, 
-  Trash2, 
-  Eye, 
-  ArrowRight,
-  PlusCircle,
-  TrendingUp,
-  Activity,
-  Heart,
-  AlertCircle,
-  Shield,
-  Users,
-  FileText,
-  ChevronRight
+import { User, MapPin, Calendar, Clock, Droplets, CheckCircle, XCircle, Edit2, Trash2, Eye, ArrowRight,PlusCircle,Activity,Heart,AlertCircle,FileText,ChevronRight
 } from 'lucide-react';
 import { AuthContext } from '../../../Provider/AuthProvider';
 import useAxiosSecure from '../../../hooks/useAxiosSecure';
@@ -48,7 +28,6 @@ const DonorDashboard = () => {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      // Fetch recent requests (max 3)
       axiosSecure.get(`/user-requests/${user.email}?limit=3`)
         .then(res => {
           setRecentRequests(res.data.requests || []);
@@ -76,22 +55,19 @@ const DonorDashboard = () => {
           theme: "colored",
         });
         
-        // Update local state
+
         setRecentRequests(prev => prev.map(req => 
           req._id === requestId ? { ...req, status: newStatus } : req
         ));
         
-        // Update stats
         setStats(prev => {
           const oldStatus = recentRequests.find(r => r._id === requestId)?.status;
           const newStats = { ...prev };
-          
-          // Decrement old status count
+
           if (oldStatus && newStats[oldStatus] > 0) {
             newStats[oldStatus]--;
           }
-          
-          // Increment new status count
+  
           newStats[newStatus]++;
           
           return newStats;
@@ -116,10 +92,10 @@ const DonorDashboard = () => {
           theme: "colored",
         });
         
-        // Remove from recent requests
+      
         setRecentRequests(prev => prev.filter(req => req._id !== deleteModal.requestId));
         
-        // Update stats
+
         const deletedRequest = recentRequests.find(r => r._id === deleteModal.requestId);
         if (deletedRequest) {
           setStats(prev => ({
@@ -167,7 +143,6 @@ const DonorDashboard = () => {
     return timeString || 'Not specified';
   };
 
-  // Animation variants
   const pageVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
@@ -209,7 +184,7 @@ const DonorDashboard = () => {
           className="text-center"
         >
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
-            <Heart className="w-10 h-10 text-red-500 animate-pulse" />
+            <Droplets className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
           <h3 className="text-xl font-bold text-gray-800">Loading Dashboard</h3>
           <p className="text-gray-600 mt-2">Getting your information ready...</p>
@@ -225,7 +200,7 @@ const DonorDashboard = () => {
       variants={pageVariants}
       className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
     >
-      {/* Animated Background */}
+   
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
@@ -241,10 +216,9 @@ const DonorDashboard = () => {
         />
       </div>
 
-      {/* Main Content with Sidebar Margin */}
       <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
-          {/* Welcome Section */}
+      
           <motion.div
             variants={cardVariants}
             className="mb-10"
@@ -258,21 +232,11 @@ const DonorDashboard = () => {
                   Here's an overview of your blood donation activities
                 </p>
               </div>
-
-              <motion.button
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-                onClick={() => navigate('/dashboard/add-request')}
-                className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-              >
-                <PlusCircle className="w-5 h-5" />
-                New Donation Request
-              </motion.button>
             </div>
 
-            {/* Stats Grid */}
+           
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-8">
-              {/* Total Requests */}
+             
               <motion.div
                 variants={cardVariants}
                 transition={{ delay: 0.1 }}
@@ -293,7 +257,7 @@ const DonorDashboard = () => {
                 </div>
               </motion.div>
 
-              {/* Pending */}
+    
               <motion.div
                 variants={cardVariants}
                 transition={{ delay: 0.2 }}
@@ -314,7 +278,6 @@ const DonorDashboard = () => {
                 </div>
               </motion.div>
 
-              {/* In Progress */}
               <motion.div
                 variants={cardVariants}
                 transition={{ delay: 0.3 }}
@@ -336,7 +299,6 @@ const DonorDashboard = () => {
                 </div>
               </motion.div>
 
-              {/* Completed */}
               <motion.div
                 variants={cardVariants}
                 transition={{ delay: 0.4 }}
@@ -357,7 +319,7 @@ const DonorDashboard = () => {
                 </div>
               </motion.div>
 
-              {/* Cancelled */}
+       
               <motion.div
                 variants={cardVariants}
                 transition={{ delay: 0.5 }}
@@ -380,7 +342,7 @@ const DonorDashboard = () => {
             </div>
           </motion.div>
 
-          {/* Recent Donation Requests Section */}
+         
           {recentRequests.length > 0 ? (
             <motion.div
               variants={cardVariants}
@@ -409,7 +371,6 @@ const DonorDashboard = () => {
                 </motion.button>
               </div>
 
-              {/* Table - Desktop */}
               <div className="hidden lg:block">
                 <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
                   <table className="w-full">
@@ -525,7 +486,7 @@ const DonorDashboard = () => {
                                   {request.status || "Unknown"}
                                 </span>
                                 
-                                {/* Status Action Buttons (only for inprogress) */}
+                      
                                 {request.status === 'inprogress' && (
                                   <div className="flex gap-2 mt-2">
                                     <motion.button
@@ -591,7 +552,7 @@ const DonorDashboard = () => {
                 </div>
               </div>
 
-              {/* Cards - Mobile */}
+            
               <div className="lg:hidden space-y-4">
                 <AnimatePresence>
                   {recentRequests.map((request, index) => (
@@ -605,7 +566,7 @@ const DonorDashboard = () => {
                       className="bg-white rounded-xl shadow-lg border border-red-100 overflow-hidden"
                     >
                       <div className="p-6">
-                        {/* Card Header */}
+              
                         <div className="flex items-start justify-between mb-4">
                           <div className="flex items-center gap-3">
                             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-red-100 to-pink-100 flex items-center justify-center border-2 border-red-200">
@@ -628,7 +589,7 @@ const DonorDashboard = () => {
                           </span>
                         </div>
 
-                        {/* Card Details */}
+        
                         <div className="space-y-3 mb-6">
                           <div className="flex items-center gap-2 text-gray-600">
                             <MapPin className="w-4 h-4 text-gray-400" />
@@ -646,10 +607,10 @@ const DonorDashboard = () => {
                           </div>
                         </div>
 
-                        {/* Action Buttons */}
+                    
                         <div className="flex items-center justify-between border-t border-gray-100 pt-6">
                           <div className="flex items-center gap-2">
-                            {/* Status Action Buttons (only for inprogress) */}
+                         
                             {request.status === 'inprogress' && (
                               <div className="flex gap-2">
                                 <motion.button
@@ -712,7 +673,6 @@ const DonorDashboard = () => {
                 </AnimatePresence>
               </div>
 
-              {/* View All Button */}
               <div className="mt-8 text-center">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
@@ -727,7 +687,7 @@ const DonorDashboard = () => {
               </div>
             </motion.div>
           ) : (
-            /* No Requests State */
+           
             <motion.div
               variants={cardVariants}
               transition={{ delay: 0.6 }}
@@ -756,7 +716,6 @@ const DonorDashboard = () => {
         </div>
       </div>
 
-      {/* Delete Confirmation Modal */}
       <AnimatePresence>
         {deleteModal.open && (
           <motion.div
@@ -773,7 +732,7 @@ const DonorDashboard = () => {
               className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
               onClick={(e) => e.stopPropagation()}
             >
-              {/* Modal Header */}
+            
               <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white">
                 <div className="flex items-center gap-3">
                   <AlertCircle className="w-12 h-12 text-white/80" />
@@ -784,7 +743,7 @@ const DonorDashboard = () => {
                 </div>
               </div>
 
-              {/* Modal Content */}
+  
               <div className="p-6">
                 <div className="space-y-4">
                   <div className="bg-gray-50 rounded-xl p-4">
@@ -793,7 +752,6 @@ const DonorDashboard = () => {
                     </p>
                   </div>
 
-                  {/* Modal Actions */}
                   <div className="flex gap-3 mt-6">
                     <motion.button
                       whileHover={{ scale: 1.02 }}

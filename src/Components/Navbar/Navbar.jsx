@@ -4,7 +4,7 @@ import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router";
 import auth from "../../firebase/firebase.config";
 import { motion, AnimatePresence } from "framer-motion";
-import {Heart,Droplets,ChevronRight,ArrowRight,Menu,X,Home,Search,DollarSign,LogOut,User as UserIcon,
+import {Heart,Droplets,ChevronRight,ArrowRight,Menu,X,Home,Search,DollarSign,LogOut,Shield,User as UserIcon,
 } from "lucide-react";
 
 const Navbar = () => {

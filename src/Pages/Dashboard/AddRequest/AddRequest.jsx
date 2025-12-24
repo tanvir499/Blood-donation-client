@@ -3,23 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../Provider/AuthProvider";
-import {
-  User,
-  Mail,
-  Droplets,
-  MapPin,
-  Hospital,
-  Calendar,
-  Clock,
-  FileText,
-  Send,
-  PlusCircle,
-  AlertCircle,
-  CheckCircle,
-  Shield,
-  Heart,
-  ArrowRight,
-} from "lucide-react";
+import {User,Mail,Droplets,MapPin,Hospital,Calendar,Clock,FileText,Send,PlusCircle,AlertCircle,CheckCircle,Shield,ArrowRight} from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 
@@ -90,7 +74,6 @@ const AddRequest = () => {
 
     setLoading(true);
 
-    // Show loading toast
     const loadingToast = toast.loading("Submitting your request...", {
       position: "top-center",
       theme: "colored",
@@ -99,9 +82,8 @@ const AddRequest = () => {
     axiosSecure
       .post("/requests", requestData)
       .then((res) => {
-        // Update toast to success
         toast.update(loadingToast, {
-          render: "Request submitted successfully! 🎉",
+          render: "Request submitted successfully! ",
           type: "success",
           isLoading: false,
           position: "top-center",
@@ -117,13 +99,11 @@ const AddRequest = () => {
             autoClose: 6000,
             theme: "colored",
           }
-        );
-
-        // Reset form
+        ); 
         form.reset();
+
         setSelectedDistrict("");
 
-        // Show success message
         setTimeout(() => {
           toast.info("Your request is now visible to potential donors.", {
             position: "bottom-right",
@@ -135,7 +115,7 @@ const AddRequest = () => {
       .catch((err) => {
         console.error("Error submitting request:", err);
 
-        // Update toast to error
+      
         toast.update(loadingToast, {
           render: "Failed to submit request. Please try again.",
           type: "error",
@@ -203,7 +183,6 @@ const AddRequest = () => {
       variants={pageVariants}
       className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
     >
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
@@ -219,7 +198,7 @@ const AddRequest = () => {
         />
       </div>
 
-      {/* Main Content with Sidebar Margin */}
+      
       <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="max-w-4xl mx-auto">
@@ -229,7 +208,7 @@ const AddRequest = () => {
                 animate={floatAnimation}
                 className="inline-flex items-center justify-center w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 mb-6"
               >
-                <Heart className="w-10 h-10 text-red-500" />
+                <Droplets className="w-10 h-10 text-red-500" />
               </motion.div>
               <motion.h1
                 animate={{
@@ -258,13 +237,12 @@ const AddRequest = () => {
               </p>
             </motion.div>
 
-            {/* Form Card */}
             <motion.div
               variants={cardVariants}
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
             >
-              {/* Form Header */}
+          
               <div className="bg-gradient-to-r from-red-500 to-pink-500 p-8">
                 <div className="flex items-center gap-4">
                   <motion.div
@@ -289,10 +267,10 @@ const AddRequest = () => {
                 </div>
               </div>
 
-              {/* Form Content */}
+         
               <form onSubmit={handleSubmit} className="p-8">
                 <div className="space-y-8">
-                  {/* Section 1: Requester Info */}
+      
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -342,7 +320,7 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-                  {/* Section 2: Recipient Info */}
+               
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
@@ -393,7 +371,7 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-                  {/* Section 3: Location */}
+     
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
@@ -489,7 +467,7 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-                  {/* Section 4: Date & Time */}
+             
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
@@ -529,7 +507,6 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-                  {/* Section 5: Message */}
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-yellow-100 flex items-center justify-center">
@@ -558,7 +535,7 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-                  {/* Important Note */}
+              
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -593,7 +570,6 @@ const AddRequest = () => {
                     </div>
                   </motion.div>
 
-                  {/* Submit Button */}
                   <motion.button
                     whileHover={{
                       scale: 1.02,
@@ -629,7 +605,7 @@ const AddRequest = () => {
               </form>
             </motion.div>
 
-            {/* Loading State Overlay */}
+           
             {loading && (
               <motion.div
                 initial={{ opacity: 0 }}
@@ -641,7 +617,7 @@ const AddRequest = () => {
                   className="bg-white rounded-2xl p-8 shadow-2xl text-center"
                 >
                   <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4 mx-auto">
-                    <Heart className="w-10 h-10 text-red-500 animate-pulse" />
+                    <Droplets className="w-10 h-10 text-red-500 animate-pulse" />
                   </div>
                   <h3 className="text-xl font-bold text-gray-800 mb-2">
                     Processing Your Request

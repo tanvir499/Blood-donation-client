@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { User, Mail, Shield, CheckCircle, XCircle, Search,  Filter, RefreshCw,AlertCircle,Users as UsersIcon,Eye,MoreVertical,ChevronDown,ChevronUp
-} from "lucide-react";
+import {User,Mail,Shield,CheckCircle,XCircle,RefreshCw,AlertCircle,Users as UsersIcon,Eye,MoreVertical,} from "lucide-react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
-import 'react-toastify/dist/ReactToastify.css';
+import "react-toastify/dist/ReactToastify.css";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
   const [users, setUsers] = useState([]);
   const [filteredUsers, setFilteredUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
+  const [searchTerm, setSearchTerm] = useState("");
   const [filters, setFilters] = useState({
-    role: 'all',
-    status: 'all'
+    role: "all",
+    status: "all",
   });
   const [showFilters, setShowFilters] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
-  const roles = ['admin', 'volunteer', 'donor', 'user'];
+  const roles = ["admin", "volunteer", "donor", "user"];
 
   const fetchUsers = () => {
     setLoading(true);
-    axiosSecure.get("/users")
+    axiosSecure
+      .get("/users")
       .then((res) => {
         setUsers(res.data);
         setFilteredUsers(res.data);
         setLoading(false);
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error fetching users:", error);
         toast.error("Failed to load users", {
           position: "top-right",
@@ -46,42 +46,41 @@ const AllUsers = () => {
   useEffect(() => {
     let filtered = [...users];
 
-    // Apply search filter
     if (searchTerm) {
-      filtered = filtered.filter(user =>
-        user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
-        user.role?.toLowerCase().includes(searchTerm.toLowerCase())
+      filtered = filtered.filter(
+        (user) =>
+          user.fullName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          user.role?.toLowerCase().includes(searchTerm.toLowerCase())
       );
     }
 
-    // Apply role filter
-    if (filters.role !== 'all') {
-      filtered = filtered.filter(user => user.role === filters.role);
+    if (filters.role !== "all") {
+      filtered = filtered.filter((user) => user.role === filters.role);
     }
 
-    // Apply status filter
-    if (filters.status !== 'all') {
-      filtered = filtered.filter(user => user.status === filters.status);
+    if (filters.status !== "all") {
+      filtered = filtered.filter((user) => user.status === filters.status);
     }
 
     setFilteredUsers(filtered);
   }, [users, searchTerm, filters]);
 
   const handleStatusChange = (email, status, userName) => {
-    const action = status === 'active' ? 'unblock' : 'block';
-    
-    axiosSecure.patch(`/update/user/status?email=${email}&status=${status}`)
-      .then(res => {
+    const action = status === "active" ? "unblock" : "block";
+
+    axiosSecure
+      .patch(`/update/user/status?email=${email}&status=${status}`)
+      .then((res) => {
         console.log(res.data);
         fetchUsers();
-        
+
         toast.success(`${userName} has been ${action}ed successfully!`, {
           position: "top-right",
           theme: "colored",
         });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error("Error updating status:", error);
         toast.error(`Failed to ${action} user`, {
           position: "top-right",
@@ -92,10 +91,10 @@ const AllUsers = () => {
 
   const handleResetFilters = () => {
     setFilters({
-      role: 'all',
-      status: 'all'
+      role: "all",
+      status: "all",
     });
-    setSearchTerm('');
+    setSearchTerm("");
     setFilteredUsers(users);
   };
 
@@ -103,16 +102,16 @@ const AllUsers = () => {
   const pageVariants = {
     initial: { opacity: 0, y: 20 },
     animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    exit: { opacity: 0, y: -20 }
+    exit: { opacity: 0, y: -20 },
   };
 
   const cardVariants = {
     hidden: { opacity: 0, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
+    visible: {
+      opacity: 1,
       scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    }
+      transition: { type: "spring", stiffness: 100, damping: 15 },
+    },
   };
 
   const pulseAnimation = {
@@ -120,8 +119,8 @@ const AllUsers = () => {
     transition: {
       duration: 2,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   };
 
   const floatAnimation = {
@@ -129,46 +128,43 @@ const AllUsers = () => {
     transition: {
       duration: 3,
       repeat: Infinity,
-      ease: "easeInOut"
-    }
+      ease: "easeInOut",
+    },
   };
 
   const getRoleColor = (role) => {
     switch (role?.toLowerCase()) {
-      case 'admin':
-        return 'bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200';
-      case 'volunteer':
-        return 'bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 border border-blue-200';
-      case 'donor':
-        return 'bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-200';
-      case 'user':
-        return 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border border-gray-300';
+      case "admin":
+        return "bg-gradient-to-r from-purple-100 to-pink-100 text-purple-800 border border-purple-200";
+      case "volunteer":
+        return "bg-gradient-to-r from-blue-100 to-cyan-100 text-blue-800 border border-blue-200";
+      case "donor":
+        return "bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-200";
+      case "user":
+        return "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border border-gray-300";
       default:
-        return 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border border-gray-300';
+        return "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border border-gray-300";
     }
   };
 
   const getStatusColor = (status) => {
     switch (status?.toLowerCase()) {
-      case 'active':
-        return 'bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200';
-      case 'block':
-      case 'blocked':
-        return 'bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-200';
-      case 'pending':
-        return 'bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-200';
+      case "active":
+        return "bg-gradient-to-r from-green-100 to-emerald-100 text-green-800 border border-green-200";
+      case "block":
+      case "blocked":
+        return "bg-gradient-to-r from-red-100 to-pink-100 text-red-800 border border-red-200";
+      case "pending":
+        return "bg-gradient-to-r from-yellow-100 to-orange-100 text-yellow-800 border border-yellow-200";
       default:
-        return 'bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border border-gray-300';
+        return "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-800 border border-gray-300";
     }
   };
 
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center">
-        <motion.div
-          animate={pulseAnimation}
-          className="text-center"
-        >
+        <motion.div animate={pulseAnimation} className="text-center">
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
             <UsersIcon className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
@@ -186,147 +182,38 @@ const AllUsers = () => {
       variants={pageVariants}
       className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
     >
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
             x: ["0%", "100%", "0%"],
-            rotate: [0, 180, 360]
+            rotate: [0, 180, 360],
           }}
           transition={{
             duration: 40,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-red-100 to-pink-100 opacity-10 blur-3xl"
         />
       </div>
 
-      {/* Main Content with Sidebar Margin */}
       <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
-          {/* Header Section */}
-          <motion.div
-            variants={cardVariants}
-            className="mb-10"
-          >
-            <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-8">
-              <div>
-                <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
-                  All Users 
-                </h1>
-                <p className="text-gray-600">
-                  Manage user accounts, roles, and statuses
-                </p>
-              </div>
-
-              <div className="flex items-center gap-3">
-                <motion.button
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                  onClick={fetchUsers}
-                  className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
-                >
-                  <RefreshCw className="w-4 h-4" />
-                  Refresh
-                </motion.button>
-              </div>
-            </div>
-
-            {/* Stats Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-              {/* Total Users */}
-              <motion.div
-                variants={cardVariants}
-                transition={{ delay: 0.1 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 text-sm">Total Users</p>
-                    <p className="text-3xl font-bold text-gray-800">{users.length}</p>
-                  </div>
-                  <motion.div
-                    animate={floatAnimation}
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-blue-100 to-indigo-100 flex items-center justify-center"
-                  >
-                    <UsersIcon className="w-6 h-6 text-blue-600" />
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Active Users */}
-              <motion.div
-                variants={cardVariants}
-                transition={{ delay: 0.2 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 text-sm">Active Users</p>
-                    <p className="text-3xl font-bold text-gray-800">
-                      {users.filter(u => u.status === 'active').length}
-                    </p>
-                  </div>
-                  <motion.div
-                    animate={pulseAnimation}
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-green-100 to-emerald-100 flex items-center justify-center"
-                  >
-                    <CheckCircle className="w-6 h-6 text-green-600" />
-                  </motion.div>
-                </div>
-              </motion.div>
-
-              {/* Blocked Users */}
-              <motion.div
-                variants={cardVariants}
-                transition={{ delay: 0.3 }}
-                whileHover={{ y: -5 }}
-                className="bg-white rounded-xl shadow-lg border border-gray-100 p-6"
-              >
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-gray-500 text-sm">Blocked Users</p>
-                    <p className="text-3xl font-bold text-gray-800">
-                      {users.filter(u => u.status === 'block' || u.status === 'blocked').length}
-                    </p>
-                  </div>
-                  <motion.div
-                    animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
-                    className="w-12 h-12 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center"
-                  >
-                    <XCircle className="w-6 h-6 text-red-600" />
-                  </motion.div>
-                </div>
-              </motion.div>
-
-             
-            </div>
-          </motion.div>
-
-         
-
-          {/* Users Table Section */}
-          <motion.div
-            variants={cardVariants}
-            transition={{ delay: 0.6 }}
-          >
+          <motion.div variants={cardVariants} transition={{ delay: 0.6 }}>
             <div className="flex items-center gap-3 mb-6">
               <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center">
                 <UsersIcon className="w-5 h-5 text-red-600" />
               </div>
               <div>
                 <h2 className="text-2xl font-bold text-gray-800">All Users</h2>
-                <p className="text-gray-600">Manage user accounts and permissions</p>
+                <p className="text-gray-600">
+                  Manage user accounts and permissions
+                </p>
               </div>
             </div>
 
             {filteredUsers.length > 0 ? (
               <>
-                {/* Table - Desktop */}
                 <div className="hidden lg:block">
                   <div className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden">
                     <table className="w-full">
@@ -335,29 +222,39 @@ const AllUsers = () => {
                           <th className="p-6 text-left">
                             <div className="flex items-center gap-2">
                               <User className="w-4 h-4 text-gray-500" />
-                              <span className="font-semibold text-gray-700">User</span>
+                              <span className="font-semibold text-gray-700">
+                                User
+                              </span>
                             </div>
                           </th>
                           <th className="p-6 text-left">
                             <div className="flex items-center gap-2">
                               <Mail className="w-4 h-4 text-gray-500" />
-                              <span className="font-semibold text-gray-700">Email</span>
+                              <span className="font-semibold text-gray-700">
+                                Email
+                              </span>
                             </div>
                           </th>
                           <th className="p-6 text-left">
                             <div className="flex items-center gap-2">
                               <Shield className="w-4 h-4 text-gray-500" />
-                              <span className="font-semibold text-gray-700">Role</span>
+                              <span className="font-semibold text-gray-700">
+                                Role
+                              </span>
                             </div>
                           </th>
                           <th className="p-6 text-left">
                             <div className="flex items-center gap-2">
                               <CheckCircle className="w-4 h-4 text-gray-500" />
-                              <span className="font-semibold text-gray-700">Status</span>
+                              <span className="font-semibold text-gray-700">
+                                Status
+                              </span>
                             </div>
                           </th>
                           <th className="p-6 text-left">
-                            <span className="font-semibold text-gray-700">Actions</span>
+                            <span className="font-semibold text-gray-700">
+                              Actions
+                            </span>
                           </th>
                         </tr>
                       </thead>
@@ -370,7 +267,9 @@ const AllUsers = () => {
                               initial="hidden"
                               animate="visible"
                               transition={{ delay: index * 0.1 }}
-                              whileHover={{ backgroundColor: "rgba(239, 68, 68, 0.05)" }}
+                              whileHover={{
+                                backgroundColor: "rgba(239, 68, 68, 0.05)",
+                              }}
                               className="border-b border-gray-100 hover:bg-red-50/50 transition-colors duration-300"
                             >
                               <td className="p-6">
@@ -380,7 +279,10 @@ const AllUsers = () => {
                                     className="w-12 h-12 rounded-full bg-gradient-to-br from-red-100 to-pink-100 overflow-hidden border-2 border-red-200"
                                   >
                                     <img
-                                      src={user?.mainPhotoUrl || `https://ui-avatars.com/api/?name=${user.fullName}&background=random`}
+                                      src={
+                                        user?.mainPhotoUrl ||
+                                        `https://ui-avatars.com/api/?name=${user.fullName}&background=random`
+                                      }
                                       alt={user.fullName}
                                       className="w-full h-full object-cover"
                                     />
@@ -390,7 +292,10 @@ const AllUsers = () => {
                                       {user.fullName}
                                     </p>
                                     <p className="text-sm text-gray-500">
-                                      Joined {new Date(user.createdAt || Date.now()).toLocaleDateString()}
+                                      Joined{" "}
+                                      {new Date(
+                                        user.createdAt || Date.now()
+                                      ).toLocaleDateString()}
                                     </p>
                                   </div>
                                 </div>
@@ -398,22 +303,31 @@ const AllUsers = () => {
                               <td className="p-6">
                                 <div className="flex items-center gap-2">
                                   <Mail className="w-4 h-4 text-gray-400" />
-                                  <span className="text-gray-800">{user.email}</span>
+                                  <span className="text-gray-800">
+                                    {user.email}
+                                  </span>
                                 </div>
                               </td>
                               <td className="p-6">
-                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getRoleColor(user.role)}`}>
-                                  {user.role || 'user'}
+                                <span
+                                  className={`px-3 py-1 rounded-full text-xs font-semibold ${getRoleColor(
+                                    user.role
+                                  )}`}
+                                >
+                                  {user.role || "user"}
                                 </span>
                               </td>
                               <td className="p-6">
-                                <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(user.status)}`}>
-                                  {user.status || 'active'}
+                                <span
+                                  className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                                    user.status
+                                  )}`}
+                                >
+                                  {user.status || "active"}
                                 </span>
                               </td>
                               <td className="p-6">
                                 <div className="flex items-center gap-2">
-                                  {/* View Details Button */}
                                   <motion.button
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
@@ -424,12 +338,17 @@ const AllUsers = () => {
                                     <Eye className="w-4 h-4" />
                                   </motion.button>
 
-                                  {/* Status Toggle Button */}
-                                  {user.status === 'active' ? (
+                                  {user.status === "active" ? (
                                     <motion.button
                                       whileHover={{ scale: 1.05 }}
                                       whileTap={{ scale: 0.95 }}
-                                      onClick={() => handleStatusChange(user.email, 'block', user.fullName)}
+                                      onClick={() =>
+                                        handleStatusChange(
+                                          user.email,
+                                          "block",
+                                          user.fullName
+                                        )
+                                      }
                                       className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all duration-300 flex items-center gap-2"
                                     >
                                       <XCircle className="w-4 h-4" />
@@ -439,7 +358,13 @@ const AllUsers = () => {
                                     <motion.button
                                       whileHover={{ scale: 1.05 }}
                                       whileTap={{ scale: 0.95 }}
-                                      onClick={() => handleStatusChange(user.email, 'active', user.fullName)}
+                                      onClick={() =>
+                                        handleStatusChange(
+                                          user.email,
+                                          "active",
+                                          user.fullName
+                                        )
+                                      }
                                       className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all duration-300 flex items-center gap-2"
                                     >
                                       <CheckCircle className="w-4 h-4" />
@@ -447,7 +372,6 @@ const AllUsers = () => {
                                     </motion.button>
                                   )}
 
-                                  {/* More Actions Button */}
                                   <motion.button
                                     whileHover={{ scale: 1.1 }}
                                     whileTap={{ scale: 0.9 }}
@@ -466,7 +390,6 @@ const AllUsers = () => {
                   </div>
                 </div>
 
-                {/* Cards - Mobile */}
                 <div className="lg:hidden space-y-4">
                   <AnimatePresence>
                     {filteredUsers.map((user, index) => (
@@ -480,7 +403,6 @@ const AllUsers = () => {
                         className="bg-white rounded-xl shadow-lg border border-red-100 overflow-hidden"
                       >
                         <div className="p-6">
-                          {/* Card Header */}
                           <div className="flex items-start justify-between mb-4">
                             <div className="flex items-center gap-3">
                               <motion.div
@@ -488,7 +410,10 @@ const AllUsers = () => {
                                 className="w-16 h-16 rounded-full bg-gradient-to-br from-red-100 to-pink-100 overflow-hidden border-2 border-red-200"
                               >
                                 <img
-                                  src={user?.mainPhotoUrl || `https://ui-avatars.com/api/?name=${user.fullName}&background=random`}
+                                  src={
+                                    user?.mainPhotoUrl ||
+                                    `https://ui-avatars.com/api/?name=${user.fullName}&background=random`
+                                  }
                                   alt={user.fullName}
                                   className="w-full h-full object-cover"
                                 />
@@ -499,35 +424,45 @@ const AllUsers = () => {
                                 </h3>
                                 <div className="flex items-center gap-2 mt-1">
                                   <Mail className="w-4 h-4 text-gray-400" />
-                                  <span className="text-sm text-gray-600">{user.email}</span>
+                                  <span className="text-sm text-gray-600">
+                                    {user.email}
+                                  </span>
                                 </div>
                               </div>
                             </div>
                           </div>
 
-                          {/* User Details */}
                           <div className="space-y-3 mb-6">
                             <div className="flex items-center justify-between">
                               <span className="text-gray-500">Role:</span>
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getRoleColor(user.role)}`}>
-                                {user.role || 'user'}
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-semibold ${getRoleColor(
+                                  user.role
+                                )}`}
+                              >
+                                {user.role || "user"}
                               </span>
                             </div>
                             <div className="flex items-center justify-between">
                               <span className="text-gray-500">Status:</span>
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(user.status)}`}>
-                                {user.status || 'active'}
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                                  user.status
+                                )}`}
+                              >
+                                {user.status || "active"}
                               </span>
                             </div>
                             <div className="flex items-center justify-between">
                               <span className="text-gray-500">Joined:</span>
                               <span className="text-gray-800">
-                                {new Date(user.createdAt || Date.now()).toLocaleDateString()}
+                                {new Date(
+                                  user.createdAt || Date.now()
+                                ).toLocaleDateString()}
                               </span>
                             </div>
                           </div>
 
-                          {/* Action Buttons */}
                           <div className="flex items-center justify-between border-t border-gray-100 pt-6">
                             <div className="flex items-center gap-2">
                               <motion.button
@@ -542,11 +477,17 @@ const AllUsers = () => {
                             </div>
 
                             <div className="flex items-center gap-2">
-                              {user.status === 'active' ? (
+                              {user.status === "active" ? (
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
-                                  onClick={() => handleStatusChange(user.email, 'block', user.fullName)}
+                                  onClick={() =>
+                                    handleStatusChange(
+                                      user.email,
+                                      "block",
+                                      user.fullName
+                                    )
+                                  }
                                   className="px-4 py-2 bg-gradient-to-r from-red-500 to-pink-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all duration-300 flex items-center gap-2"
                                 >
                                   <XCircle className="w-4 h-4" />
@@ -556,7 +497,13 @@ const AllUsers = () => {
                                 <motion.button
                                   whileHover={{ scale: 1.05 }}
                                   whileTap={{ scale: 0.95 }}
-                                  onClick={() => handleStatusChange(user.email, 'active', user.fullName)}
+                                  onClick={() =>
+                                    handleStatusChange(
+                                      user.email,
+                                      "active",
+                                      user.fullName
+                                    )
+                                  }
                                   className="px-4 py-2 bg-gradient-to-r from-green-500 to-emerald-500 text-white text-sm font-semibold rounded-lg hover:shadow-md transition-all duration-300 flex items-center gap-2"
                                 >
                                   <CheckCircle className="w-4 h-4" />
@@ -585,11 +532,12 @@ const AllUsers = () => {
                   No Users Found
                 </h3>
                 <p className="text-gray-600 max-w-md mx-auto mb-8">
-                  {searchTerm || Object.values(filters).some(f => f !== 'all')
+                  {searchTerm || Object.values(filters).some((f) => f !== "all")
                     ? "No users match your search criteria. Try adjusting your filters."
                     : "No users are currently registered in the system."}
                 </p>
-                {(searchTerm || Object.values(filters).some(f => f !== 'all')) && (
+                {(searchTerm ||
+                  Object.values(filters).some((f) => f !== "all")) && (
                   <motion.button
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
@@ -604,7 +552,6 @@ const AllUsers = () => {
             )}
           </motion.div>
 
-          {/* User Details Modal */}
           <AnimatePresence>
             {selectedUser && (
               <motion.div
@@ -621,19 +568,24 @@ const AllUsers = () => {
                   className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  {/* Modal Header */}
+            
                   <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white sticky top-0">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
                         <div className="w-12 h-12 rounded-full bg-white/20 overflow-hidden">
                           <img
-                            src={selectedUser?.mainPhotoUrl || `https://ui-avatars.com/api/?name=${selectedUser.fullName}&background=random`}
+                            src={
+                              selectedUser?.mainPhotoUrl ||
+                              `https://ui-avatars.com/api/?name=${selectedUser.fullName}&background=random`
+                            }
                             alt={selectedUser.fullName}
                             className="w-full h-full object-cover"
                           />
                         </div>
                         <div>
-                          <h3 className="text-xl font-bold">{selectedUser.fullName}</h3>
+                          <h3 className="text-xl font-bold">
+                            {selectedUser.fullName}
+                          </h3>
                           <p className="text-white/80">{selectedUser.email}</p>
                         </div>
                       </div>
@@ -646,64 +598,89 @@ const AllUsers = () => {
                     </div>
                   </div>
 
-                  {/* Modal Content */}
                   <div className="p-6">
                     <div className="space-y-6">
-                      {/* User Information */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-500">Full Name</label>
-                          <p className="text-lg font-semibold text-gray-800">{selectedUser.fullName}</p>
+                          <label className="text-sm font-medium text-gray-500">
+                            Full Name
+                          </label>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {selectedUser.fullName}
+                          </p>
                         </div>
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-500">Email</label>
-                          <p className="text-lg font-semibold text-gray-800">{selectedUser.email}</p>
+                          <label className="text-sm font-medium text-gray-500">
+                            Email
+                          </label>
+                          <p className="text-lg font-semibold text-gray-800">
+                            {selectedUser.email}
+                          </p>
                         </div>
                       </div>
 
-                      {/* Role and Status */}
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-500">Role</label>
-                          <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getRoleColor(selectedUser.role)}`}>
-                            {selectedUser.role || 'user'}
+                        <div className="space-y-2 space-x-2">
+                          <label className="text-sm font-medium text-gray-500">
+                            Role:
+                          </label>
+                          <span
+                            className={`px-4 py-2 rounded-full text-sm font-semibold ${getRoleColor(
+                              selectedUser.role
+                            )}`}
+                          >
+                            {selectedUser.role || "user"}
                           </span>
                         </div>
-                        <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-500">Status</label>
-                          <span className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(selectedUser.status)}`}>
-                            {selectedUser.status || 'active'}
+                        <div className="space-y-2 space-x-2">
+                          <label className="text-sm font-medium text-gray-500">
+                            Status:
+                          </label>
+                          <span
+                            className={`px-4 py-2 rounded-full text-sm font-semibold ${getStatusColor(
+                              selectedUser.status
+                            )}`}
+                          >
+                            {selectedUser.status || "active"}
                           </span>
                         </div>
                       </div>
 
-                      {/* Additional Information */}
                       {selectedUser.phone && (
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-500">Phone Number</label>
+                          <label className="text-sm font-medium text-gray-500">
+                            Phone Number
+                          </label>
                           <p className="text-gray-800">{selectedUser.phone}</p>
                         </div>
                       )}
 
                       {selectedUser.address && (
                         <div className="space-y-2">
-                          <label className="text-sm font-medium text-gray-500">Address</label>
-                          <p className="text-gray-800">{selectedUser.address}</p>
+                          <label className="text-sm font-medium text-gray-500">
+                            Address
+                          </label>
+                          <p className="text-gray-800">
+                            {selectedUser.address}
+                          </p>
                         </div>
                       )}
 
                       <div className="space-y-2">
-                        <label className="text-sm font-medium text-gray-500">Account Created</label>
+                        <label className="text-sm font-medium text-gray-500">
+                          Account Created
+                        </label>
                         <p className="text-gray-800">
-                          {new Date(selectedUser.createdAt || Date.now()).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'long',
-                            day: 'numeric'
+                          {new Date(
+                            selectedUser.createdAt || Date.now()
+                          ).toLocaleDateString("en-US", {
+                            year: "numeric",
+                            month: "long",
+                            day: "numeric",
                           })}
                         </p>
                       </div>
 
-                      {/* Action Buttons */}
                       <div className="flex flex-col sm:flex-row gap-3 pt-6 border-t border-gray-200">
                         <motion.button
                           whileHover={{ scale: 1.02 }}
@@ -713,13 +690,17 @@ const AllUsers = () => {
                         >
                           Close
                         </motion.button>
-                        
-                        {selectedUser.status === 'active' ? (
+
+                        {selectedUser.status === "active" ? (
                           <motion.button
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
-                              handleStatusChange(selectedUser.email, 'block', selectedUser.fullName);
+                              handleStatusChange(
+                                selectedUser.email,
+                                "block",
+                                selectedUser.fullName
+                              );
                               setSelectedUser(null);
                             }}
                             className="flex-1 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
@@ -731,7 +712,11 @@ const AllUsers = () => {
                             whileHover={{ scale: 1.02 }}
                             whileTap={{ scale: 0.98 }}
                             onClick={() => {
-                              handleStatusChange(selectedUser.email, 'active', selectedUser.fullName);
+                              handleStatusChange(
+                                selectedUser.email,
+                                "active",
+                                selectedUser.fullName
+                              );
                               setSelectedUser(null);
                             }}
                             className="flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300"
@@ -741,7 +726,6 @@ const AllUsers = () => {
                         )}
                       </div>
 
-                      {/* Warning Message */}
                       <div className="p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl border border-yellow-100">
                         <div className="flex items-start gap-3">
                           <AlertCircle className="w-5 h-5 text-yellow-600 mt-0.5 flex-shrink-0" />
@@ -750,8 +734,9 @@ const AllUsers = () => {
                               Important Note
                             </h4>
                             <p className="text-sm text-yellow-700">
-                              Blocking a user will prevent them from accessing their account. 
-                              Activating will restore their access immediately.
+                              Blocking a user will prevent them from accessing
+                              their account. Activating will restore their
+                              access immediately.
                             </p>
                           </div>
                         </div>
