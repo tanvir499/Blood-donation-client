@@ -6,6 +6,13 @@ import auth from "../firebase/firebase.config";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
+import { 
+  pageVariants, 
+  cardVariants, 
+  fadeInUp,
+  floatAnimation,
+  bounceAnimation 
+} from "../utils/AnimationUtils";
 
 const Login = () => {
   const { setUser, handleGoogleSignIn } = useContext(AuthContext);
@@ -51,32 +58,38 @@ const Login = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       
-      {/* Floating Heart Icons - Only on larger screens */}
+  
       <motion.div
-        animate={{ y: [0, -20, 0] }}
-        transition={{ repeat: Infinity, duration: 3 }}
+        animate={floatAnimation}
         className="hidden lg:block absolute top-10 left-10 text-4xl opacity-10"
       >
         ❤️
       </motion.div>
       <motion.div
-        animate={{ y: [0, 20, 0] }}
-        transition={{ repeat: Infinity, duration: 4, delay: 0.5 }}
+        animate={{ 
+          y: [0, 20, 0],
+          scale: [1, 1.1, 1]
+        }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 4,
+          delay: 0.5,
+          ease: "easeInOut"
+        }}
         className="hidden lg:block absolute bottom-10 right-10 text-4xl opacity-10"
       >
         🩸
       </motion.div>
 
-      {/* Main Login Card */}
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        initial="initial"
+        animate="animate"
+        variants={pageVariants}
         className="relative z-10 w-full max-w-md"
       >
         <div className="rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
           
-          {/* Header Section */}
+         
           <motion.div
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -95,7 +108,7 @@ const Login = () => {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-            {/* Email Input */}
+        
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -119,7 +132,7 @@ const Login = () => {
               </div>
             </motion.div>
 
-            {/* Password Input */}
+           
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -142,7 +155,6 @@ const Login = () => {
               </div>
             </motion.div>
 
-            {/* Forget Password */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -158,7 +170,7 @@ const Login = () => {
               </button>
             </motion.div>
 
-            {/* Login Button */}
+          
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -172,7 +184,7 @@ const Login = () => {
               </button>
             </motion.div>
 
-            {/* Divider */}
+        
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -189,7 +201,6 @@ const Login = () => {
               </div>
             </motion.div>
 
-            {/* Google Login */}
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -205,7 +216,7 @@ const Login = () => {
               </button>
             </motion.div>
 
-            {/* Register Link */}
+   
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

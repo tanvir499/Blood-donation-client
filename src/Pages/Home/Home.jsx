@@ -4,41 +4,18 @@ import { motion, useAnimation } from "framer-motion";
 import { Heart, Users, Shield, Clock, Phone, Mail, MapPin, Search, UserPlus, ChevronRight, ArrowRight, Droplets, Activity
 } from "lucide-react";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { 
+  fadeInUp, 
+  staggerContainer, 
+  pulseAnimation,
+  textGradientAnimation,
+} from "../../utils/AnimationUtils";
 
 const Home = () => {
   const { user, logOut } = useContext(AuthContext);
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const controls = useAnimation();
-
-  // Animation variants
-  const fadeInUp = {
-    hidden: { opacity: 0, y: 20 },
-    visible: { 
-      opacity: 1, 
-      y: 0,
-      transition: { duration: 0.6 }
-    }
-  };
-
-  const staggerContainer = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.2
-      }
-    }
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
 
   const handleLogout = () => {
     logOut()
@@ -49,7 +26,7 @@ const Home = () => {
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50">
 
-      {/* Animated Background Elements */}
+
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{ 
@@ -78,7 +55,7 @@ const Home = () => {
         />
       </div>
 
-      {/* Floating Blood Drops */}
+    
       {[...Array(5)].map((_, i) => (
         <motion.div
           key={i}
@@ -101,9 +78,6 @@ const Home = () => {
         </motion.div>
       ))}
 
-     
-
-
       <section className="container mx-auto px-4 py-12 md:py-24">
         <div className="max-w-4xl mx-auto text-center">
           <motion.div
@@ -113,14 +87,8 @@ const Home = () => {
           >
             <motion.h1 
               className="text-4xl md:text-6xl font-bold mb-6"
-              animate={{ 
-                backgroundPosition: ["0%", "100%", "0%"]
-              }}
-              transition={{ 
-                duration: 5, 
-                repeat: Infinity, 
-                ease: "linear" 
-              }}
+              animate={textGradientAnimation.animate}
+              transition={textGradientAnimation.transition}
               style={{
                 background: "linear-gradient(90deg, #dc2626, #ec4899, #dc2626)",
                 backgroundSize: "200% auto",
@@ -141,7 +109,6 @@ const Home = () => {
               Join thousands of donors in our mission to provide life-saving blood to those in need across Bangladesh
             </motion.p>
 
-           
             <motion.div 
               variants={staggerContainer}
               initial="hidden"
@@ -170,7 +137,6 @@ const Home = () => {
             </motion.div>
           </motion.div>
 
-   
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -196,7 +162,6 @@ const Home = () => {
           </motion.div>
         </div>
       </section>
-
 
       <section className="py-16 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">
@@ -268,7 +233,6 @@ const Home = () => {
         </div>
       </section>
 
-
       <section className="py-16">
         <div className="container mx-auto px-4">
           <motion.div
@@ -279,7 +243,6 @@ const Home = () => {
           >
             <div className="bg-gradient-to-br from-white to-red-50 rounded-3xl border border-gray-100 shadow-xl p-8 md:p-12">
               <div className="grid md:grid-cols-2 gap-8">
-              
                 <div>
                   <h3 className="text-2xl font-bold text-gray-800 mb-6">Contact Us</h3>
                   <form className="space-y-4">
@@ -315,7 +278,6 @@ const Home = () => {
                   </form>
                 </div>
 
- 
                 <div className="space-y-6">
                   <h3 className="text-2xl font-bold text-gray-800 mb-6">Get in Touch</h3>
                   
@@ -351,7 +313,6 @@ const Home = () => {
                     </div>
                   </div>
 
-              
                   <motion.div
                     animate={{ 
                       backgroundColor: ["#fef2f2", "#fee2e2", "#fef2f2"]
@@ -371,11 +332,9 @@ const Home = () => {
         </div>
       </section>
 
-     
       <footer className="bg-gradient-to-b from-gray-900 to-gray-800 text-white pt-12 pb-8">
         <div className="container mx-auto px-4">
           <div className="grid md:grid-cols-4 gap-8 mb-8">
-          
             <div>
               <div className="flex items-center gap-2 mb-4">
                 <div className="w-10 h-10 rounded-full bg-gradient-to-r from-red-500 to-pink-500 flex items-center justify-center">
@@ -388,7 +347,6 @@ const Home = () => {
               </p>
             </div>
 
-          
             <div>
               <h4 className="font-bold text-lg mb-4">Quick Links</h4>
               <ul className="space-y-2">
@@ -399,7 +357,6 @@ const Home = () => {
               </ul>
             </div>
 
-         
             <div>
               <h4 className="font-bold text-lg mb-4">Resources</h4>
               <ul className="space-y-2">

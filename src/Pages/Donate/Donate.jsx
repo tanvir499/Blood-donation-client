@@ -2,6 +2,13 @@ import React, { useContext, useState } from "react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { motion, AnimatePresence } from "framer-motion";
+import { 
+  pulseAnimation, 
+  floatAnimation, 
+  rotateAnimation,
+  shineEffect,
+  buttonHoverAnimation 
+} from "../../utils/AnimationUtils";
 
 const Donate = () => {
   const axiosInstance = useAxiosSecure();
@@ -75,15 +82,7 @@ const Donate = () => {
 
       {/* Floating Animated Icons */}
       <motion.div
-        animate={{ 
-          y: [0, -30, 0],
-          rotate: [0, 5, -5, 0]
-        }}
-        transition={{ 
-          repeat: Infinity, 
-          duration: 4,
-          ease: "easeInOut"
-        }}
+        animate={floatAnimation}
         className="hidden lg:block absolute top-10 left-10 text-5xl opacity-20"
       >
         🩸
@@ -106,15 +105,8 @@ const Donate = () => {
       </motion.div>
       
       <motion.div
-        animate={{ 
-          rotate: 360,
-          scale: [1, 1.3, 1]
-        }}
-        transition={{ 
-          repeat: Infinity, 
-          duration: 8,
-          ease: "linear"
-        }}
+        animate={rotateAnimation.animate}
+        transition={rotateAnimation.transition}
         className="hidden lg:block absolute top-1/4 right-1/4 text-3xl opacity-15"
       >
         💰
@@ -377,11 +369,7 @@ const Donate = () => {
               <motion.button
                 type="submit"
                 disabled={loading}
-                whileHover={{ 
-                  scale: 1.05,
-                  boxShadow: "0 10px 30px rgba(239, 68, 68, 0.4)"
-                }}
-                whileTap={{ scale: 0.95 }}
+                {...buttonHoverAnimation}
                 animate={{
                   background: loading 
                     ? ["#ef4444", "#ec4899", "#f43f5e", "#ef4444"]
@@ -398,8 +386,8 @@ const Donate = () => {
               >
                 {/* Button shine effect */}
                 <motion.div
-                  animate={{ x: ["-100%", "200%"] }}
-                  transition={{ repeat: Infinity, duration: 1.5, ease: "linear" }}
+                  animate={shineEffect.animate}
+                  transition={shineEffect.transition}
                   className="absolute top-0 left-0 w-1/3 h-full bg-white/30 skew-x-12"
                 />
                 
@@ -407,8 +395,8 @@ const Donate = () => {
                   {loading ? (
                     <>
                       <motion.svg
-                        animate={{ rotate: 360 }}
-                        transition={{ repeat: Infinity, duration: 1, ease: "linear" }}
+                        animate={rotateAnimation.animate}
+                        transition={rotateAnimation.transition}
                         className="h-5 w-5 text-white"
                         fill="none"
                         viewBox="0 0 24 24"
@@ -426,8 +414,6 @@ const Donate = () => {
                 </span>
               </motion.button>
             </motion.div>
-
-          
           </form>
 
           {/* Success Confetti (Hidden until success) */}
@@ -443,22 +429,7 @@ const Donate = () => {
                   <motion.div
                     key={i}
                     className="absolute text-2xl"
-                    initial={{
-                      x: "50%",
-                      y: "50%",
-                      rotate: 0,
-                      opacity: 1
-                    }}
-                    animate={{
-                      x: Math.random() * 100 - 50 + "%",
-                      y: Math.random() * 100 - 50 + "%",
-                      rotate: 360,
-                      opacity: 0
-                    }}
-                    transition={{
-                      duration: 1.5,
-                      ease: "easeOut"
-                    }}
+                    {...confettiAnimation(i)}
                   >
                     {["🎉", "✨", "🌟", "💫", "⭐"][i % 5]}
                   </motion.div>

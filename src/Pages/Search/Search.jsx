@@ -20,6 +20,14 @@ import {
 import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
+import {
+  fadeInUp,
+  cardVariants,
+  pulseAnimation,
+  textGradientAnimation,
+  buttonHoverAnimation,
+  rotateAnimation,
+} from "../../utils/AnimationUtils";
 
 const SearchRequest = () => {
   const axiosInstance = useAxiosSecure();
@@ -37,7 +45,6 @@ const SearchRequest = () => {
     upazila: "",
   });
 
-  // Load districts and upazilas data
   useEffect(() => {
     axios.get("/district.json").then((res) => {
       setDistricts(res.data.districts || []);
@@ -141,30 +148,10 @@ const SearchRequest = () => {
       });
   };
 
-  // Animation variants
-  const fadeIn = {
-    hidden: { opacity: 0, y: 20 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.6 },
-    },
-  };
-
-  const pulse = {
-    scale: [1, 1.02, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
-
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50">
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
@@ -180,7 +167,6 @@ const SearchRequest = () => {
         />
       </div>
 
-      {/* Floating Icons */}
       <motion.div
         animate={{
           y: [0, -30, 0],
@@ -197,7 +183,6 @@ const SearchRequest = () => {
       </motion.div>
 
       <div className="container mx-auto px-4 py-8 md:py-12">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -205,14 +190,8 @@ const SearchRequest = () => {
           className="text-center mb-8 md:mb-12"
         >
           <motion.h1
-            animate={{
-              backgroundPosition: ["0%", "100%", "0%"],
-            }}
-            transition={{
-              duration: 5,
-              repeat: Infinity,
-              ease: "linear",
-            }}
+            animate={textGradientAnimation.animate}
+            transition={textGradientAnimation.transition}
             style={{
               background: "linear-gradient(90deg, #dc2626, #ec4899, #dc2626)",
               backgroundSize: "200% auto",
@@ -230,9 +209,8 @@ const SearchRequest = () => {
           </p>
         </motion.div>
 
-        {/* Search Form */}
         <motion.div
-          variants={fadeIn}
+          variants={cardVariants}
           initial="hidden"
           animate="visible"
           className="max-w-4xl mx-auto mb-12"
@@ -259,7 +237,6 @@ const SearchRequest = () => {
 
             <form onSubmit={handleSearch} className="space-y-6">
               <div className="grid md:grid-cols-3 gap-6">
-                {/* Blood Group */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -282,20 +259,17 @@ const SearchRequest = () => {
                       <option value="" disabled>
                         Select Blood Group
                       </option>
-                      {["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"].map(
-                        (bg) => (
-                          <option key={bg} value={bg}>
-                            {bg}
-                          </option>
-                        )
-                      )}
+                      {bloodGroups.map((bg) => (
+                        <option key={bg} value={bg}>
+                          {bg}
+                        </option>
+                      ))}
                     </select>
                     <ChevronDown className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 pointer-events-none" />
                     <Droplets className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                   </div>
                 </motion.div>
 
-                {/* District */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -327,7 +301,6 @@ const SearchRequest = () => {
                   </div>
                 </motion.div>
 
-                {/* Upazila */}
                 <motion.div
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
@@ -360,7 +333,6 @@ const SearchRequest = () => {
                 </motion.div>
               </div>
 
-              {/* Form Actions */}
               <motion.div
                 className="flex flex-col sm:flex-row gap-4 pt-4"
                 initial={{ opacity: 0, y: 20 }}
@@ -370,8 +342,7 @@ const SearchRequest = () => {
                 <motion.button
                   type="submit"
                   disabled={loading}
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
+                  {...buttonHoverAnimation}
                   className="flex-1 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2"
                 >
                   {loading ? (
@@ -400,7 +371,6 @@ const SearchRequest = () => {
               </motion.div>
             </form>
 
-            {/* Stats Card */}
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}
@@ -433,7 +403,6 @@ const SearchRequest = () => {
           </div>
         </motion.div>
 
-        {/* Search Results */}
         <AnimatePresence>
           {searched && (
             <motion.div
@@ -444,7 +413,6 @@ const SearchRequest = () => {
               transition={{ duration: 0.5 }}
               className="max-w-6xl mx-auto"
             >
-              {/* Results Header */}
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -479,7 +447,6 @@ const SearchRequest = () => {
                 )}
               </motion.div>
 
-              {/* PDF Content (hidden for display) */}
               {results.length > 0 && (
                 <div id="search-results-pdf" className="hidden">
                   <div className="p-8 bg-white">
@@ -522,7 +489,6 @@ const SearchRequest = () => {
                 </div>
               )}
 
-              {/* Loading State */}
               {loading && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -542,7 +508,6 @@ const SearchRequest = () => {
                 </motion.div>
               )}
 
-              {/* No Results Message */}
               {!loading && results.length === 0 && (
                 <motion.div
                   initial={{ opacity: 0 }}
@@ -562,7 +527,6 @@ const SearchRequest = () => {
                 </motion.div>
               )}
 
-              {/* Donor Cards */}
               <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
                 {results.map((donor, index) => (
                   <motion.div
@@ -573,7 +537,6 @@ const SearchRequest = () => {
                     whileHover={{ y: -5 }}
                     className="bg-white rounded-xl shadow-lg border border-gray-100 overflow-hidden"
                   >
-                    {/* Card Header */}
                     <div className="p-6">
                       <div className="flex items-start justify-between mb-4">
                         <div className="flex items-center gap-3">
@@ -603,14 +566,13 @@ const SearchRequest = () => {
                           </div>
                         </div>
                         <motion.div
-                          animate={pulse}
+                          animate={pulseAnimation}
                           className="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-700"
                         >
                           Urgent Need
                         </motion.div>
                       </div>
 
-                      {/* Donor Details */}
                       <div className="space-y-3">
                         <div className="flex items-center gap-2 text-gray-600">
                           <MapPin className="w-4 h-4 text-gray-400" />
@@ -634,7 +596,6 @@ const SearchRequest = () => {
                         )}
                       </div>
                     </div>
-                   
                   </motion.div>
                 ))}
               </div>
@@ -642,7 +603,6 @@ const SearchRequest = () => {
           )}
         </AnimatePresence>
 
-        {/* Search Tips */}
         <motion.div
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}

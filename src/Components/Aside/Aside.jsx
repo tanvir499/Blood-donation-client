@@ -1,12 +1,18 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Users, Droplets, Settings, LogOut, Menu, X, PlusCircle, FileText, Bell, Heart, Shield, User as UserIcon,Activity,BarChart3,} from "lucide-react";
+import { Home, Users, Droplets, Settings, LogOut, Menu, X, PlusCircle, FileText, Bell, Heart, Shield, User as UserIcon, Activity, BarChart3 } from "lucide-react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { signOut } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { 
+  sidebarVariants, 
+  menuItemVariants, 
+  hoverAnimation, 
+  pulseAnimation 
+} from "../../utils/AnimationUtils";
 
 const Aside = () => {
   const { role, user } = useContext(AuthContext);
@@ -51,7 +57,6 @@ const Aside = () => {
     // Admin specific
     { to: "/dashboard/all-users", icon: <Users className="w-5 h-5" />, label: "All Users", roles: ['admin'] },
     { to: "/dashboard/volunteer-dashboard", icon: <Droplets className="w-5 h-5" />, label: "Volunteer Dashboard", roles: ['admin'] },
-   
   ];
 
   const filteredNavItems = navItems.filter(item => {
@@ -59,47 +64,8 @@ const Aside = () => {
     return item.roles?.includes(role);
   });
 
-  // Animation variants
-  const sidebarVariants = {
-    collapsed: { width: 80 },
-    expanded: { width: 280 }
-  };
-
-  const menuItemVariants = {
-    hidden: { opacity: 0, x: -20 },
-    visible: (i) => ({
-      opacity: 1,
-      x: 0,
-      transition: {
-        delay: i * 0.1,
-        type: "spring",
-        stiffness: 100,
-        damping: 15
-      }
-    })
-  };
-
-  const hoverAnimation = {
-    scale: 1.02,
-    transition: {
-      type: "spring",
-      stiffness: 400,
-      damping: 17
-    }
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
-
   return (
     <>
-    
       <motion.button
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -109,7 +75,6 @@ const Aside = () => {
         <Menu className="w-6 h-6" />
       </motion.button>
 
- 
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
@@ -122,7 +87,6 @@ const Aside = () => {
         )}
       </AnimatePresence>
 
-
       <motion.aside
         initial={false}
         animate={isCollapsed ? "collapsed" : "expanded"}
@@ -131,7 +95,6 @@ const Aside = () => {
           isCollapsed ? "w-20" : "w-72"
         }`}
       >
-       
         <motion.button
           whileHover={{ scale: 1.1 }}
           whileTap={{ scale: 0.9 }}
@@ -150,9 +113,7 @@ const Aside = () => {
           )}
         </motion.button>
 
-       
         <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
-       
           <motion.div
             animate={{
               backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
@@ -265,7 +226,6 @@ const Aside = () => {
           </AnimatePresence>
         </nav>
 
- 
         <div className="absolute bottom-0 w-full p-4 border-t border-red-100 bg-white">
           <motion.button
             whileHover={{ scale: 1.02, x: isCollapsed ? 0 : 5 }}
@@ -292,7 +252,6 @@ const Aside = () => {
         </div>
       </motion.aside>
 
-   
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.aside
@@ -302,7 +261,6 @@ const Aside = () => {
             transition={{ type: "spring", damping: 25, stiffness: 200 }}
             className="lg:hidden fixed left-0 top-0 h-full w-72 bg-gradient-to-b from-white to-red-50 border-r border-red-100 shadow-xl z-50 overflow-y-auto"
           >
-            
             <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
               <motion.div
                 animate={{
@@ -344,7 +302,6 @@ const Aside = () => {
               </div>
             </div>
 
-        
             <div className="mx-4 -mt-8 relative z-10">
               <div className="bg-white rounded-xl shadow-lg border border-red-100 p-4">
                 <div className="flex items-center gap-3">
@@ -380,7 +337,6 @@ const Aside = () => {
               </div>
             </div>
 
-      
             <nav className="mt-8 px-4 space-y-1">
               {filteredNavItems.map((item, index) => (
                 <motion.div
@@ -400,7 +356,6 @@ const Aside = () => {
               ))}
             </nav>
 
- 
             <div className="mt-8 mx-4 p-4 bg-gradient-to-br from-blue-50 to-indigo-50 rounded-xl border border-blue-100">
               <div className="flex items-center gap-2 mb-3">
                 <Activity className="w-4 h-4 text-blue-600" />
@@ -481,7 +436,6 @@ const NavItem = ({ to, icon, label, collapsed, onClick }) => {
     </NavLink>
   );
 };
-
 
 const ChevronLeft = ({ className }) => (
   <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">

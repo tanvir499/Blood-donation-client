@@ -1,11 +1,33 @@
 import React, { useContext, useEffect, useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import axios from "axios";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { AuthContext } from "../../../Provider/AuthProvider";
-import {User,Mail,Droplets,MapPin,Hospital,Calendar,Clock,FileText,Send,PlusCircle,AlertCircle,CheckCircle,Shield,ArrowRight} from "lucide-react";
+import {
+  User,
+  Mail,
+  Droplets,
+  MapPin,
+  Hospital,
+  Calendar,
+  Clock,
+  FileText,
+  Send,
+  PlusCircle,
+  AlertCircle,
+  CheckCircle,
+  Shield,
+  ArrowRight
+} from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { 
+  pageVariants, 
+  cardVariants, 
+  pulseAnimation,
+  floatAnimation,
+  buttonHoverAnimation 
+} from "../../../utils/AnimationUtils";
 
 const AddRequest = () => {
   const [upazilas, setUpazilas] = useState([]);
@@ -32,7 +54,6 @@ const AddRequest = () => {
       });
   }, []);
 
-  // Filter upazilas when district changes
   useEffect(() => {
     if (selectedDistrict) {
       const filtered = upazilas.filter(
@@ -53,21 +74,15 @@ const AddRequest = () => {
     const requestData = {
       requesterName: user?.displayName,
       requesterEmail: user?.email,
-
       recipientName: form.recipientName.value,
       bloodGroup: form.bloodGroup.value,
-
       district: form.district.value,
       upazila: form.upazila.value,
-
       hospital: form.hospital.value,
       address: form.address.value,
-
       donationDate: form.donationDate.value,
       donationTime: form.donationTime.value,
-
       message: form.message.value,
-
       status: "pending",
       createdAt: new Date().toISOString(),
     };
@@ -101,7 +116,6 @@ const AddRequest = () => {
           }
         ); 
         form.reset();
-
         setSelectedDistrict("");
 
         setTimeout(() => {
@@ -114,7 +128,6 @@ const AddRequest = () => {
       })
       .catch((err) => {
         console.error("Error submitting request:", err);
-
       
         toast.update(loadingToast, {
           render: "Failed to submit request. Please try again.",
@@ -138,40 +151,6 @@ const AddRequest = () => {
       .finally(() => {
         setLoading(false);
       });
-  };
-
-  // Animation variants
-  const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    exit: { opacity: 0, y: -20 },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 },
-    },
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
-
-  const floatAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
   };
 
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
@@ -198,11 +177,9 @@ const AddRequest = () => {
         />
       </div>
 
-      
       <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
           <div className="max-w-4xl mx-auto">
-            {/* Header */}
             <motion.div variants={cardVariants} className="text-center mb-10">
               <motion.div
                 animate={floatAnimation}
@@ -242,7 +219,6 @@ const AddRequest = () => {
               transition={{ delay: 0.2 }}
               className="bg-white rounded-2xl shadow-xl border border-gray-100 overflow-hidden"
             >
-          
               <div className="bg-gradient-to-r from-red-500 to-pink-500 p-8">
                 <div className="flex items-center gap-4">
                   <motion.div
@@ -267,10 +243,8 @@ const AddRequest = () => {
                 </div>
               </div>
 
-         
               <form onSubmit={handleSubmit} className="p-8">
                 <div className="space-y-8">
-      
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-red-100 flex items-center justify-center">
@@ -320,7 +294,6 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-               
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center">
@@ -371,7 +344,6 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-     
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center">
@@ -424,7 +396,7 @@ const AddRequest = () => {
                             <option value="" disabled>
                               Select your Upazila
                             </option>
-                            {upazilas.map((u) => (
+                            {filteredUpazilas.map((u) => (
                               <option value={u.name} key={u.id}>
                                 {u.name}
                               </option>
@@ -467,7 +439,6 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-             
                   <div className="space-y-6">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-full bg-purple-100 flex items-center justify-center">
@@ -535,7 +506,6 @@ const AddRequest = () => {
                     </div>
                   </div>
 
-              
                   <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -571,11 +541,7 @@ const AddRequest = () => {
                   </motion.div>
 
                   <motion.button
-                    whileHover={{
-                      scale: 1.02,
-                      boxShadow: "0 10px 30px rgba(239, 68, 68, 0.3)",
-                    }}
-                    whileTap={{ scale: 0.98 }}
+                    {...buttonHoverAnimation}
                     type="submit"
                     disabled={loading}
                     className="w-full py-4 bg-gradient-to-r from-red-500 to-pink-500 text-white font-bold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center gap-3 group"
@@ -605,7 +571,6 @@ const AddRequest = () => {
               </form>
             </motion.div>
 
-           
             {loading && (
               <motion.div
                 initial={{ opacity: 0 }}

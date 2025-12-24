@@ -127,6 +127,21 @@ export const rotateAnimation = {
   }
 };
 
+// Menu item variants for sidebar
+export const menuItemVariants = {
+  hidden: { opacity: 0, x: -20 },
+  visible: (i) => ({
+    opacity: 1,
+    x: 0,
+    transition: {
+      delay: i * 0.1,
+      type: "spring",
+      stiffness: 100,
+      damping: 15
+    }
+  })
+};
+
 // DonationRequest specific animations
 export const containerVariants = {
   hidden: { opacity: 0 },
@@ -160,3 +175,53 @@ export const cardHoverVariants = {
     },
   },
 };
+
+// Sidebar variants
+export const sidebarVariants = {
+  collapsed: { width: 80 },
+  expanded: { width: 280 }
+};
+
+// Progress bar animation
+export const progressBarAnimation = {
+  animate: {
+    x: ["0%", "100%"],
+  },
+  transition: {
+    repeat: Infinity,
+    duration: 1.5,
+    ease: "linear"
+  }
+};
+
+// Shine effect for buttons
+export const shineEffect = {
+  animate: { 
+    x: ["-100%", "200%"]
+  },
+  transition: { 
+    repeat: Infinity, 
+    duration: 1.5, 
+    ease: "linear" 
+  }
+};
+
+// Confetti animation
+export const confettiAnimation = (i) => ({
+  initial: {
+    x: "50%",
+    y: "50%",
+    rotate: 0,
+    opacity: 1
+  },
+  animate: {
+    x: Math.random() * 100 - 50 + "%",
+    y: Math.random() * 100 - 50 + "%",
+    rotate: 360,
+    opacity: 0
+  },
+  transition: {
+    duration: 1.5,
+    ease: "easeOut"
+  }
+});

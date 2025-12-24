@@ -4,8 +4,12 @@ import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router";
 import auth from "../../firebase/firebase.config";
 import { motion, AnimatePresence } from "framer-motion";
-import {Heart,Droplets,ChevronRight,ArrowRight,Menu,X,Home,Search,DollarSign,LogOut,Shield,User as UserIcon,
-} from "lucide-react";
+import { Heart, Droplets, ChevronRight, ArrowRight, Menu, X, Home, Search, DollarSign, LogOut, Shield, User as UserIcon } from "lucide-react";
+import { 
+  rotateAnimation, 
+  bounceAnimation, 
+  buttonHoverAnimation 
+} from "../../utils/AnimationUtils";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
@@ -131,12 +135,8 @@ const Navbar = () => {
                 >
                   <div className="relative">
                     <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{
-                        duration: 10,
-                        repeat: Infinity,
-                        ease: "linear",
-                      }}
+                      animate={rotateAnimation.animate}
+                      transition={rotateAnimation.transition}
                       className="absolute inset-0 rounded-full bg-gradient-to-r from-red-500 to-pink-500 opacity-20"
                     />
                     <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-red-200 relative">

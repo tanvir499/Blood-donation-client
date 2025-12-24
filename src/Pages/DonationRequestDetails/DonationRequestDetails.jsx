@@ -24,6 +24,14 @@ import "react-toastify/dist/ReactToastify.css";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { useNavigate } from "react-router";
+import { 
+  pageVariants, 
+  cardVariants, 
+  pulseAnimation, 
+  floatAnimation,
+  rotateAnimation,
+  buttonHoverAnimation 
+} from "../../utils/AnimationUtils";
 
 const DonationRequestDetails = () => {
   const { id } = useParams();
@@ -151,40 +159,6 @@ const DonationRequestDetails = () => {
     }
   };
 
-  // Animation variants
-  const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    exit: { opacity: 0, y: -20 }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    }
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
-
-  const floatAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center">
@@ -275,8 +249,8 @@ const DonationRequestDetails = () => {
                   <div>
                     <div className="flex items-center gap-3 mb-4">
                       <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                        animate={rotateAnimation.animate}
+                        transition={rotateAnimation.transition}
                         className="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
                       >
                         <Droplets className="w-8 h-8" />
@@ -529,8 +503,8 @@ const DonationRequestDetails = () => {
                         <p className="text-lg font-bold text-gray-800">{request.donationTime}</p>
                       </div>
                       <motion.div
-                        animate={{ rotate: 360 }}
-                        transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                        animate={rotateAnimation.animate}
+                        transition={rotateAnimation.transition}
                         className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center"
                       >
                         <Clock className="w-6 h-6 text-blue-600" />
@@ -619,8 +593,7 @@ const DonationRequestDetails = () => {
                     className="sticky top-8"
                   >
                     <motion.button
-                      whileHover={{ scale: 1.02, boxShadow: "0 10px 30px rgba(239, 68, 68, 0.3)" }}
-                      whileTap={{ scale: 0.98 }}
+                      {...buttonHoverAnimation}
                       onClick={() => {
                         if (!user) {
                           toast.warning("Please login first to donate blood!", {
@@ -700,8 +673,8 @@ const DonationRequestDetails = () => {
                 <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white">
                   <div className="flex items-center gap-3 mb-2">
                     <motion.div
-                      animate={{ rotate: 360 }}
-                      transition={{ duration: 1.5, ease: "linear" }}
+                      animate={rotateAnimation.animate}
+                      transition={rotateAnimation.transition}
                       className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center"
                     >
                       <CheckCircle className="w-6 h-6" />

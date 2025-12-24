@@ -6,6 +6,13 @@ import { updateProfile } from "firebase/auth";
 import axios from "axios";
 import auth from "../Firebase/firebase.config";
 import { motion } from "framer-motion";
+import { 
+  pageVariants, 
+  cardVariants, 
+  fadeInUp,
+  floatAnimation,
+  bounceAnimation 
+} from "../utils/AnimationUtils";
 
 const Register = () => {
   const [upazilas, setUpazilas] = useState([]);
@@ -100,26 +107,32 @@ const Register = () => {
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       
- 
       <motion.div
-        animate={{ y: [0, -20, 0] }}
-        transition={{ repeat: Infinity, duration: 3 }}
+        animate={floatAnimation}
         className="hidden lg:block absolute top-10 right-10 text-4xl opacity-10"
       >
         🩸
       </motion.div>
       <motion.div
-        animate={{ y: [0, 20, 0] }}
-        transition={{ repeat: Infinity, duration: 4, delay: 0.5 }}
+        animate={{ 
+          y: [0, 20, 0],
+          scale: [1, 1.1, 1]
+        }}
+        transition={{ 
+          repeat: Infinity, 
+          duration: 4,
+          delay: 0.5,
+          ease: "easeInOut"
+        }}
         className="hidden lg:block absolute bottom-10 left-10 text-4xl opacity-10"
       >
         ❤️
       </motion.div>
 
       <motion.div
-        initial={{ opacity: 0, scale: 0.95, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.4 }}
+        initial="initial"
+        animate="animate"
+        variants={pageVariants}
         className="relative z-10 w-full max-w-md"
       >
         <div className="rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
@@ -366,8 +379,7 @@ const Register = () => {
               >
                 Login
                 <motion.span
-                  animate={{ x: [0, 4, 0] }}
-                  transition={{ repeat: Infinity, duration: 1.5, delay: 1 }}
+                  animate={bounceAnimation}
                   className="inline-block"
                 >
                   →

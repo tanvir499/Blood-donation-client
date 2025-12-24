@@ -15,18 +15,18 @@ import {
   Camera,
   CheckCircle,
   AlertCircle,
-  Heart,
-  Activity,
-  BarChart3,
-  TrendingUp,
-  Bell,
-  Clock,
-  Award
 } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
+import { 
+  pageVariants, 
+  cardVariants, 
+  pulseAnimation,
+  floatAnimation,
+  buttonHoverAnimation 
+} from "../../../utils/AnimationUtils";
 
 const MainDashboard = () => {
   const { user, updateUserProfile } = useContext(AuthContext);
@@ -63,12 +63,10 @@ const MainDashboard = () => {
   const bloodGroups = ["A+", "A-", "B+", "B-", "AB+", "AB-", "O+", "O-"];
   const genders = ["Male", "Female", "Other"];
 
-  // Load user profile data and stats
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
       
-      // Load profile data
       axiosSecure.get(`/user/${user.email}`)
         .then((res) => {
           const userData = res.data;
@@ -87,7 +85,6 @@ const MainDashboard = () => {
           });
         })
         .catch(() => {
-          // If no profile exists, use auth data
           setProfileData({
             name: user.displayName || "",
             email: user.email || "",
@@ -103,13 +100,11 @@ const MainDashboard = () => {
           });
         });
 
-      // Load user stats
       axiosSecure.get(`/user-stats/${user.email}`)
         .then((res) => {
           setStats(res.data);
         })
         .catch(() => {
-          // Fallback stats
           setStats({
             donations: 0,
             requests: 0,
@@ -125,13 +120,10 @@ const MainDashboard = () => {
     }
   }, [user, axiosSecure]);
 
-  // Load districts and upazilas
   useEffect(() => {
-    // Load districts from API or JSON
     axiosSecure.get("/districts")
       .then(res => setDistricts(res.data))
       .catch(() => {
-        // Fallback districts
         const fallbackDistricts = [
           "Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barisal", 
           "Sylhet", "Rangpur", "Mymensingh", "Cumilla", "Noakhali"
@@ -142,7 +134,6 @@ const MainDashboard = () => {
     axiosSecure.get("/upazilas")
       .then(res => setUpazilas(res.data))
       .catch(() => {
-        // Fallback upazilas
         const fallbackUpazilas = [
           { id: 1, name: "Gulshan", district: "Dhaka" },
           { id: 2, name: "Banani", district: "Dhaka" },
@@ -155,7 +146,6 @@ const MainDashboard = () => {
       });
   }, [axiosSecure]);
 
-  // Filter upazilas based on selected district
   useEffect(() => {
     if (profileData.district) {
       const filtered = upazilas.filter(u => 
@@ -179,7 +169,6 @@ const MainDashboard = () => {
     const file = e.target.files[0];
     if (!file) return;
 
-    // Check file size (max 2MB)
     if (file.size > 2 * 1024 * 1024) {
       toast.error("Image size should be less than 2MB", {
         position: "top-right",
@@ -188,7 +177,6 @@ const MainDashboard = () => {
       return;
     }
 
-    // Check file type
     if (!file.type.startsWith('image/')) {
       toast.error("Please upload an image file", {
         position: "top-right",
@@ -199,11 +187,8 @@ const MainDashboard = () => {
 
     setUploading(true);
     
-    // In a real app, you would upload to cloud storage
-    // For demo, create a local URL
     const imageUrl = URL.createObjectURL(file);
     
-    // Simulate upload delay
     setTimeout(() => {
       setProfileData(prev => ({ ...prev, photoURL: imageUrl }));
       setUploading(false);
@@ -217,7 +202,6 @@ const MainDashboard = () => {
   const handleSaveProfile = (e) => {
     e.preventDefault();
     
-    // Validate required fields
     if (!profileData.name || !profileData.email) {
       toast.error("Name and email are required", {
         position: "top-right",
@@ -226,7 +210,6 @@ const MainDashboard = () => {
       return;
     }
 
-    // Validate blood group if provided
     if (profileData.bloodGroup && !bloodGroups.includes(profileData.bloodGroup)) {
       toast.error("Please select a valid blood group", {
         position: "top-right",
@@ -235,10 +218,8 @@ const MainDashboard = () => {
       return;
     }
 
-    // Update profile in database
     axiosSecure.put(`/user/${user.email}`, profileData)
       .then((res) => {
-        // Update auth profile if name or photo changed
         if (profileData.name !== user.displayName || profileData.photoURL !== user.photoURL) {
           updateUserProfile({
             displayName: profileData.name,
@@ -277,7 +258,6 @@ const MainDashboard = () => {
   };
 
   const handleCancelEdit = () => {
-    // Reset to original data
     axiosSecure.get(`/user/${user.email}`)
       .then((res) => {
         const userData = res.data;
@@ -301,40 +281,6 @@ const MainDashboard = () => {
       });
   };
 
-  // Animation variants
-  const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    exit: { opacity: 0, y: -20 }
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: { 
-      opacity: 1, 
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 }
-    }
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
-
-  const floatAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut"
-    }
-  };
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center">
@@ -343,7 +289,7 @@ const MainDashboard = () => {
           className="text-center"
         >
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
-            <Heart className="w-10 h-10 text-red-500 animate-pulse" />
+            <Droplets className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
           <h3 className="text-xl font-bold text-gray-800">Loading Dashboard</h3>
           <p className="text-gray-600 mt-2">Getting your information ready...</p>
@@ -359,7 +305,6 @@ const MainDashboard = () => {
       variants={pageVariants}
       className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
     >
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
@@ -375,9 +320,8 @@ const MainDashboard = () => {
         />
       </div>
 
-      <div className="lg:ml-72"> {/* Adjust margin for sidebar */}
+      <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
-          {/* Welcome Header */}
           <motion.div
             variants={cardVariants}
             className="mb-8"
@@ -395,8 +339,7 @@ const MainDashboard = () => {
               <div className="flex gap-4">
                 {!editing ? (
                   <motion.button
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
+                    {...buttonHoverAnimation}
                     onClick={() => setEditing(true)}
                     className="px-6 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                   >
@@ -415,8 +358,7 @@ const MainDashboard = () => {
                       Cancel
                     </motion.button>
                     <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
+                      {...buttonHoverAnimation}
                       onClick={handleSaveProfile}
                       className="px-6 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                     >
@@ -429,18 +371,13 @@ const MainDashboard = () => {
             </div>
           </motion.div>
 
-         
-
-          {/* Main Content */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-            {/* Left Column - Profile Card */}
             <motion.div
               variants={cardVariants}
               transition={{ delay: 0.5 }}
               className="lg:col-span-1"
             >
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 sticky top-8">
-                {/* Profile Image */}
                 <div className="relative mb-6">
                   <motion.div
                     animate={pulseAnimation}
@@ -481,7 +418,6 @@ const MainDashboard = () => {
                   </motion.div>
                 </div>
 
-                {/* Basic Info */}
                 <div className="text-center mb-6">
                   <h2 className="text-2xl font-bold text-gray-800 mb-2">
                     {profileData.name}
@@ -504,9 +440,6 @@ const MainDashboard = () => {
                   )}
                 </div>
 
-             
-
-                {/* Role Badge */}
                 <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
                   <Shield className="w-5 h-5 text-purple-600" />
                   <span className="font-semibold text-purple-600">Verified Donor</span>
@@ -514,14 +447,12 @@ const MainDashboard = () => {
               </div>
             </motion.div>
 
-            {/* Right Column - Profile Form */}
             <motion.div
               variants={cardVariants}
               transition={{ delay: 0.6 }}
               className="lg:col-span-2"
             >
               <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden">
-                {/* Form Header */}
                 <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6">
                   <div className="flex items-center gap-3">
                     <motion.div
@@ -538,10 +469,8 @@ const MainDashboard = () => {
                   </div>
                 </div>
 
-                {/* Form Content */}
                 <form onSubmit={handleSaveProfile} className="p-6">
                   <div className="space-y-6">
-                    {/* Personal Information */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                         <User className="w-5 h-5 text-red-500" />
@@ -549,7 +478,6 @@ const MainDashboard = () => {
                       </h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Name */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Full Name *
@@ -565,7 +493,6 @@ const MainDashboard = () => {
                           />
                         </div>
 
-                        {/* Email (Read Only) */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Email Address
@@ -584,7 +511,6 @@ const MainDashboard = () => {
                           </div>
                         </div>
 
-                        {/* Blood Group */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700 flex items-center gap-2">
                             <Droplets className="w-4 h-4 text-red-500" />
@@ -604,7 +530,6 @@ const MainDashboard = () => {
                           </select>
                         </div>
 
-                        {/* Gender */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Gender
@@ -625,7 +550,6 @@ const MainDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Contact Information */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                         <Phone className="w-5 h-5 text-blue-500" />
@@ -633,7 +557,6 @@ const MainDashboard = () => {
                       </h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Phone */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Phone Number
@@ -649,7 +572,6 @@ const MainDashboard = () => {
                           />
                         </div>
 
-                        {/* Address */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Street Address
@@ -667,7 +589,6 @@ const MainDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Location Information */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                         <MapPin className="w-5 h-5 text-green-500" />
@@ -675,7 +596,6 @@ const MainDashboard = () => {
                       </h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* District */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             District
@@ -696,7 +616,6 @@ const MainDashboard = () => {
                           </select>
                         </div>
 
-                        {/* Upazila */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Upazila
@@ -721,7 +640,6 @@ const MainDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Medical Information */}
                     <div className="space-y-4">
                       <h3 className="text-lg font-bold text-gray-800 flex items-center gap-2">
                         <Calendar className="w-5 h-5 text-purple-500" />
@@ -729,7 +647,6 @@ const MainDashboard = () => {
                       </h3>
                       
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                        {/* Date of Birth */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Date of Birth
@@ -744,7 +661,6 @@ const MainDashboard = () => {
                           />
                         </div>
 
-                        {/* Last Donation */}
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
                             Last Donation Date
@@ -761,7 +677,6 @@ const MainDashboard = () => {
                       </div>
                     </div>
 
-                    {/* Edit Mode Notice */}
                     {editing && (
                       <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -783,12 +698,10 @@ const MainDashboard = () => {
                     )}
                   </div>
 
-                  {/* Save Button (Visible only in edit mode) */}
                   {editing && (
                     <div className="mt-8 pt-6 border-t border-gray-200 flex justify-end gap-4">
                       <motion.button
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
+                        {...buttonHoverAnimation}
                         type="submit"
                         className="px-8 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                       >
@@ -806,12 +719,5 @@ const MainDashboard = () => {
     </motion.div>
   );
 };
-
-// Plus Icon component
-const Plus = ({ className }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-  </svg>
-);
 
 export default MainDashboard;

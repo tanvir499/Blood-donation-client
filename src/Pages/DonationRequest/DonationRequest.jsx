@@ -17,6 +17,13 @@ import {
 import { useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
+import { 
+  containerVariants,
+  cardHoverVariants,
+  pulseAnimation,
+  floatAnimation,
+  buttonHoverAnimation
+} from "../../utils/AnimationUtils";
 
 const DonationRequest = () => {
   const [allRequests, setAllRequests] = useState([]);
@@ -68,58 +75,6 @@ const DonationRequest = () => {
           (req) => req.priority === "urgent" || req.urgency === "high"
         )
       : allRequests;
-
-  // Animation variants
-  const containerVariants = {
-    hidden: { opacity: 0 },
-    visible: {
-      opacity: 1,
-      transition: {
-        staggerChildren: 0.1,
-      },
-    },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, y: 20, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      scale: 1,
-      transition: {
-        type: "spring",
-        stiffness: 100,
-        damping: 15,
-      },
-    },
-    hover: {
-      y: -8,
-      scale: 1.02,
-      transition: {
-        type: "spring",
-        stiffness: 400,
-        damping: 17,
-      },
-    },
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
-
-  const floatAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden">
@@ -331,7 +286,7 @@ const DonationRequest = () => {
                 {filteredRequests.map((request, index) => (
                   <motion.div
                     key={request._id}
-                    variants={cardVariants}
+                    variants={cardHoverVariants}
                     initial="hidden"
                     animate="visible"
                     whileHover="hover"
@@ -469,8 +424,7 @@ const DonationRequest = () => {
 
                         {/* Action Button */}
                         <motion.button
-                          whileHover={{ scale: 1.02 }}
-                          whileTap={{ scale: 0.98 }}
+                          {...buttonHoverAnimation}
                           onClick={() => handleView(request._id)}
                           className="w-full mt-8 py-3 bg-gradient-to-r from-red-500 to-pink-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-3 group"
                         >

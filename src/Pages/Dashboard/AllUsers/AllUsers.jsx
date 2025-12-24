@@ -1,9 +1,27 @@
 import React, { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import {User,Mail,Shield,CheckCircle,XCircle,RefreshCw,AlertCircle,Users as UsersIcon,Eye,MoreVertical,} from "lucide-react";
+import {
+  User,
+  Mail,
+  Shield,
+  CheckCircle,
+  XCircle,
+  RefreshCw,
+  AlertCircle,
+  Users as UsersIcon,
+  Eye,
+  MoreVertical,
+} from "lucide-react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import {
+  pageVariants,
+  cardVariants,
+  pulseAnimation,
+  floatAnimation,
+  buttonHoverAnimation,
+} from "../../../utils/AnimationUtils";
 
 const AllUsers = () => {
   const axiosSecure = useAxiosSecure();
@@ -15,7 +33,6 @@ const AllUsers = () => {
     role: "all",
     status: "all",
   });
-  const [showFilters, setShowFilters] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
 
   const roles = ["admin", "volunteer", "donor", "user"];
@@ -96,40 +113,6 @@ const AllUsers = () => {
     });
     setSearchTerm("");
     setFilteredUsers(users);
-  };
-
-  // Animation variants
-  const pageVariants = {
-    initial: { opacity: 0, y: 20 },
-    animate: { opacity: 1, y: 0, transition: { duration: 0.6 } },
-    exit: { opacity: 0, y: -20 },
-  };
-
-  const cardVariants = {
-    hidden: { opacity: 0, scale: 0.95 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { type: "spring", stiffness: 100, damping: 15 },
-    },
-  };
-
-  const pulseAnimation = {
-    scale: [1, 1.05, 1],
-    transition: {
-      duration: 2,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
-  };
-
-  const floatAnimation = {
-    y: [0, -10, 0],
-    transition: {
-      duration: 3,
-      repeat: Infinity,
-      ease: "easeInOut",
-    },
   };
 
   const getRoleColor = (role) => {
@@ -276,6 +259,7 @@ const AllUsers = () => {
                                 <div className="flex items-center gap-3">
                                   <motion.div
                                     whileHover={{ scale: 1.1 }}
+                                    transition={{ duration: 0.3 }}
                                     className="w-12 h-12 rounded-full bg-gradient-to-br from-red-100 to-pink-100 overflow-hidden border-2 border-red-200"
                                   >
                                     <img
@@ -407,6 +391,7 @@ const AllUsers = () => {
                             <div className="flex items-center gap-3">
                               <motion.div
                                 whileHover={{ scale: 1.1 }}
+                                transition={{ duration: 0.3 }}
                                 className="w-16 h-16 rounded-full bg-gradient-to-br from-red-100 to-pink-100 overflow-hidden border-2 border-red-200"
                               >
                                 <img
@@ -519,7 +504,6 @@ const AllUsers = () => {
                 </div>
               </>
             ) : (
-              /* No Users Found */
               <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
@@ -568,7 +552,6 @@ const AllUsers = () => {
                   className="bg-white rounded-2xl shadow-2xl max-w-lg w-full max-h-[90vh] overflow-y-auto"
                   onClick={(e) => e.stopPropagation()}
                 >
-            
                   <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white sticky top-0">
                     <div className="flex items-center justify-between">
                       <div className="flex items-center gap-3">
@@ -620,7 +603,7 @@ const AllUsers = () => {
                       </div>
 
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-2 space-x-2">
+                        <div className="space-y-2">
                           <label className="text-sm font-medium text-gray-500">
                             Role:
                           </label>
@@ -632,7 +615,7 @@ const AllUsers = () => {
                             {selectedUser.role || "user"}
                           </span>
                         </div>
-                        <div className="space-y-2 space-x-2">
+                        <div className="space-y-2">
                           <label className="text-sm font-medium text-gray-500">
                             Status:
                           </label>
