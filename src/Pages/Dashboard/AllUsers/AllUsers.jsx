@@ -19,8 +19,6 @@ import {
   pageVariants,
   cardVariants,
   pulseAnimation,
-  floatAnimation,
-  buttonHoverAnimation,
 } from "../../../utils/AnimationUtils";
 
 const AllUsers = () => {

@@ -1,17 +1,33 @@
 import React, { useContext, useState } from "react";
 import { NavLink, useNavigate } from "react-router";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Users, Droplets, Settings, LogOut, Menu, X, PlusCircle, FileText, Bell, Heart, Shield, User as UserIcon, Activity, BarChart3 } from "lucide-react";
+import {
+  Home,
+  Users,
+  Droplets,
+  Settings,
+  LogOut,
+  Menu,
+  X,
+  PlusCircle,
+  FileText,
+  Bell,
+  Heart,
+  Shield,
+  User as UserIcon,
+  Activity,
+  BarChart3,
+} from "lucide-react";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { signOut } from "firebase/auth";
 import auth from "../../firebase/firebase.config";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { 
-  sidebarVariants, 
-  menuItemVariants, 
-  hoverAnimation, 
-  pulseAnimation 
+import {
+  sidebarVariants,
+  menuItemVariants,
+  hoverAnimation,
+  pulseAnimation,
 } from "../../utils/AnimationUtils";
 
 const Aside = () => {
@@ -47,19 +63,49 @@ const Aside = () => {
   };
 
   const navItems = [
-    { to: "/dashboard", icon: <Home className="w-5 h-5" />, label: "Profile", allRoles: true },
-    { to: "/dashboard/my-request", icon: <FileText className="w-5 h-5" />, label: "My Requests", allRoles: true },
-    { to: "/dashboard/donation-requests", icon: <Heart className="w-5 h-5" />, label: "Donor-Dashboard", allRoles: true },
-    
+    {
+      to: "/dashboard",
+      icon: <Home className="w-5 h-5" />,
+      label: "Profile",
+      allRoles: true,
+    },
+    {
+      to: "/dashboard/my-request",
+      icon: <FileText className="w-5 h-5" />,
+      label: "My Requests",
+      allRoles: true,
+    },
+    {
+      to: "/dashboard/donation-requests",
+      icon: <Heart className="w-5 h-5" />,
+      label: "Donor-Dashboard",
+      allRoles: true,
+    },
+
     // Donor specific
-    { to: "/dashboard/add-request", icon: <PlusCircle className="w-5 h-5" />, label: "Add Request", roles: ['donor', 'volunteer'] },
-    
+    {
+      to: "/dashboard/add-request",
+      icon: <PlusCircle className="w-5 h-5" />,
+      label: "Add Request",
+      roles: ["donor", "volunteer"],
+    },
+
     // Admin specific
-    { to: "/dashboard/all-users", icon: <Users className="w-5 h-5" />, label: "All Users", roles: ['admin'] },
-    { to: "/dashboard/volunteer-dashboard", icon: <Droplets className="w-5 h-5" />, label: "Volunteer Dashboard", roles: ['admin'] },
+    {
+      to: "/dashboard/all-users",
+      icon: <Users className="w-5 h-5" />,
+      label: "All Users",
+      roles: ["admin"],
+    },
+    {
+      to: "/dashboard/volunteer-dashboard",
+      icon: <Droplets className="w-5 h-5" />,
+      label: "Volunteer Dashboard",
+      roles: ["admin"],
+    },
   ];
 
-  const filteredNavItems = navItems.filter(item => {
+  const filteredNavItems = navItems.filter((item) => {
     if (item.allRoles) return true;
     return item.roles?.includes(role);
   });
@@ -116,24 +162,27 @@ const Aside = () => {
         <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
           <motion.div
             animate={{
-              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+              backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
             }}
             transition={{
               duration: 10,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             style={{
-              background: "linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)",
-              backgroundSize: "50px 50px"
+              background:
+                "linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)",
+              backgroundSize: "50px 50px",
             }}
             className="absolute inset-0"
           />
-          
+
           <div className="relative p-6">
             <motion.div
               animate={pulseAnimation}
-              className={`flex items-center gap-3 ${isCollapsed ? "justify-center" : ""}`}
+              className={`flex items-center gap-3 ${
+                isCollapsed ? "justify-center" : ""
+              }`}
             >
               <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                 <Droplets className="w-6 h-6 text-white" />
@@ -264,20 +313,21 @@ const Aside = () => {
             <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
               <motion.div
                 animate={{
-                  backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"]
+                  backgroundPosition: ["0% 0%", "100% 100%", "0% 0%"],
                 }}
                 transition={{
                   duration: 10,
                   repeat: Infinity,
-                  ease: "linear"
+                  ease: "linear",
                 }}
                 style={{
-                  background: "linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)",
-                  backgroundSize: "50px 50px"
+                  background:
+                    "linear-gradient(45deg, rgba(255,255,255,0.1) 25%, transparent 25%, transparent 50%, rgba(255,255,255,0.1) 50%, rgba(255,255,255,0.1) 75%, transparent 75%, transparent)",
+                  backgroundSize: "50px 50px",
                 }}
                 className="absolute inset-0"
               />
-              
+
               <div className="relative p-6 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <motion.div
@@ -417,7 +467,7 @@ const NavItem = ({ to, icon, label, collapsed, onClick }) => {
       >
         {icon}
       </motion.span>
-      
+
       {!collapsed && (
         <motion.span
           initial={{ opacity: 1 }}
@@ -427,7 +477,7 @@ const NavItem = ({ to, icon, label, collapsed, onClick }) => {
           {label}
         </motion.span>
       )}
-      
+
       {collapsed && (
         <div className="absolute left-full ml-2 px-2 py-1 bg-gray-900 text-white text-sm rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap z-50">
           {label}
@@ -438,14 +488,34 @@ const NavItem = ({ to, icon, label, collapsed, onClick }) => {
 };
 
 const ChevronLeft = ({ className }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M15 19l-7-7 7-7"
+    />
   </svg>
 );
 
 const ChevronRight = ({ className }) => (
-  <svg className={className} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+  <svg
+    className={className}
+    fill="none"
+    stroke="currentColor"
+    viewBox="0 0 24 24"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth={2}
+      d="M9 5l7 7-7 7"
+    />
   </svg>
 );
 

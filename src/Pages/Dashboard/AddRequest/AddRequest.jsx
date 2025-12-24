@@ -17,16 +17,16 @@ import {
   AlertCircle,
   CheckCircle,
   Shield,
-  ArrowRight
+  ArrowRight,
 } from "lucide-react";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { 
-  pageVariants, 
-  cardVariants, 
+import {
+  pageVariants,
+  cardVariants,
   pulseAnimation,
   floatAnimation,
-  buttonHoverAnimation 
+  buttonHoverAnimation,
 } from "../../../utils/AnimationUtils";
 
 const AddRequest = () => {
@@ -114,7 +114,7 @@ const AddRequest = () => {
             autoClose: 6000,
             theme: "colored",
           }
-        ); 
+        );
         form.reset();
         setSelectedDistrict("");
 
@@ -128,7 +128,7 @@ const AddRequest = () => {
       })
       .catch((err) => {
         console.error("Error submitting request:", err);
-      
+
         toast.update(loadingToast, {
           render: "Failed to submit request. Please try again.",
           type: "error",

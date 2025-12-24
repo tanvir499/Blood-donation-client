@@ -17,12 +17,12 @@ import {
 import { useNavigate } from "react-router";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
-import { 
+import {
   containerVariants,
   cardHoverVariants,
   pulseAnimation,
   floatAnimation,
-  buttonHoverAnimation
+  buttonHoverAnimation,
 } from "../../utils/AnimationUtils";
 
 const DonationRequest = () => {
@@ -78,7 +78,6 @@ const DonationRequest = () => {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden">
-      {/* Animated Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={floatAnimation}
@@ -98,7 +97,6 @@ const DonationRequest = () => {
         />
       </div>
 
-      {/* Floating Hearts */}
       <motion.div
         animate={{
           y: [0, -30, 0],
@@ -115,7 +113,6 @@ const DonationRequest = () => {
       </motion.div>
 
       <div className="container mx-auto px-4 py-8 md:py-12 relative z-10">
-        {/* Header */}
         <motion.div
           initial={{ opacity: 0, y: -30 }}
           animate={{ opacity: 1, y: 0 }}
@@ -147,7 +144,6 @@ const DonationRequest = () => {
             could save a life.
           </p>
 
-          {/* Stats Card */}
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
@@ -182,7 +178,6 @@ const DonationRequest = () => {
           </motion.div>
         </motion.div>
 
-        {/* Filter Tabs */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -221,7 +216,6 @@ const DonationRequest = () => {
           </div>
         </motion.div>
 
-        {/* Loading State */}
         {loading && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -245,7 +239,6 @@ const DonationRequest = () => {
           </motion.div>
         )}
 
-        {/* Empty State */}
         {!loading && filteredRequests.length === 0 && (
           <motion.div
             initial={{ opacity: 0, scale: 0.9 }}
@@ -273,7 +266,6 @@ const DonationRequest = () => {
           </motion.div>
         )}
 
-        {/* Requests Grid */}
         {!loading && filteredRequests.length > 0 && (
           <motion.div
             variants={containerVariants}
@@ -293,7 +285,6 @@ const DonationRequest = () => {
                     exit={{ opacity: 0, scale: 0.9 }}
                     className="relative"
                   >
-                    {/* Urgent Badge */}
                     {(request.priority === "urgent" ||
                       request.urgency === "high") && (
                       <motion.div
@@ -308,7 +299,6 @@ const DonationRequest = () => {
                     )}
 
                     <div className="bg-white rounded-2xl shadow-lg border border-red-100 overflow-hidden h-full">
-                      {/* Blood Group Header */}
                       <div className="relative h-32 bg-gradient-to-r from-red-500 to-pink-500 overflow-hidden">
                         <motion.div
                           animate={{
@@ -342,9 +332,7 @@ const DonationRequest = () => {
                         </div>
                       </div>
 
-                      {/* Card Content */}
                       <div className="p-6">
-                        {/* Recipient Info */}
                         <div className="flex items-start gap-3 mb-6">
                           <motion.div
                             whileHover={{ rotate: 360 }}
@@ -369,9 +357,7 @@ const DonationRequest = () => {
                           </div>
                         </div>
 
-                        {/* Details Grid */}
                         <div className="space-y-4">
-                          {/* Location */}
                           <div className="flex items-start gap-3">
                             <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center flex-shrink-0">
                               <MapPin className="w-4 h-4 text-blue-500" />
@@ -384,7 +370,6 @@ const DonationRequest = () => {
                             </div>
                           </div>
 
-                          {/* Date and Time */}
                           <div className="flex items-start gap-3">
                             <div className="w-8 h-8 rounded-full bg-green-50 flex items-center justify-center flex-shrink-0">
                               <Calendar className="w-4 h-4 text-green-500" />
@@ -405,7 +390,6 @@ const DonationRequest = () => {
                             </div>
                           </div>
 
-                          {/* Status */}
                           <div className="flex items-start gap-3">
                             <div className="w-8 h-8 rounded-full bg-yellow-50 flex items-center justify-center flex-shrink-0">
                               <ClockIcon className="w-4 h-4 text-yellow-500" />
@@ -422,7 +406,6 @@ const DonationRequest = () => {
                           </div>
                         </div>
 
-                        {/* Action Button */}
                         <motion.button
                           {...buttonHoverAnimation}
                           onClick={() => handleView(request._id)}
@@ -445,7 +428,6 @@ const DonationRequest = () => {
               </AnimatePresence>
             </div>
 
-            {/* Info Footer */}
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

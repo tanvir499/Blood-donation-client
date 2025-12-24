@@ -58,7 +58,7 @@ const router = createBrowserRouter([
       {
         path: "/volunteers",
         element: <Volunteers></Volunteers>,
-      }
+      },
     ],
   },
   // Routes for Dashboard
@@ -93,7 +93,7 @@ const router = createBrowserRouter([
       {
         path: "volunteer-dashboard",
         element: <VolunteerDashboard></VolunteerDashboard>,
-      }
+      },
     ],
   },
 ]);

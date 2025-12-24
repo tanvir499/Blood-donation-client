@@ -17,20 +17,20 @@ import {
   Heart,
   ChevronRight,
   Users,
-  FileText
+  FileText,
 } from "lucide-react";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { useNavigate } from "react-router";
-import { 
-  pageVariants, 
-  cardVariants, 
-  pulseAnimation, 
+import {
+  pageVariants,
+  cardVariants,
+  pulseAnimation,
   floatAnimation,
   rotateAnimation,
-  buttonHoverAnimation 
+  buttonHoverAnimation,
 } from "../../utils/AnimationUtils";
 
 const DonationRequestDetails = () => {
@@ -46,7 +46,8 @@ const DonationRequestDetails = () => {
 
   useEffect(() => {
     setLoading(true);
-    axiosInstance.get(`/request/${id}`)
+    axiosInstance
+      .get(`/request/${id}`)
       .then((res) => {
         setRequest(res.data);
         setLoading(false);
@@ -74,15 +75,13 @@ const DonationRequestDetails = () => {
     }
 
     setConfirmLoading(true);
-    
-    // Show loading toast
+
     const loadingToast = toast.loading("Processing your donation...", {
       position: "top-center",
       theme: "colored",
     });
 
     try {
-      // Try to update request status directly
       const response = await axiosInstance.patch(`/request/${id}`, {
         status: "inprogress",
         donorName: user?.displayName,
@@ -90,8 +89,7 @@ const DonationRequestDetails = () => {
       });
 
       console.log("Donation confirmed successfully:", response.data);
-      
-      // Update toast to success
+
       toast.update(loadingToast, {
         render: "Donation confirmed successfully! ",
         type: "success",
@@ -103,28 +101,24 @@ const DonationRequestDetails = () => {
       });
 
       setModalOpen(false);
-      
-      // Update local state
-      setRequest(prev => ({
+
+      setRequest((prev) => ({
         ...prev,
         status: "inprogress",
         donorName: user?.displayName,
-        donorEmail: user?.email
+        donorEmail: user?.email,
       }));
-
     } catch (error) {
       console.error("Error confirming donation:", error);
-      
-      // If PATCH fails, update local state for demo
+
       setModalOpen(false);
-      setRequest(prev => ({
+      setRequest((prev) => ({
         ...prev,
         status: "inprogress",
         donorName: user?.displayName,
-        donorEmail: user?.email
+        donorEmail: user?.email,
       }));
 
-      // Show success toast
       toast.update(loadingToast, {
         render: "Donation confirmed successfully! ",
         type: "success",
@@ -141,7 +135,8 @@ const DonationRequestDetails = () => {
 
   const handleCopyDetails = (text, type) => {
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(text)
+      navigator.clipboard
+        .writeText(text)
         .then(() => {
           toast.info(`${type} copied to clipboard!`, {
             position: "bottom-right",
@@ -162,15 +157,16 @@ const DonationRequestDetails = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center">
-        <motion.div
-          animate={pulseAnimation}
-          className="text-center"
-        >
+        <motion.div animate={pulseAnimation} className="text-center">
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
             <Heart className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
-          <h3 className="text-xl font-bold text-gray-800">Loading Request Details</h3>
-          <p className="text-gray-600 mt-2">Fetching life-saving information...</p>
+          <h3 className="text-xl font-bold text-gray-800">
+            Loading Request Details
+          </h3>
+          <p className="text-gray-600 mt-2">
+            Fetching life-saving information...
+          </p>
         </motion.div>
       </div>
     );
@@ -190,7 +186,7 @@ const DonationRequestDetails = () => {
         pauseOnHover
         theme="colored"
       />
-      
+
       <motion.div
         initial="initial"
         animate="animate"
@@ -198,24 +194,22 @@ const DonationRequestDetails = () => {
         variants={pageVariants}
         className="min-h-screen bg-gradient-to-b from-white to-red-50 relative overflow-hidden"
       >
-        {/* Animated Background */}
         <div className="absolute inset-0 overflow-hidden pointer-events-none">
           <motion.div
             animate={{
               x: ["0%", "100%", "0%"],
-              rotate: [0, 180, 360]
+              rotate: [0, 180, 360],
             }}
             transition={{
               duration: 40,
               repeat: Infinity,
-              ease: "linear"
+              ease: "linear",
             }}
             className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-red-100 to-pink-100 opacity-10 blur-3xl"
           />
         </div>
 
         <div className="container mx-auto px-4 py-8 relative z-10">
-          {/* Header */}
           <div className="flex items-center justify-between mb-8">
             <motion.button
               whileHover={{ scale: 1.05, x: -5 }}
@@ -235,9 +229,7 @@ const DonationRequestDetails = () => {
             </div>
           </div>
 
-          {/* Main Content */}
           <div className="max-w-5xl mx-auto">
-            {/* Request Header Card */}
             <motion.div
               variants={cardVariants}
               initial="hidden"
@@ -256,15 +248,19 @@ const DonationRequestDetails = () => {
                         <Droplets className="w-8 h-8" />
                       </motion.div>
                       <div>
-                        <h1 className="text-4xl font-bold mb-1">{request.bloodGroup}</h1>
+                        <h1 className="text-4xl font-bold mb-1">
+                          {request.bloodGroup}
+                        </h1>
                         <p className="text-white/80">Blood Group Required</p>
                       </div>
                     </div>
-                    
+
                     <div className="flex items-center gap-4">
                       <div className="flex items-center gap-2">
                         <Users className="w-4 h-4" />
-                        <span>Recipient: <strong>{request.recipientName}</strong></span>
+                        <span>
+                          Recipient: <strong>{request.recipientName}</strong>
+                        </span>
                       </div>
                       <div className="w-px h-6 bg-white/30"></div>
                       <div className="flex items-center gap-2">
@@ -290,7 +286,6 @@ const DonationRequestDetails = () => {
               </div>
             </motion.div>
 
-            {/* Donor Info Card (Only show if donation is confirmed) */}
             {request.donorName && (
               <motion.div
                 initial={{ opacity: 0, y: -20 }}
@@ -304,9 +299,12 @@ const DonationRequestDetails = () => {
                         <User className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="text-xl font-bold">Donation Confirmed! </h3>
+                        <h3 className="text-xl font-bold">
+                          Donation Confirmed!{" "}
+                        </h3>
                         <p className="text-white/80">
-                          <strong>{request.donorName}</strong> has accepted to donate blood
+                          <strong>{request.donorName}</strong> has accepted to
+                          donate blood
                         </p>
                       </div>
                     </div>
@@ -316,11 +314,8 @@ const DonationRequestDetails = () => {
               </motion.div>
             )}
 
-            {/* Details Grid */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-              {/* Left Column - Patient & Location */}
               <div className="lg:col-span-2 space-y-8">
-                {/* Patient Information Card */}
                 <motion.div
                   variants={cardVariants}
                   initial="hidden"
@@ -332,7 +327,7 @@ const DonationRequestDetails = () => {
                     <User className="w-5 h-5 text-red-500" />
                     Patient Information
                   </h2>
-                  
+
                   <div className="space-y-6">
                     <div className="flex items-start gap-4">
                       <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0">
@@ -340,7 +335,9 @@ const DonationRequestDetails = () => {
                       </div>
                       <div>
                         <p className="text-sm text-gray-500">Recipient Name</p>
-                        <p className="text-lg font-bold text-gray-800">{request.recipientName}</p>
+                        <p className="text-lg font-bold text-gray-800">
+                          {request.recipientName}
+                        </p>
                       </div>
                     </div>
 
@@ -350,7 +347,9 @@ const DonationRequestDetails = () => {
                           <Droplets className="w-4 h-4" />
                           <span>Required Blood Group</span>
                         </div>
-                        <div className="text-2xl font-bold text-red-600">{request.bloodGroup}</div>
+                        <div className="text-2xl font-bold text-red-600">
+                          {request.bloodGroup}
+                        </div>
                       </div>
 
                       {request.units && (
@@ -359,14 +358,15 @@ const DonationRequestDetails = () => {
                             <Droplets className="w-4 h-4" />
                             <span>Units Required</span>
                           </div>
-                          <div className="text-2xl font-bold text-red-600">{request.units} unit(s)</div>
+                          <div className="text-2xl font-bold text-red-600">
+                            {request.units} unit(s)
+                          </div>
                         </div>
                       )}
                     </div>
                   </div>
                 </motion.div>
 
-                {/* Location & Hospital Card */}
                 <motion.div
                   variants={cardVariants}
                   initial="hidden"
@@ -386,9 +386,11 @@ const DonationRequestDetails = () => {
                           <MapPin className="w-4 h-4" />
                           <span>District</span>
                         </div>
-                        <p 
+                        <p
                           className="text-lg font-medium text-gray-800 cursor-pointer hover:text-blue-600 transition-colors"
-                          onClick={() => handleCopyDetails(request.district, "District")}
+                          onClick={() =>
+                            handleCopyDetails(request.district, "District")
+                          }
                           title="Click to copy"
                         >
                           {request.district}
@@ -400,9 +402,11 @@ const DonationRequestDetails = () => {
                           <MapPin className="w-4 h-4" />
                           <span>Upazila</span>
                         </div>
-                        <p 
+                        <p
                           className="text-lg font-medium text-gray-800 cursor-pointer hover:text-blue-600 transition-colors"
-                          onClick={() => handleCopyDetails(request.upazila, "Upazila")}
+                          onClick={() =>
+                            handleCopyDetails(request.upazila, "Upazila")
+                          }
                           title="Click to copy"
                         >
                           {request.upazila}
@@ -415,9 +419,11 @@ const DonationRequestDetails = () => {
                         <Hospital className="w-4 h-4" />
                         <span>Hospital</span>
                       </div>
-                      <p 
+                      <p
                         className="text-lg font-medium text-gray-800 cursor-pointer hover:text-blue-600 transition-colors"
-                        onClick={() => handleCopyDetails(request.hospital, "Hospital")}
+                        onClick={() =>
+                          handleCopyDetails(request.hospital, "Hospital")
+                        }
                         title="Click to copy"
                       >
                         {request.hospital}
@@ -430,9 +436,11 @@ const DonationRequestDetails = () => {
                           <MapPin className="w-4 h-4" />
                           <span>Full Address</span>
                         </div>
-                        <p 
+                        <p
                           className="text-gray-700 cursor-pointer hover:text-blue-600 transition-colors"
-                          onClick={() => handleCopyDetails(request.address, "Address")}
+                          onClick={() =>
+                            handleCopyDetails(request.address, "Address")
+                          }
                           title="Click to copy"
                         >
                           {request.address}
@@ -442,7 +450,6 @@ const DonationRequestDetails = () => {
                   </div>
                 </motion.div>
 
-                {/* Message Card */}
                 {request.message && (
                   <motion.div
                     variants={cardVariants}
@@ -456,15 +463,15 @@ const DonationRequestDetails = () => {
                       Additional Message
                     </h2>
                     <div className="bg-gray-50 rounded-xl p-6">
-                      <p className="text-gray-700 leading-relaxed">{request.message}</p>
+                      <p className="text-gray-700 leading-relaxed">
+                        {request.message}
+                      </p>
                     </div>
                   </motion.div>
                 )}
               </div>
 
-              {/* Right Column - Timing & Contact */}
               <div className="space-y-8">
-                {/* Timing Card */}
                 <motion.div
                   variants={cardVariants}
                   initial="hidden"
@@ -484,7 +491,9 @@ const DonationRequestDetails = () => {
                           <Calendar className="w-4 h-4" />
                           <span>Date</span>
                         </div>
-                        <p className="text-lg font-bold text-gray-800">{request.donationDate}</p>
+                        <p className="text-lg font-bold text-gray-800">
+                          {request.donationDate}
+                        </p>
                       </div>
                       <motion.div
                         animate={floatAnimation}
@@ -500,7 +509,9 @@ const DonationRequestDetails = () => {
                           <Clock className="w-4 h-4" />
                           <span>Time</span>
                         </div>
-                        <p className="text-lg font-bold text-gray-800">{request.donationTime}</p>
+                        <p className="text-lg font-bold text-gray-800">
+                          {request.donationTime}
+                        </p>
                       </div>
                       <motion.div
                         animate={rotateAnimation.animate}
@@ -514,16 +525,18 @@ const DonationRequestDetails = () => {
                     <div className="p-4 bg-gradient-to-r from-yellow-50 to-orange-50 rounded-xl">
                       <div className="flex items-center gap-2 mb-2">
                         <AlertCircle className="w-5 h-5 text-yellow-600" />
-                        <span className="font-semibold text-yellow-800">Important Note</span>
+                        <span className="font-semibold text-yellow-800">
+                          Important Note
+                        </span>
                       </div>
                       <p className="text-sm text-yellow-700">
-                        Please arrive 15 minutes before the scheduled time. Bring your ID and donor card if available.
+                        Please arrive 15 minutes before the scheduled time.
+                        Bring your ID and donor card if available.
                       </p>
                     </div>
                   </div>
                 </motion.div>
 
-                {/* Requester Contact Card */}
                 <motion.div
                   variants={cardVariants}
                   initial="hidden"
@@ -542,9 +555,14 @@ const DonationRequestDetails = () => {
                         <User className="w-4 h-4" />
                         <span>Requester Name</span>
                       </div>
-                      <p 
+                      <p
                         className="font-medium text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
-                        onClick={() => handleCopyDetails(request.requesterName, "Requester Name")}
+                        onClick={() =>
+                          handleCopyDetails(
+                            request.requesterName,
+                            "Requester Name"
+                          )
+                        }
                         title="Click to copy"
                       >
                         {request.requesterName}
@@ -556,9 +574,11 @@ const DonationRequestDetails = () => {
                         <Mail className="w-4 h-4" />
                         <span>Email Address</span>
                       </div>
-                      <p 
+                      <p
                         className="font-medium text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
-                        onClick={() => handleCopyDetails(request.requesterEmail, "Email")}
+                        onClick={() =>
+                          handleCopyDetails(request.requesterEmail, "Email")
+                        }
                         title="Click to copy"
                       >
                         {request.requesterEmail}
@@ -571,9 +591,11 @@ const DonationRequestDetails = () => {
                           <Phone className="w-4 h-4" />
                           <span>Phone Number</span>
                         </div>
-                        <p 
+                        <p
                           className="font-medium text-gray-800 cursor-pointer hover:text-indigo-600 transition-colors"
-                          onClick={() => handleCopyDetails(request.requesterPhone, "Phone")}
+                          onClick={() =>
+                            handleCopyDetails(request.requesterPhone, "Phone")
+                          }
                           title="Click to copy"
                         >
                           {request.requesterPhone}
@@ -583,7 +605,6 @@ const DonationRequestDetails = () => {
                   </div>
                 </motion.div>
 
-                {/* Donate Button (Only show if status is pending) */}
                 {request.status === "pending" && (
                   <motion.div
                     variants={cardVariants}
@@ -601,7 +622,9 @@ const DonationRequestDetails = () => {
                             autoClose: 4000,
                             theme: "colored",
                           });
-                          navigate("/login", { state: { from: `/donation-request/${id}` } });
+                          navigate("/login", {
+                            state: { from: `/donation-request/${id}` },
+                          });
                         } else {
                           setModalOpen(true);
                         }
@@ -612,14 +635,13 @@ const DonationRequestDetails = () => {
                       Donate Blood Now
                       <ChevronRight className="w-5 h-5 group-hover:translate-x-2 transition-transform" />
                     </motion.button>
-                    
+
                     <p className="text-center text-sm text-gray-500 mt-3">
                       Your donation can save a life
                     </p>
                   </motion.div>
                 )}
 
-                {/* Donation Confirmed Info (Only show if status is inprogress) */}
                 {request.status === "inprogress" && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -631,18 +653,26 @@ const DonationRequestDetails = () => {
                         <CheckCircle className="w-8 h-8 text-green-600" />
                       </div>
                       <h3 className="text-xl font-bold text-gray-800 mb-2">
-                        Donation Confirmed! 
+                        Donation Confirmed!
                       </h3>
                       <p className="text-gray-600 mb-4">
-                        You have accepted to donate blood for {request.recipientName}
+                        You have accepted to donate blood for{" "}
+                        {request.recipientName}
                       </p>
                       <div className="bg-white rounded-xl p-4 mb-4">
-                        <p className="text-sm text-gray-500">Your Information</p>
-                        <p className="font-bold text-gray-800">{request.donorName}</p>
-                        <p className="text-sm text-gray-600">{request.donorEmail}</p>
+                        <p className="text-sm text-gray-500">
+                          Your Information
+                        </p>
+                        <p className="font-bold text-gray-800">
+                          {request.donorName}
+                        </p>
+                        <p className="text-sm text-gray-600">
+                          {request.donorEmail}
+                        </p>
                       </div>
                       <p className="text-sm text-gray-500">
-                        The requester has been notified. Please arrive at the scheduled time.
+                        The requester has been notified. Please arrive at the
+                        scheduled time.
                       </p>
                     </div>
                   </motion.div>
@@ -652,7 +682,6 @@ const DonationRequestDetails = () => {
           </div>
         </div>
 
-        {/* MODAL */}
         <AnimatePresence>
           {modalOpen && (
             <motion.div
@@ -669,7 +698,6 @@ const DonationRequestDetails = () => {
                 className="bg-white rounded-2xl shadow-2xl max-w-md w-full overflow-hidden"
                 onClick={(e) => e.stopPropagation()}
               >
-                {/* Modal Header */}
                 <div className="bg-gradient-to-r from-red-500 to-pink-500 p-6 text-white">
                   <div className="flex items-center gap-3 mb-2">
                     <motion.div
@@ -680,13 +708,16 @@ const DonationRequestDetails = () => {
                       <CheckCircle className="w-6 h-6" />
                     </motion.div>
                     <div>
-                      <h3 className="text-xl font-bold">Confirm Your Donation</h3>
-                      <p className="text-white/80 text-sm">You're about to save a life!</p>
+                      <h3 className="text-xl font-bold">
+                        Confirm Your Donation
+                      </h3>
+                      <p className="text-white/80 text-sm">
+                        You're about to save a life!
+                      </p>
                     </div>
                   </div>
                 </div>
 
-                {/* Modal Content */}
                 <div className="p-6">
                   <div className="space-y-6">
                     <div>
@@ -715,16 +746,18 @@ const DonationRequestDetails = () => {
                     <div className="bg-gradient-to-r from-green-50 to-emerald-50 rounded-xl p-4 border border-green-100">
                       <div className="flex items-center gap-2 mb-2">
                         <AlertCircle className="w-5 h-5 text-green-600" />
-                        <span className="font-semibold text-green-800">Confirmation Required</span>
+                        <span className="font-semibold text-green-800">
+                          Confirmation Required
+                        </span>
                       </div>
                       <p className="text-sm text-green-700">
-                        By confirming, you agree to donate blood for {request.recipientName}. 
-                        Your information will be shared with the requester.
+                        By confirming, you agree to donate blood for{" "}
+                        {request.recipientName}. Your information will be shared
+                        with the requester.
                       </p>
                     </div>
                   </div>
 
-                  {/* Modal Actions */}
                   <div className="flex gap-3 mt-8">
                     <motion.button
                       whileHover={{ scale: confirmLoading ? 1 : 1.02 }}
@@ -732,19 +765,35 @@ const DonationRequestDetails = () => {
                       onClick={handleConfirmDonation}
                       disabled={confirmLoading}
                       className={`flex-1 py-3 bg-gradient-to-r from-green-500 to-emerald-500 text-white font-semibold rounded-xl hover:shadow-lg transition-all duration-300 flex items-center justify-center gap-2 ${
-                        confirmLoading ? 'opacity-70 cursor-not-allowed' : ''
+                        confirmLoading ? "opacity-70 cursor-not-allowed" : ""
                       }`}
                     >
                       {confirmLoading ? (
                         <>
-                          <svg className="animate-spin h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
-                            <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                          <svg
+                            className="animate-spin h-5 w-5 text-white"
+                            xmlns="http://www.w3.org/2000/svg"
+                            fill="none"
+                            viewBox="0 0 24 24"
+                          >
+                            <circle
+                              className="opacity-25"
+                              cx="12"
+                              cy="12"
+                              r="10"
+                              stroke="currentColor"
+                              strokeWidth="4"
+                            ></circle>
+                            <path
+                              className="opacity-75"
+                              fill="currentColor"
+                              d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
+                            ></path>
                           </svg>
                           Processing...
                         </>
                       ) : (
-                        'Confirm Donation'
+                        "Confirm Donation"
                       )}
                     </motion.button>
                     <motion.button
@@ -753,7 +802,7 @@ const DonationRequestDetails = () => {
                       onClick={() => setModalOpen(false)}
                       disabled={confirmLoading}
                       className={`px-6 py-3 border border-gray-300 text-gray-700 font-semibold rounded-xl hover:bg-gray-50 transition-all duration-300 ${
-                        confirmLoading ? 'opacity-50 cursor-not-allowed' : ''
+                        confirmLoading ? "opacity-50 cursor-not-allowed" : ""
                       }`}
                     >
                       Cancel

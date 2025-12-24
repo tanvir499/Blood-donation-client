@@ -6,20 +6,14 @@ import auth from "../firebase/firebase.config";
 import { AuthContext } from "../Provider/AuthProvider";
 import { toast } from "react-toastify";
 import { motion } from "framer-motion";
-import { 
-  pageVariants, 
-  cardVariants, 
-  fadeInUp,
-  floatAnimation,
-  bounceAnimation 
-} from "../utils/AnimationUtils";
+import { pageVariants, floatAnimation } from "../utils/AnimationUtils";
 
 const Login = () => {
   const { setUser, handleGoogleSignIn } = useContext(AuthContext);
 
   const location = useLocation();
   const navigate = useNavigate();
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -30,11 +24,11 @@ const Login = () => {
       .then((userCredential) => {
         const user = userCredential.user;
         setUser(user);
-        toast.success("Logged in successfully!"); 
-        navigate(location.state ? location.state : '/');
+        toast.success("Logged in successfully!");
+        navigate(location.state ? location.state : "/");
       })
       .catch((error) => {
-        toast.error(error.message); 
+        toast.error(error.message);
       });
   };
 
@@ -43,11 +37,11 @@ const Login = () => {
       .then((result) => {
         const user = result.user;
         setUser(user);
-        toast.success("Logged in successfully!"); 
+        toast.success("Logged in successfully!");
         navigate("/");
       })
       .catch((error) => {
-        toast.error(error.message); 
+        toast.error(error.message);
       });
   };
 
@@ -57,8 +51,6 @@ const Login = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      
-  
       <motion.div
         animate={floatAnimation}
         className="hidden lg:block absolute top-10 left-10 text-4xl opacity-10"
@@ -66,15 +58,15 @@ const Login = () => {
         ❤️
       </motion.div>
       <motion.div
-        animate={{ 
+        animate={{
           y: [0, 20, 0],
-          scale: [1, 1.1, 1]
+          scale: [1, 1.1, 1],
         }}
-        transition={{ 
-          repeat: Infinity, 
+        transition={{
+          repeat: Infinity,
           duration: 4,
           delay: 0.5,
-          ease: "easeInOut"
+          ease: "easeInOut",
         }}
         className="hidden lg:block absolute bottom-10 right-10 text-4xl opacity-10"
       >
@@ -88,8 +80,6 @@ const Login = () => {
         className="relative z-10 w-full max-w-md"
       >
         <div className="rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
-          
-         
           <motion.div
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -108,7 +98,6 @@ const Login = () => {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-        
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -132,7 +121,6 @@ const Login = () => {
               </div>
             </motion.div>
 
-           
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -170,7 +158,6 @@ const Login = () => {
               </button>
             </motion.div>
 
-          
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -184,7 +171,6 @@ const Login = () => {
               </button>
             </motion.div>
 
-        
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -216,7 +202,6 @@ const Login = () => {
               </button>
             </motion.div>
 
-   
             <motion.div
               initial={{ opacity: 0 }}
               animate={{ opacity: 1 }}

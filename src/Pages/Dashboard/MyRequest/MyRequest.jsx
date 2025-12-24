@@ -15,12 +15,9 @@ import {
   Search,
   RefreshCw,
   TrendingUp,
-  Activity,
   PlusCircle,
   Filter,
-  Download,
-  Heart,
-  BarChart3
+  BarChart3,
 } from "lucide-react";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
 
@@ -75,17 +72,18 @@ const MyRequest = () => {
 
   // Filter and search functionality
   const filteredRequests = myRequest.filter((request) => {
-    const matchesSearch = searchTerm === "" || 
+    const matchesSearch =
+      searchTerm === "" ||
       request.recipientName?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.hospital?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       request.bloodGroup?.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    const matchesStatus = filterStatus === "all" || request.status === filterStatus;
-    
+
+    const matchesStatus =
+      filterStatus === "all" || request.status === filterStatus;
+
     return matchesSearch && matchesStatus;
   });
 
-  // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
     visible: {
@@ -151,13 +149,11 @@ const MyRequest = () => {
   };
 
   const handleAddRequest = () => {
-    // Navigate to add request page
     window.location.href = "/dashboard/add-request";
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-red-50">
-      {/* Animated Background */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <motion.div
           animate={{
@@ -173,10 +169,8 @@ const MyRequest = () => {
         />
       </div>
 
-      {/* Main Content with Sidebar Margin */}
-      <div className="lg:ml-72"> {/* This is the key fix - margin for sidebar */}
+      <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
-          {/* Header Section */}
           <motion.div
             initial={{ opacity: 0, y: -30 }}
             animate={{ opacity: 1, y: 0 }}
@@ -195,7 +189,8 @@ const MyRequest = () => {
                     ease: "linear",
                   }}
                   style={{
-                    background: "linear-gradient(90deg, #dc2626, #ef4444, #dc2626)",
+                    background:
+                      "linear-gradient(90deg, #dc2626, #ef4444, #dc2626)",
                     backgroundSize: "200% auto",
                     backgroundClip: "text",
                     WebkitBackgroundClip: "text",
@@ -228,15 +223,14 @@ const MyRequest = () => {
                   disabled={loading}
                   className="px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-500 text-white rounded-lg hover:shadow-lg transition-all duration-300 flex items-center gap-2"
                 >
-                  <RefreshCw className={`w-5 h-5 ${loading ? "animate-spin" : ""}`} />
+                  <RefreshCw
+                    className={`w-5 h-5 ${loading ? "animate-spin" : ""}`}
+                  />
                   Refresh
                 </motion.button>
-
-               
               </div>
             </div>
 
-            {/* Stats Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
               <motion.div
                 variants={cardVariants}
@@ -246,7 +240,9 @@ const MyRequest = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-500 text-sm">Total Requests</p>
-                    <p className="text-3xl font-bold text-gray-800">{totalRequest}</p>
+                    <p className="text-3xl font-bold text-gray-800">
+                      {totalRequest}
+                    </p>
                   </div>
                   <motion.div
                     animate={floatAnimation}
@@ -265,7 +261,9 @@ const MyRequest = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-500 text-sm">Showing</p>
-                    <p className="text-3xl font-bold text-gray-800">{myRequest.length}</p>
+                    <p className="text-3xl font-bold text-gray-800">
+                      {myRequest.length}
+                    </p>
                   </div>
                   <motion.div
                     animate={pulseAnimation}
@@ -284,23 +282,26 @@ const MyRequest = () => {
                 <div className="flex items-center justify-between">
                   <div>
                     <p className="text-gray-500 text-sm">Current Page</p>
-                    <p className="text-3xl font-bold text-gray-800">{currentPage}</p>
+                    <p className="text-3xl font-bold text-gray-800">
+                      {currentPage}
+                    </p>
                   </div>
                   <motion.div
                     animate={{ rotate: 360 }}
-                    transition={{ duration: 4, repeat: Infinity, ease: "linear" }}
+                    transition={{
+                      duration: 4,
+                      repeat: Infinity,
+                      ease: "linear",
+                    }}
                     className="w-12 h-12 rounded-full bg-gradient-to-r from-purple-100 to-pink-100 flex items-center justify-center"
                   >
                     <TrendingUp className="w-6 h-6 text-purple-600" />
                   </motion.div>
                 </div>
               </motion.div>
-
-             
             </div>
           </motion.div>
 
-          {/* Search and Filter Bar */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -308,7 +309,6 @@ const MyRequest = () => {
             className="bg-white rounded-xl shadow-lg border border-gray-100 p-6 mb-8"
           >
             <div className="flex flex-col md:flex-row gap-4">
-              {/* Search Input */}
               <div className="flex-1">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -322,7 +322,6 @@ const MyRequest = () => {
                 </div>
               </div>
 
-              {/* Filter Dropdown */}
               <div className="flex gap-4">
                 <div className="relative">
                   <Filter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
@@ -338,12 +337,10 @@ const MyRequest = () => {
                     <option value="cancelled">Cancelled</option>
                   </select>
                 </div>
-
               </div>
             </div>
           </motion.div>
 
-          {/* Loading State */}
           {loading && (
             <motion.div
               initial={{ opacity: 0 }}
@@ -355,7 +352,7 @@ const MyRequest = () => {
                 className="inline-flex flex-col items-center"
               >
                 <div className="w-16 h-16 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
-                  <Heart className="w-8 h-8 text-red-500 animate-pulse" />
+                  <Droplets className="w-8 h-8 text-red-500 animate-pulse" />
                 </div>
                 <h3 className="text-xl font-bold text-gray-800 mb-2">
                   Loading Your Requests
@@ -374,7 +371,6 @@ const MyRequest = () => {
               initial="hidden"
               animate="visible"
             >
-              {/* Mobile Cards View */}
               <div className="lg:hidden space-y-4 mb-8">
                 <AnimatePresence>
                   {filteredRequests.map((request, index) => (
@@ -409,7 +405,11 @@ const MyRequest = () => {
                               </div>
                             </div>
                           </div>
-                          <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(request.status)}`}>
+                          <span
+                            className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                              request.status
+                            )}`}
+                          >
                             {request.status || "Unknown"}
                           </span>
                         </div>
@@ -437,14 +437,17 @@ const MyRequest = () => {
                           {request.district && (
                             <div className="flex items-center gap-2 text-gray-600">
                               <MapPin className="w-4 h-4 text-gray-400" />
-                              <span>{request.district}, {request.upazila}</span>
+                              <span>
+                                {request.district}, {request.upazila}
+                              </span>
                             </div>
                           )}
                         </div>
 
                         <div className="flex items-center justify-between mt-6 pt-6 border-t border-gray-100">
                           <span className="text-sm text-gray-500">
-                            Request #{((currentPage - 1) * itemsPerPage) + index + 1}
+                            Request #
+                            {(currentPage - 1) * itemsPerPage + index + 1}
                           </span>
                           <motion.button
                             whileHover={{ scale: 1.05 }}
@@ -461,7 +464,6 @@ const MyRequest = () => {
                 </AnimatePresence>
               </div>
 
-              {/* Desktop Table View */}
               <div className="hidden lg:block">
                 <div className="bg-white rounded-xl shadow-lg border border-red-100 overflow-hidden">
                   <table className="w-full">
@@ -469,41 +471,55 @@ const MyRequest = () => {
                       <tr className="bg-gradient-to-r from-red-50 to-pink-50">
                         <th className="p-6 text-left">
                           <div className="flex items-center gap-2">
-                            <span className="font-semibold text-gray-700">#</span>
+                            <span className="font-semibold text-gray-700">
+                              #
+                            </span>
                           </div>
                         </th>
                         <th className="p-6 text-left">
                           <div className="flex items-center gap-2">
                             <User className="w-4 h-4 text-gray-500" />
-                            <span className="font-semibold text-gray-700">Recipient</span>
+                            <span className="font-semibold text-gray-700">
+                              Recipient
+                            </span>
                           </div>
                         </th>
                         <th className="p-6 text-left">
                           <div className="flex items-center gap-2">
                             <Hospital className="w-4 h-4 text-gray-500" />
-                            <span className="font-semibold text-gray-700">Hospital</span>
+                            <span className="font-semibold text-gray-700">
+                              Hospital
+                            </span>
                           </div>
                         </th>
                         <th className="p-6 text-left">
                           <div className="flex items-center gap-2">
                             <Droplets className="w-4 h-4 text-gray-500" />
-                            <span className="font-semibold text-gray-700">Blood Group</span>
+                            <span className="font-semibold text-gray-700">
+                              Blood Group
+                            </span>
                           </div>
                         </th>
                         <th className="p-6 text-left">
                           <div className="flex items-center gap-2">
                             <Calendar className="w-4 h-4 text-gray-500" />
-                            <span className="font-semibold text-gray-700">Date</span>
+                            <span className="font-semibold text-gray-700">
+                              Date
+                            </span>
                           </div>
                         </th>
                         <th className="p-6 text-left">
                           <div className="flex items-center gap-2">
                             <AlertCircle className="w-4 h-4 text-gray-500" />
-                            <span className="font-semibold text-gray-700">Status</span>
+                            <span className="font-semibold text-gray-700">
+                              Status
+                            </span>
                           </div>
                         </th>
                         <th className="p-6 text-left">
-                          <span className="font-semibold text-gray-700">Actions</span>
+                          <span className="font-semibold text-gray-700">
+                            Actions
+                          </span>
                         </th>
                       </tr>
                     </thead>
@@ -515,12 +531,14 @@ const MyRequest = () => {
                             variants={cardVariants}
                             initial="hidden"
                             animate="visible"
-                            whileHover={{ backgroundColor: "rgba(239, 68, 68, 0.05)" }}
+                            whileHover={{
+                              backgroundColor: "rgba(239, 68, 68, 0.05)",
+                            }}
                             className="border-b border-gray-100 hover:bg-red-50/50 transition-colors duration-300"
                           >
                             <td className="p-6">
                               <span className="font-medium text-gray-800">
-                                {((currentPage - 1) * itemsPerPage) + index + 1}
+                                {(currentPage - 1) * itemsPerPage + index + 1}
                               </span>
                             </td>
                             <td className="p-6">
@@ -578,7 +596,11 @@ const MyRequest = () => {
                               )}
                             </td>
                             <td className="p-6">
-                              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(request.status)}`}>
+                              <span
+                                className={`px-3 py-1 rounded-full text-xs font-semibold ${getStatusColor(
+                                  request.status
+                                )}`}
+                              >
                                 {request.status || "Unknown"}
                               </span>
                             </td>
@@ -599,7 +621,6 @@ const MyRequest = () => {
                   </table>
                 </div>
 
-                {/* Empty State */}
                 {filteredRequests.length === 0 && (
                   <motion.div
                     initial={{ opacity: 0, scale: 0.9 }}
@@ -641,11 +662,16 @@ const MyRequest = () => {
               className="flex flex-col sm:flex-row justify-between items-center gap-6 mt-8"
             >
               <div className="text-sm text-gray-600">
-                Showing <span className="font-semibold">{((currentPage - 1) * itemsPerPage) + 1}</span> to{" "}
+                Showing{" "}
+                <span className="font-semibold">
+                  {(currentPage - 1) * itemsPerPage + 1}
+                </span>{" "}
+                to{" "}
                 <span className="font-semibold">
                   {Math.min(currentPage * itemsPerPage, totalRequest)}
-                </span> of{" "}
-                <span className="font-semibold">{totalRequest}</span> requests
+                </span>{" "}
+                of <span className="font-semibold">{totalRequest}</span>{" "}
+                requests
               </div>
 
               <div className="flex items-center gap-2">
@@ -706,7 +732,10 @@ const MyRequest = () => {
                   max={pages.length}
                   value={currentPage}
                   onChange={(e) => {
-                    const page = Math.min(Math.max(1, Number(e.target.value)), pages.length);
+                    const page = Math.min(
+                      Math.max(1, Number(e.target.value)),
+                      pages.length
+                    );
                     setCurrentPage(page);
                   }}
                   className="w-16 px-2 py-1 border border-gray-300 rounded text-center outline-none focus:ring-2 focus:ring-red-500 focus:border-red-500"

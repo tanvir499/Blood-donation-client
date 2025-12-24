@@ -5,7 +5,6 @@ import useAxiosSecure from "../../../hooks/useAxiosSecure";
 import { motion, AnimatePresence } from "framer-motion";
 import {
   pageVariants,
-  cardVariants,
   pulseAnimation,
   textGradientAnimation,
   rotateAnimation,

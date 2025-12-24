@@ -6,12 +6,12 @@ import { updateProfile } from "firebase/auth";
 import axios from "axios";
 import auth from "../Firebase/firebase.config";
 import { motion } from "framer-motion";
-import { 
-  pageVariants, 
-  cardVariants, 
+import {
+  pageVariants,
+  cardVariants,
   fadeInUp,
   floatAnimation,
-  bounceAnimation 
+  bounceAnimation,
 } from "../utils/AnimationUtils";
 
 const Register = () => {
@@ -19,8 +19,7 @@ const Register = () => {
   const [districts, setDistricts] = useState([]);
 
   useEffect(() => {
-    axios.get("./upazila.json")
-    .then((res) => setUpazilas(res.data.upazilas));
+    axios.get("./upazila.json").then((res) => setUpazilas(res.data.upazilas));
 
     axios
       .get("./district.json")
@@ -28,7 +27,7 @@ const Register = () => {
   }, []);
 
   const navigate = useNavigate();
-  const { registerWithEmailPassword, setUser,  handleGoogleSignIn } =
+  const { registerWithEmailPassword, setUser, handleGoogleSignIn } =
     useContext(AuthContext);
 
   const handleSubmit = async (e) => {
@@ -106,7 +105,6 @@ const Register = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
-      
       <motion.div
         animate={floatAnimation}
         className="hidden lg:block absolute top-10 right-10 text-4xl opacity-10"
@@ -114,15 +112,15 @@ const Register = () => {
         🩸
       </motion.div>
       <motion.div
-        animate={{ 
+        animate={{
           y: [0, 20, 0],
-          scale: [1, 1.1, 1]
+          scale: [1, 1.1, 1],
         }}
-        transition={{ 
-          repeat: Infinity, 
+        transition={{
+          repeat: Infinity,
           duration: 4,
           delay: 0.5,
-          ease: "easeInOut"
+          ease: "easeInOut",
         }}
         className="hidden lg:block absolute bottom-10 left-10 text-4xl opacity-10"
       >
@@ -136,7 +134,6 @@ const Register = () => {
         className="relative z-10 w-full max-w-md"
       >
         <div className="rounded-2xl shadow-2xl p-6 md:p-8 border border-gray-200 dark:border-gray-700">
-        
           <motion.div
             initial={{ y: -10, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
@@ -155,7 +152,6 @@ const Register = () => {
           </motion.div>
 
           <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
-     
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -178,7 +174,6 @@ const Register = () => {
               </div>
             </motion.div>
 
-        
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -201,7 +196,6 @@ const Register = () => {
               </div>
             </motion.div>
 
-      
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -220,7 +214,6 @@ const Register = () => {
               </div>
             </motion.div>
 
-         
             <motion.div
               initial={{ opacity: 0, x: -10 }}
               animate={{ opacity: 1, x: 0 }}
@@ -235,7 +228,9 @@ const Register = () => {
                 className="w-full p-3 md:p-4 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base appearance-none"
                 required
               >
-                <option value="" disabled>Choose Blood Group</option>
+                <option value="" disabled>
+                  Choose Blood Group
+                </option>
                 <option value="A+">A+</option>
                 <option value="A-">A-</option>
                 <option value="B+">B+</option>
@@ -247,7 +242,6 @@ const Register = () => {
               </select>
             </motion.div>
 
-       
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
               <motion.div
                 initial={{ opacity: 0, x: -10 }}
@@ -263,7 +257,9 @@ const Register = () => {
                   className="w-full p-3 md:p-4 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base appearance-none"
                   required
                 >
-                  <option value="" disabled>Select your district</option>
+                  <option value="" disabled>
+                    Select your district
+                  </option>
                   {districts.map((d) => (
                     <option value={d?.name} key={d.id}>
                       {d?.name}
@@ -286,7 +282,9 @@ const Register = () => {
                   className="w-full p-3 md:p-4 rounded-lg md:rounded-xl border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-red-500 dark:focus:ring-red-400 focus:border-transparent transition-all duration-200 text-sm md:text-base appearance-none"
                   required
                 >
-                  <option value="" disabled>Select your Upazila</option>
+                  <option value="" disabled>
+                    Select your Upazila
+                  </option>
                   {upazilas.map((u) => (
                     <option value={u.name} key={u.id}>
                       {u.name}
@@ -331,7 +329,6 @@ const Register = () => {
               </button>
             </motion.div>
 
-           
             <motion.div
               initial={{ scaleX: 0 }}
               animate={{ scaleX: 1 }}
@@ -348,7 +345,6 @@ const Register = () => {
               </div>
             </motion.div>
 
-           
             <motion.div
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
@@ -378,10 +374,7 @@ const Register = () => {
                 className="text-red-500 hover:text-red-600 dark:text-red-400 dark:hover:text-red-300 font-semibold hover:underline inline-flex items-center gap-1 transition-all"
               >
                 Login
-                <motion.span
-                  animate={bounceAnimation}
-                  className="inline-block"
-                >
+                <motion.span animate={bounceAnimation} className="inline-block">
                   →
                 </motion.span>
               </Link>

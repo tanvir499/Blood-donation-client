@@ -1,11 +1,22 @@
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Users, Droplets, MapPin, Mail, Shield, Heart, RefreshCw, Activity, Eye, Award } from "lucide-react";
+import {
+  Users,
+  Droplets,
+  MapPin,
+  Mail,
+  Shield,
+  Heart,
+  RefreshCw,
+  Activity,
+  Eye,
+  Award,
+} from "lucide-react";
 import useAxiosSecure from "../hooks/useAxiosSecure";
-import { 
-  cardVariants, 
+import {
+  cardVariants,
   pulseAnimation,
-  buttonHoverAnimation 
+  buttonHoverAnimation,
 } from "../utils/AnimationUtils";
 
 const Volunteers = () => {
@@ -26,15 +37,16 @@ const Volunteers = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center">
-        <motion.div
-          animate={pulseAnimation}
-          className="text-center"
-        >
+        <motion.div animate={pulseAnimation} className="text-center">
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
             <Users className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
-          <h3 className="text-xl font-bold text-gray-800">Loading Volunteers</h3>
-          <p className="text-gray-600 mt-2">Fetching volunteer information...</p>
+          <h3 className="text-xl font-bold text-gray-800">
+            Loading Volunteers
+          </h3>
+          <p className="text-gray-600 mt-2">
+            Fetching volunteer information...
+          </p>
         </motion.div>
       </div>
     );
@@ -53,15 +65,16 @@ const Volunteers = () => {
               <Users className="w-8 h-8 text-red-600" />
             </div>
             <div>
-              <h2 className="text-2xl font-bold text-gray-800">Volunteer Team</h2>
-              <p className="text-gray-600">Our dedicated volunteers across the region</p>
+              <h2 className="text-2xl font-bold text-gray-800">
+                Volunteer Team
+              </h2>
+              <p className="text-gray-600">
+                Our dedicated volunteers across the region
+              </p>
             </div>
           </div>
         </motion.div>
-        <motion.div
-          variants={cardVariants}
-          transition={{ delay: 0.5 }}
-        >
+        <motion.div variants={cardVariants} transition={{ delay: 0.5 }}>
           {volunteers.length > 0 ? (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
               <AnimatePresence>
@@ -82,14 +95,21 @@ const Volunteers = () => {
                           className="w-24 h-24 rounded-full mx-auto overflow-hidden border-4 border-red-200 shadow-lg"
                         >
                           <img
-                            src={volunteer.mainPhotoUrl || `https://ui-avatars.com/api/?name=${volunteer.fullName}&background=random`}
+                            src={
+                              volunteer.mainPhotoUrl ||
+                              `https://ui-avatars.com/api/?name=${volunteer.fullName}&background=random`
+                            }
                             alt={volunteer.fullName}
                             className="w-full h-full object-cover"
                           />
                         </motion.div>
                         <motion.div
                           animate={{ rotate: 360 }}
-                          transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+                          transition={{
+                            duration: 20,
+                            repeat: Infinity,
+                            ease: "linear",
+                          }}
                           className="absolute inset-0 rounded-full border-2 border-red-300 border-t-transparent"
                         />
                       </div>
@@ -100,7 +120,9 @@ const Volunteers = () => {
                         </h3>
                         <div className="flex items-center justify-center gap-2 text-gray-600 mb-3">
                           <Mail className="w-4 h-4" />
-                          <span className="text-sm truncate">{volunteer.email}</span>
+                          <span className="text-sm truncate">
+                            {volunteer.email}
+                          </span>
                         </div>
 
                         {volunteer.blood && (
@@ -109,7 +131,9 @@ const Volunteers = () => {
                             className="inline-flex items-center gap-2 px-4 py-2 bg-red-50 rounded-full mb-4"
                           >
                             <Droplets className="w-4 h-4 text-red-600" />
-                            <span className="font-bold text-red-600">{volunteer.blood}</span>
+                            <span className="font-bold text-red-600">
+                              {volunteer.blood}
+                            </span>
                           </motion.div>
                         )}
 
@@ -120,14 +144,18 @@ const Volunteers = () => {
                           </div>
                           <div className="flex items-center justify-center gap-2 text-gray-600">
                             <MapPin className="w-4 h-4" />
-                            <span className="text-sm">{volunteer.district}</span>
+                            <span className="text-sm">
+                              {volunteer.district}
+                            </span>
                           </div>
                         </div>
                       </div>
 
                       <div className="flex items-center justify-center gap-2 mb-6">
                         <Shield className="w-4 h-4 text-blue-500" />
-                        <span className="text-sm font-semibold text-blue-600">Verified Volunteer</span>
+                        <span className="text-sm font-semibold text-blue-600">
+                          Verified Volunteer
+                        </span>
                       </div>
 
                       <motion.button
@@ -191,13 +219,18 @@ const Volunteers = () => {
                   <div className="flex items-center gap-3">
                     <div className="w-16 h-16 rounded-full bg-white/20 overflow-hidden border-2 border-white/30">
                       <img
-                        src={selectedVolunteer.mainPhotoUrl || `https://ui-avatars.com/api/?name=${selectedVolunteer.fullName}&background=random`}
+                        src={
+                          selectedVolunteer.mainPhotoUrl ||
+                          `https://ui-avatars.com/api/?name=${selectedVolunteer.fullName}&background=random`
+                        }
                         alt={selectedVolunteer.fullName}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold">{selectedVolunteer.fullName}</h3>
+                      <h3 className="text-xl font-bold">
+                        {selectedVolunteer.fullName}
+                      </h3>
                       <p className="text-white/80">{selectedVolunteer.email}</p>
                     </div>
                   </div>
@@ -212,7 +245,9 @@ const Volunteers = () => {
                           Blood Group
                         </label>
                         <div className="flex items-center gap-2">
-                          <span className="text-2xl font-bold text-red-600">{selectedVolunteer.blood}</span>
+                          <span className="text-2xl font-bold text-red-600">
+                            {selectedVolunteer.blood}
+                          </span>
                           <span className="px-3 py-1 bg-red-50 text-red-600 text-sm rounded-full">
                             Donor
                           </span>
@@ -228,11 +263,15 @@ const Volunteers = () => {
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                           <p className="text-sm text-gray-500">Upazila</p>
-                          <p className="font-medium text-gray-800">{selectedVolunteer.upazila}</p>
+                          <p className="font-medium text-gray-800">
+                            {selectedVolunteer.upazila}
+                          </p>
                         </div>
                         <div>
                           <p className="text-sm text-gray-500">District</p>
-                          <p className="font-medium text-gray-800">{selectedVolunteer.district}</p>
+                          <p className="font-medium text-gray-800">
+                            {selectedVolunteer.district}
+                          </p>
                         </div>
                       </div>
                     </div>
@@ -241,9 +280,13 @@ const Volunteers = () => {
                       <div className="flex items-start gap-3">
                         <Award className="w-5 h-5 text-blue-600 mt-0.5 flex-shrink-0" />
                         <div>
-                          <h4 className="font-bold text-blue-800 mb-1">Volunteer Status</h4>
+                          <h4 className="font-bold text-blue-800 mb-1">
+                            Volunteer Status
+                          </h4>
                           <p className="text-sm text-blue-700">
-                            This volunteer is verified and ready to help save lives. They can assist with blood donation coordination and emergency response.
+                            This volunteer is verified and ready to help save
+                            lives. They can assist with blood donation
+                            coordination and emergency response.
                           </p>
                         </div>
                       </div>

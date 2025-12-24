@@ -1,11 +1,11 @@
 import React, { useContext, useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { 
-  User, 
-  Mail, 
-  MapPin, 
-  Droplets, 
-  Phone, 
+import {
+  User,
+  Mail,
+  MapPin,
+  Droplets,
+  Phone,
   Calendar,
   Edit2,
   Save,
@@ -20,12 +20,11 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { AuthContext } from "../../../Provider/AuthProvider";
 import useAxiosSecure from "../../../hooks/useAxiosSecure";
-import { 
-  pageVariants, 
-  cardVariants, 
+import {
+  pageVariants,
+  cardVariants,
   pulseAnimation,
-  floatAnimation,
-  buttonHoverAnimation 
+  buttonHoverAnimation,
 } from "../../../utils/AnimationUtils";
 
 const MainDashboard = () => {
@@ -43,7 +42,7 @@ const MainDashboard = () => {
     savedLives: 0,
     pendingRequests: 0,
     completedRequests: 0,
-    recentActivity: []
+    recentActivity: [],
   });
 
   const [profileData, setProfileData] = useState({
@@ -66,14 +65,20 @@ const MainDashboard = () => {
   useEffect(() => {
     if (user?.email) {
       setLoading(true);
-      
-      axiosSecure.get(`/user/${user.email}`)
+
+      axiosSecure
+        .get(`/user/${user.email}`)
         .then((res) => {
           const userData = res.data;
           setProfileData({
             name: userData.name || user.displayName || "",
             email: userData.email || user.email || "",
-            photoURL: userData.photoURL || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || "User"}&background=random`,
+            photoURL:
+              userData.photoURL ||
+              user.photoURL ||
+              `https://ui-avatars.com/api/?name=${
+                user.displayName || "User"
+              }&background=random`,
             district: userData.district || "",
             upazila: userData.upazila || "",
             bloodGroup: userData.bloodGroup || "",
@@ -88,7 +93,11 @@ const MainDashboard = () => {
           setProfileData({
             name: user.displayName || "",
             email: user.email || "",
-            photoURL: user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || "User"}&background=random`,
+            photoURL:
+              user.photoURL ||
+              `https://ui-avatars.com/api/?name=${
+                user.displayName || "User"
+              }&background=random`,
             district: "",
             upazila: "",
             bloodGroup: "",
@@ -100,7 +109,8 @@ const MainDashboard = () => {
           });
         });
 
-      axiosSecure.get(`/user-stats/${user.email}`)
+      axiosSecure
+        .get(`/user-stats/${user.email}`)
         .then((res) => {
           setStats(res.data);
         })
@@ -111,7 +121,7 @@ const MainDashboard = () => {
             savedLives: 0,
             pendingRequests: 0,
             completedRequests: 0,
-            recentActivity: []
+            recentActivity: [],
           });
         })
         .finally(() => {
@@ -121,18 +131,28 @@ const MainDashboard = () => {
   }, [user, axiosSecure]);
 
   useEffect(() => {
-    axiosSecure.get("/districts")
-      .then(res => setDistricts(res.data))
+    axiosSecure
+      .get("/districts")
+      .then((res) => setDistricts(res.data))
       .catch(() => {
         const fallbackDistricts = [
-          "Dhaka", "Chittagong", "Rajshahi", "Khulna", "Barisal", 
-          "Sylhet", "Rangpur", "Mymensingh", "Cumilla", "Noakhali"
+          "Dhaka",
+          "Chittagong",
+          "Rajshahi",
+          "Khulna",
+          "Barisal",
+          "Sylhet",
+          "Rangpur",
+          "Mymensingh",
+          "Cumilla",
+          "Noakhali",
         ].map((name, idx) => ({ id: idx + 1, name }));
         setDistricts(fallbackDistricts);
       });
 
-    axiosSecure.get("/upazilas")
-      .then(res => setUpazilas(res.data))
+    axiosSecure
+      .get("/upazilas")
+      .then((res) => setUpazilas(res.data))
       .catch(() => {
         const fallbackUpazilas = [
           { id: 1, name: "Gulshan", district: "Dhaka" },
@@ -148,8 +168,10 @@ const MainDashboard = () => {
 
   useEffect(() => {
     if (profileData.district) {
-      const filtered = upazilas.filter(u => 
-        u.district && u.district.toLowerCase() === profileData.district.toLowerCase()
+      const filtered = upazilas.filter(
+        (u) =>
+          u.district &&
+          u.district.toLowerCase() === profileData.district.toLowerCase()
       );
       setFilteredUpazilas(filtered);
     } else {
@@ -159,9 +181,9 @@ const MainDashboard = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setProfileData(prev => ({
+    setProfileData((prev) => ({
       ...prev,
-      [name]: value
+      [name]: value,
     }));
   };
 
@@ -177,7 +199,7 @@ const MainDashboard = () => {
       return;
     }
 
-    if (!file.type.startsWith('image/')) {
+    if (!file.type.startsWith("image/")) {
       toast.error("Please upload an image file", {
         position: "top-right",
         theme: "colored",
@@ -186,11 +208,11 @@ const MainDashboard = () => {
     }
 
     setUploading(true);
-    
+
     const imageUrl = URL.createObjectURL(file);
-    
+
     setTimeout(() => {
-      setProfileData(prev => ({ ...prev, photoURL: imageUrl }));
+      setProfileData((prev) => ({ ...prev, photoURL: imageUrl }));
       setUploading(false);
       toast.success("Profile picture updated!", {
         position: "top-right",
@@ -201,7 +223,7 @@ const MainDashboard = () => {
 
   const handleSaveProfile = (e) => {
     e.preventDefault();
-    
+
     if (!profileData.name || !profileData.email) {
       toast.error("Name and email are required", {
         position: "top-right",
@@ -210,7 +232,10 @@ const MainDashboard = () => {
       return;
     }
 
-    if (profileData.bloodGroup && !bloodGroups.includes(profileData.bloodGroup)) {
+    if (
+      profileData.bloodGroup &&
+      !bloodGroups.includes(profileData.bloodGroup)
+    ) {
       toast.error("Please select a valid blood group", {
         position: "top-right",
         theme: "colored",
@@ -218,12 +243,16 @@ const MainDashboard = () => {
       return;
     }
 
-    axiosSecure.put(`/user/${user.email}`, profileData)
+    axiosSecure
+      .put(`/user/${user.email}`, profileData)
       .then((res) => {
-        if (profileData.name !== user.displayName || profileData.photoURL !== user.photoURL) {
+        if (
+          profileData.name !== user.displayName ||
+          profileData.photoURL !== user.photoURL
+        ) {
           updateUserProfile({
             displayName: profileData.name,
-            photoURL: profileData.photoURL
+            photoURL: profileData.photoURL,
           })
             .then(() => {
               toast.success("Profile updated successfully!", {
@@ -234,10 +263,13 @@ const MainDashboard = () => {
             })
             .catch((error) => {
               console.error("Error updating auth profile:", error);
-              toast.warning("Profile saved but couldn't update authentication", {
-                position: "top-right",
-                theme: "colored",
-              });
+              toast.warning(
+                "Profile saved but couldn't update authentication",
+                {
+                  position: "top-right",
+                  theme: "colored",
+                }
+              );
               setEditing(false);
             });
         } else {
@@ -258,13 +290,19 @@ const MainDashboard = () => {
   };
 
   const handleCancelEdit = () => {
-    axiosSecure.get(`/user/${user.email}`)
+    axiosSecure
+      .get(`/user/${user.email}`)
       .then((res) => {
         const userData = res.data;
         setProfileData({
           name: userData.name || user.displayName || "",
           email: userData.email || user.email || "",
-          photoURL: userData.photoURL || user.photoURL || `https://ui-avatars.com/api/?name=${user.displayName || "User"}&background=random`,
+          photoURL:
+            userData.photoURL ||
+            user.photoURL ||
+            `https://ui-avatars.com/api/?name=${
+              user.displayName || "User"
+            }&background=random`,
           district: userData.district || "",
           upazila: userData.upazila || "",
           bloodGroup: userData.bloodGroup || "",
@@ -284,15 +322,14 @@ const MainDashboard = () => {
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-b from-white to-red-50 flex items-center justify-center">
-        <motion.div
-          animate={pulseAnimation}
-          className="text-center"
-        >
+        <motion.div animate={pulseAnimation} className="text-center">
           <div className="w-20 h-20 rounded-full bg-gradient-to-r from-red-100 to-pink-100 flex items-center justify-center mb-4">
             <Droplets className="w-10 h-10 text-red-500 animate-pulse" />
           </div>
           <h3 className="text-xl font-bold text-gray-800">Loading Dashboard</h3>
-          <p className="text-gray-600 mt-2">Getting your information ready...</p>
+          <p className="text-gray-600 mt-2">
+            Getting your information ready...
+          </p>
         </motion.div>
       </div>
     );
@@ -309,12 +346,12 @@ const MainDashboard = () => {
         <motion.div
           animate={{
             x: ["0%", "100%", "0%"],
-            rotate: [0, 180, 360]
+            rotate: [0, 180, 360],
           }}
           transition={{
             duration: 40,
             repeat: Infinity,
-            ease: "linear"
+            ease: "linear",
           }}
           className="absolute top-1/4 left-1/4 w-96 h-96 rounded-full bg-gradient-to-r from-red-100 to-pink-100 opacity-10 blur-3xl"
         />
@@ -322,10 +359,7 @@ const MainDashboard = () => {
 
       <div className="lg:ml-72">
         <div className="container mx-auto px-4 py-8 relative z-10">
-          <motion.div
-            variants={cardVariants}
-            className="mb-8"
-          >
+          <motion.div variants={cardVariants} className="mb-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
               <div>
                 <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-2">
@@ -401,7 +435,11 @@ const MainDashboard = () => {
                           {uploading ? (
                             <motion.div
                               animate={{ rotate: 360 }}
-                              transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                              transition={{
+                                duration: 1,
+                                repeat: Infinity,
+                                ease: "linear",
+                              }}
                               className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center mx-auto mb-2"
                             >
                               <Upload className="w-6 h-6 text-white" />
@@ -409,7 +447,9 @@ const MainDashboard = () => {
                           ) : (
                             <>
                               <Camera className="w-12 h-12 text-white mx-auto mb-2" />
-                              <span className="text-white font-semibold">Change Photo</span>
+                              <span className="text-white font-semibold">
+                                Change Photo
+                              </span>
                             </>
                           )}
                         </div>
@@ -426,7 +466,7 @@ const MainDashboard = () => {
                     <Mail className="w-4 h-4" />
                     <span>{profileData.email}</span>
                   </div>
-                  
+
                   {profileData.bloodGroup && (
                     <motion.div
                       animate={pulseAnimation}
@@ -442,7 +482,9 @@ const MainDashboard = () => {
 
                 <div className="flex items-center justify-center gap-2 p-3 bg-gradient-to-r from-purple-50 to-pink-50 rounded-lg">
                   <Shield className="w-5 h-5 text-purple-600" />
-                  <span className="font-semibold text-purple-600">Verified Donor</span>
+                  <span className="font-semibold text-purple-600">
+                    Verified Donor
+                  </span>
                 </div>
               </div>
             </motion.div>
@@ -457,14 +499,22 @@ const MainDashboard = () => {
                   <div className="flex items-center gap-3">
                     <motion.div
                       animate={{ rotate: 360 }}
-                      transition={{ duration: 2, repeat: Infinity, ease: "linear" }}
+                      transition={{
+                        duration: 2,
+                        repeat: Infinity,
+                        ease: "linear",
+                      }}
                       className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center"
                     >
                       <User className="w-6 h-6 text-white" />
                     </motion.div>
                     <div>
-                      <h2 className="text-xl font-bold text-white">Personal Information</h2>
-                      <p className="text-white/80">Update your personal details and preferences</p>
+                      <h2 className="text-xl font-bold text-white">
+                        Personal Information
+                      </h2>
+                      <p className="text-white/80">
+                        Update your personal details and preferences
+                      </p>
                     </div>
                   </div>
                 </div>
@@ -476,7 +526,7 @@ const MainDashboard = () => {
                         <User className="w-5 h-5 text-red-500" />
                         Basic Information
                       </h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
@@ -524,8 +574,10 @@ const MainDashboard = () => {
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                           >
                             <option value="">Select Blood Group</option>
-                            {bloodGroups.map(group => (
-                              <option key={group} value={group}>{group}</option>
+                            {bloodGroups.map((group) => (
+                              <option key={group} value={group}>
+                                {group}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -542,8 +594,10 @@ const MainDashboard = () => {
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                           >
                             <option value="">Select Gender</option>
-                            {genders.map(gender => (
-                              <option key={gender} value={gender}>{gender}</option>
+                            {genders.map((gender) => (
+                              <option key={gender} value={gender}>
+                                {gender}
+                              </option>
                             ))}
                           </select>
                         </div>
@@ -555,7 +609,7 @@ const MainDashboard = () => {
                         <Phone className="w-5 h-5 text-blue-500" />
                         Contact Information
                       </h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
@@ -594,7 +648,7 @@ const MainDashboard = () => {
                         <MapPin className="w-5 h-5 text-green-500" />
                         Location Information
                       </h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
@@ -608,7 +662,7 @@ const MainDashboard = () => {
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                           >
                             <option value="">Select District</option>
-                            {districts.map(district => (
+                            {districts.map((district) => (
                               <option key={district.id} value={district.name}>
                                 {district.name}
                               </option>
@@ -628,9 +682,11 @@ const MainDashboard = () => {
                             className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-red-500 outline-none transition-all disabled:bg-gray-50 disabled:cursor-not-allowed"
                           >
                             <option value="">
-                              {!profileData.district ? "Select District First" : "Select Upazila"}
+                              {!profileData.district
+                                ? "Select District First"
+                                : "Select Upazila"}
                             </option>
-                            {filteredUpazilas.map(upazila => (
+                            {filteredUpazilas.map((upazila) => (
                               <option key={upazila.id} value={upazila.name}>
                                 {upazila.name}
                               </option>
@@ -645,7 +701,7 @@ const MainDashboard = () => {
                         <Calendar className="w-5 h-5 text-purple-500" />
                         Medical Information
                       </h3>
-                      
+
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
                           <label className="block text-sm font-medium text-gray-700">
@@ -690,7 +746,9 @@ const MainDashboard = () => {
                               Edit Mode Active
                             </h4>
                             <p className="text-sm text-yellow-700">
-                              You are currently editing your profile. Click "Save Changes" to update your information or "Cancel" to discard changes.
+                              You are currently editing your profile. Click
+                              "Save Changes" to update your information or
+                              "Cancel" to discard changes.
                             </p>
                           </div>
                         </div>

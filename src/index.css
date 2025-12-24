@@ -1,26 +1,2 @@
 @import "tailwindcss";
 @plugin "daisyui";
-
-.input {
-  @apply w-full bg-transparent px-2 py-2
-  border-0 border-b-2 border-gray-300
-  text-gray-700
-  focus:outline-none
-  transition duration-300;
-}
-
-/* Gradient underline on focus */
-.input:focus {
-  border-image: linear-gradient(to right, #6366f1, #a855f7);
-  border-image-slice: 1;
-}
-
-/* Clean select styling */
-select.input {
-  @apply appearance-none cursor-pointer;
-}
-
-/* File input improvement */
-input[type="file"].input {
-  @apply cursor-pointer;
-}

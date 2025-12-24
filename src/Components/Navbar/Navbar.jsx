@@ -4,12 +4,21 @@ import { signOut } from "firebase/auth";
 import { Link, useNavigate } from "react-router";
 import auth from "../../firebase/firebase.config";
 import { motion, AnimatePresence } from "framer-motion";
-import { Heart, Droplets, ChevronRight, ArrowRight, Menu, X, Home, Search, DollarSign, LogOut, Shield, User as UserIcon } from "lucide-react";
-import { 
-  rotateAnimation, 
-  bounceAnimation, 
-  buttonHoverAnimation 
-} from "../../utils/AnimationUtils";
+import {
+  Heart,
+  Droplets,
+  ChevronRight,
+  ArrowRight,
+  Menu,
+  X,
+  Home,
+  Search,
+  DollarSign,
+  LogOut,
+  Shield,
+  User as UserIcon,
+} from "lucide-react";
+import { rotateAnimation } from "../../utils/AnimationUtils";
 
 const Navbar = () => {
   const { user } = useContext(AuthContext);
@@ -46,7 +55,7 @@ const Navbar = () => {
       to: "/donate",
       icon: <DollarSign className="w-4 h-4" />,
       label: "Funding",
-    }, 
+    },
   ];
 
   return (

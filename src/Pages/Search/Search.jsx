@@ -12,7 +12,6 @@ import {
   Loader2,
   X,
   CheckCircle,
-  Phone,
   Calendar,
   Download,
   User,
@@ -21,12 +20,10 @@ import { jsPDF } from "jspdf";
 import html2canvas from "html2canvas";
 import useAxiosSecure from "../../hooks/useAxiosSecure";
 import {
-  fadeInUp,
   cardVariants,
   pulseAnimation,
   textGradientAnimation,
   buttonHoverAnimation,
-  rotateAnimation,
 } from "../../utils/AnimationUtils";
 
 const SearchRequest = () => {
