@@ -9,5 +9,5 @@ import AuthProvider from "./Provider/AuthProvider.jsx";
 createRoot(document.getElementById("root")).render(
   <AuthProvider>
     <RouterProvider router={router} />
-  </AuthProvider>dfgdfg
+  </AuthProvider>
 );
